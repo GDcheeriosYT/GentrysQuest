@@ -1,0 +1,11 @@
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\bin\Debug\net6.0\GentrysQuest.Resources.deps.json
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\bin\Debug\net6.0\GentrysQuest.Resources.dll
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\bin\Debug\net6.0\GentrysQuest.Resources.pdb
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\GentrysQuest.Resources.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\GentrysQuest.Resources.AssemblyInfoInputs.cache
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\GentrysQuest.Resources.AssemblyInfo.cs
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\GentrysQuest.Resources.csproj.CoreCompileInputs.cache
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\GentrysQuest.Resources.dll
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\refint\GentrysQuest.Resources.dll
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\GentrysQuest.Resources.pdb
+C:\Users\Brayden\csharp\GentrysQuest\GentrysQuest.Resources\obj\Debug\net6.0\ref\GentrysQuest.Resources.dll

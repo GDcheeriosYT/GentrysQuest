@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "WAAyMcUlNYP9I+fBwrI2bWTq6WV3AG9nqCMABfNAgBzLR87U7fyNs0m2NRnwIGNiao224dCDYNLWGrfi2yWSHg==",
+  "success": false,
+  "projectFilePath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.iOS\\GentrysQuest.iOS.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1012",
+      "level": "Error",
+      "message": "Platform version is not present for one or more target frameworks, even though they have specified a platform: net6.0-ios"
+    }
+  ]
+}

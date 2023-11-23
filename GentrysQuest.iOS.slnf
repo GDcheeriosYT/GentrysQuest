@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "GentrysQuest.sln",
+    "projects": [
+      "GentrysQuest.Game\\GentrysQuest.Game.csproj",
+      "GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
+      "GentrysQuest.iOS\\GentrysQuest.iOS.csproj"
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0-ios": {},
+    "net6.0-ios/iossimulator-x64": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net6.0-ios": [
+      "ppy.osu.Framework.iOS >= 2023.1012.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Brayden\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.iOS\\GentrysQuest.iOS.csproj",
+      "projectName": "GentrysQuest.iOS",
+      "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.iOS\\GentrysQuest.iOS.csproj",
+      "packagesPath": "C:\\Users\\Brayden\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.iOS\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Brayden\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0-ios"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0-ios": {
+          "targetAlias": "net6.0-ios",
+          "projectReferences": {
+            "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj": {
+              "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj"
+            },
+            "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj": {
+              "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0-ios": {
+        "targetAlias": "net6.0-ios",
+        "dependencies": {
+          "ppy.osu.Framework.iOS": {
+            "target": "Package",
+            "version": "[2023.1012.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
+      }
+    },
+    "runtimes": {
+      "iossimulator-x64": {
+        "#import": []
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1012",
+      "level": "Error",
+      "message": "Platform version is not present for one or more target frameworks, even though they have specified a platform: net6.0-ios"
+    }
+  ]
+}
