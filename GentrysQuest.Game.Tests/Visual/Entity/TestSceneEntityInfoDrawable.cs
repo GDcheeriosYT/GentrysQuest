@@ -20,11 +20,8 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
                 Origin = Anchor.Centre,
                 Anchor = Anchor.Centre,
                 Size = new Vector2(0.8f),
-                BorderColour = Colour4.White,
-                Children = new Drawable[]
-                {
-                    entityInfoDrawable = new EntityInfoDrawable()
-                }
+                Colour = Colour4.Aquamarine,
+                Child = entityInfoDrawable = new EntityInfoDrawable()
             });
         }
     }
