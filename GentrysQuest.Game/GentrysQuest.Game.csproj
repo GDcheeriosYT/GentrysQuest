@@ -6,7 +6,7 @@
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2023.1121.1" />
+    <PackageReference Include="ppy.osu.Framework" Version="2023.1201.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User\" />

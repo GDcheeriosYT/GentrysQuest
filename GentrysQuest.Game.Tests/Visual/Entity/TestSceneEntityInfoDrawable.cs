@@ -1,7 +1,9 @@
 ﻿using GentrysQuest.Game.Entity.Drawables;
 using NUnit.Framework;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osuTK;
 
 namespace GentrysQuest.Game.Tests.Visual.Entity
@@ -10,7 +12,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
     public partial class TestSceneEntityInfoDrawable : GentrysQuestTestScene
     {
         private EntityInfoDrawable entityInfoDrawable;
-        private Container containerBox;
+        private CompositeDrawable containerBox;
 
         public TestSceneEntityInfoDrawable()
         {
@@ -20,8 +22,17 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
                 Origin = Anchor.Centre,
                 Anchor = Anchor.Centre,
                 Size = new Vector2(0.8f),
-                Colour = Colour4.Aquamarine,
-                Child = entityInfoDrawable = new EntityInfoDrawable()
+                Children = new Drawable[]
+                {
+                    new Circle
+                    {
+                        Origin = Anchor.Centre,
+                        Anchor = Anchor.Centre,
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = ColourInfo.GradientVertical(Colour4.LightGray, Colour4.White)
+                    },
+                    entityInfoDrawable = new EntityInfoDrawable()
+                }
             });
         }
     }

@@ -1,9 +1,8 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
-using osuTK.Graphics;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
@@ -21,12 +20,18 @@ namespace GentrysQuest.Game.Entity.Drawables
             RelativeSizeAxes = Axes.X;
             Origin = Anchor.Centre;
             Anchor = Anchor.Centre;
-            Colour = Color4.Gray;
             CornerRadius = 0.2f;
             Margin = new MarginPadding(2);
             Size = new Vector2(0.8f, 100);
             InternalChildren = new Drawable[]
             {
+                new Circle
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.Gray,
+                    BorderColour = Colour4.Black,
+                    BorderThickness = 2f
+                },
                 icon = new EntityIconDrawable
                 {
                     Origin = Anchor.CentreLeft,
