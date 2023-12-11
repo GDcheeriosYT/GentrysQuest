@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3oOKTpIAglmayVwkIbHV6040ryU7eNuBKlfnjxr29TH0ooAfmRr0JA6OxBkt11S2DNg7KCr/Xn1pibBNZ+zM1w==",
+  "dgSpecHash": "LyRVvJa8gk/chmaN8DuV9bXWkEM0Z1LeKuvho1wODU6+mIJiehy8ZCzsWJH764QJDlaK2KsnpCCRbs+9gAYatg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\GDcheerios\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.20\\microsoft.netcore.app.ref.6.0.20.nupkg.sha512",
-    "C:\\Users\\GDcheerios\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.20\\microsoft.windowsdesktop.app.ref.6.0.20.nupkg.sha512",
-    "C:\\Users\\GDcheerios\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.20\\microsoft.aspnetcore.app.ref.6.0.20.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

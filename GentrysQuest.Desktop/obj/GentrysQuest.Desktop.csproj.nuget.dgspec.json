@@ -1,33 +1,39 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj": {}
+    "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj": {
+    "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj": {
       "version": "0.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj",
+        "projectUniqueName": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj",
         "projectName": "GentrysQuest",
-        "projectPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj",
-        "packagesPath": "C:\\Users\\GDcheerios\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Desktop\\obj\\",
+        "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj",
+        "packagesPath": "C:\\Users\\Brayden\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Desktop\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\GDcheerios\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Brayden\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj": {
-                "projectPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj"
+              "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj": {
+                "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj"
               }
             }
           }
@@ -52,57 +58,45 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj": {
+    "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj",
+        "projectUniqueName": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj",
         "projectName": "GentrysQuest.Game",
-        "projectPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj",
-        "packagesPath": "C:\\Users\\GDcheerios\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Game\\obj\\",
+        "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\GentrysQuest.Game.csproj",
+        "packagesPath": "C:\\Users\\Brayden\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Game\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\GDcheerios\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Brayden\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj": {
-                "projectPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj"
+              "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj": {
+                "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj"
               }
             }
           }
@@ -133,45 +127,37 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj": {
+    "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
+        "projectUniqueName": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
         "projectName": "GentrysQuest.Resources",
-        "projectPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
-        "packagesPath": "C:\\Users\\GDcheerios\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\obj\\",
+        "projectPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj",
+        "packagesPath": "C:\\Users\\Brayden\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Brayden\\csharp\\GentrysQuest\\GentrysQuest.Resources\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\GDcheerios\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Brayden\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -200,26 +186,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.20, 6.0.20]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

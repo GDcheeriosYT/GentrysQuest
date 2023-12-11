@@ -9,6 +9,7 @@
     <PackageReference Include="ppy.osu.Framework" Version="2023.1201.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\" />
     <Folder Include="User\" />
   </ItemGroup>
 </Project>
