@@ -1,12 +1,15 @@
-﻿using osu.Framework.Graphics.Sprites;
+﻿using osu.Framework.Graphics;
+using osu.Framework.Graphics.Sprites;
+using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class EntityIconDrawable : SpriteIcon
+    public partial class EntityIconDrawable : Sprite
     {
         public EntityIconDrawable()
         {
-            this.Icon = FontAwesome.Solid.Question;
+            RelativePositionAxes = Axes.Both;
+            Scale = new Vector2(0.32f);
         }
     }
 }

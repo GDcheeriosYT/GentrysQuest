@@ -1,7 +1,12 @@
-﻿using osu.Framework.Graphics;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Bindables;
+using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.Textures;
+using osu.Framework.Input.Events;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -10,39 +15,120 @@ namespace GentrysQuest.Game.Entity.Drawables
     {
         private EntityIconDrawable icon;
         private SpriteText name;
-        private StarRatingContainer starRatingContainer;
+        public StarRatingContainer starRatingContainer;
+        public Entity entity;
+        private Colour4 firstColor = Colour4.Gray;
+        private Colour4 secondColor = Colour4.Gray;
 
         // [Resolved]
         // private TextureStore textures { get; }
 
-        public EntityInfoDrawable()
+        public EntityInfoDrawable(Entity entity)
         {
+            this.entity = entity;
+
             RelativeSizeAxes = Axes.X;
-            Origin = Anchor.Centre;
-            Anchor = Anchor.Centre;
+            Origin = Anchor.TopCentre;
+            Anchor = Anchor.TopCentre;
             CornerRadius = 0.2f;
             Margin = new MarginPadding(2);
             Size = new Vector2(0.8f, 100);
+            CornerExponent = 2;
+            CornerRadius = 15;
+            Masking = true;
+            BorderColour = Colour4.Black;
+            BorderThickness = 2f;
             InternalChildren = new Drawable[]
             {
-                new Circle
+                new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.Gray,
-                    BorderColour = Colour4.Black,
-                    BorderThickness = 2f
+                    Colour = ColourInfo.GradientHorizontal(firstColor, secondColor),
+                },
+                name = new SpriteText
+                {
+                    Text = entity.name,
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.TopLeft,
+                    RelativePositionAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(0.2f),
+                    Scale = new Vector2(2.5f),
+                    AllowMultiline = false,
+                    Truncate = true,
+                    X = 0.2f,
+                    Y = -0.5f
                 },
                 icon = new EntityIconDrawable
                 {
                     Origin = Anchor.CentreLeft,
-                    RelativePositionAxes = Axes.Both,
-                    Scale = new Vector2(64, 64),
                     Anchor = Anchor.CentreLeft,
                     X = 0.05f
                 },
-                new StarRatingContainer()
+                starRatingContainer = new StarRatingContainer(this.entity.starRating.Value)
+                {
+                    Size = new Vector2(0.27f, 1f),
+                    Y = 0.7f,
+                    X = 0.2f
+                },
             };
+
+            starRatingContainer.starRating.BindValueChanged(updateColorWithStarRating, true);
         }
+
+        [BackgroundDependencyLoader]
+        private void load(TextureStore textures)
+        {
+            icon.Texture = textures.Get(entity.textureMapping.Get("Idle"));
+        }
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            this.ScaleTo(new Vector2(1.2f, 1f), 30);
+            this.FadeColour(ColourInfo.SingleColour(firstColor), 200);
+            return base.OnHover(e);
+        }
+
+        protected override void OnHoverLost(HoverLostEvent e)
+        {
+            this.ScaleTo(new Vector2(1f, 1f), 30);
+            setColor();
+            base.OnHoverLost(e);
+        }
+
+        private void updateColorWithStarRating(ValueChangedEvent<int> valueChangedEvent)
+        {
+            switch (valueChangedEvent.NewValue)
+            {
+                case 1:
+                    firstColor = Colour4.LightGray;
+                    secondColor = Colour4.Gray;
+                    break;
+
+                case 2:
+                    firstColor = Colour4.WhiteSmoke;
+                    secondColor = Colour4.White;
+                    break;
+
+                case 3:
+                    firstColor = Colour4.WhiteSmoke;
+                    secondColor = Colour4.Aquamarine;
+                    break;
+
+                case 4:
+                    firstColor = Colour4.FromHex("#FDBAF4");
+                    secondColor = Colour4.FromHex("#ECA5E2");
+                    break;
+
+                case 5:
+                    firstColor = Colour4.FromHex("#FDF9BA");
+                    secondColor = Colour4.FromHex("#F5EE77");
+                    break;
+            }
+
+            setColor();
+        }
+
+        private void setColor() { this.FadeColour(ColourInfo.GradientVertical(firstColor, secondColor), 200); }
     }
 }
-

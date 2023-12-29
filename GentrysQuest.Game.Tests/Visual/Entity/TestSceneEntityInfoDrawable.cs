@@ -1,10 +1,6 @@
-﻿using GentrysQuest.Game.Entity.Drawables;
+﻿using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Entity.Drawables;
 using NUnit.Framework;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Colour;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
-using osuTK;
 
 namespace GentrysQuest.Game.Tests.Visual.Entity
 {
@@ -12,27 +8,14 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
     public partial class TestSceneEntityInfoDrawable : GentrysQuestTestScene
     {
         private EntityInfoDrawable entityInfoDrawable;
-        private CompositeDrawable containerBox;
+        private GentrysQuest.Game.Entity.Entity testEntity;
 
         public TestSceneEntityInfoDrawable()
         {
-            Add(containerBox = new Container
+            Add(entityInfoDrawable = new EntityInfoDrawable(testEntity = new TestCharacter(1)));
+            AddSliderStep("Change the star rating", 1, 5, 1, i =>
             {
-                RelativeSizeAxes = Axes.Both,
-                Origin = Anchor.Centre,
-                Anchor = Anchor.Centre,
-                Size = new Vector2(0.8f),
-                Children = new Drawable[]
-                {
-                    new Circle
-                    {
-                        Origin = Anchor.Centre,
-                        Anchor = Anchor.Centre,
-                        RelativeSizeAxes = Axes.Both,
-                        Colour = ColourInfo.GradientVertical(Colour4.LightGray, Colour4.White)
-                    },
-                    entityInfoDrawable = new EntityInfoDrawable()
-                }
+                entityInfoDrawable.starRatingContainer.starRating.Value = i;
             });
         }
     }

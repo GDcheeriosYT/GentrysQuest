@@ -1,4 +1,4 @@
-﻿using osu.Framework.Graphics.Textures;
+﻿using GentrysQuest.Game.Graphics;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -9,13 +9,13 @@ namespace GentrysQuest.Game.Entity
 
         // experience
         protected Experience experience = new Experience(new Xp(0), new Level(1, 0));
-        protected int difficulty;
+        protected int difficulty = 0;
 
         // equips
         protected Weapon weapon;
 
         // textures
-        protected Texture mainTexture;
+        public TextureMapping textureMapping { get; protected set; } = new();
 
         public virtual void UpdateStats()
         {

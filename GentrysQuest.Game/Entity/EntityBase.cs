@@ -4,12 +4,12 @@ namespace GentrysQuest.Game.Entity
 {
     public class EntityBase
     {
-        protected string name;
+        public string name { get; protected set; }
 
         [CanBeNull]
-        protected StarRating starRating;
+        public StarRating starRating { get; protected set; }
 
-        protected string description;
-        protected Experience experience;
+        public string description { get; protected set; }
+        public Experience experience { get; protected set; }
     }
 }
