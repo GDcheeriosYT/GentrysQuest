@@ -1,66 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Entity.Drawables;
 using NUnit.Framework;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
-using osuTK;
 
 namespace GentrysQuest.Game.Tests.Visual.Entity
 {
     [TestFixture]
     public partial class TestSceneEntityInfoDrawableList : GentrysQuestTestScene
     {
-        private CompositeDrawable containerBox;
-        private BasicScrollContainer scrollContainer;
-        private int yVal;
+        private EntityInfoListContainer container;
 
         public TestSceneEntityInfoDrawableList()
         {
-            yVal = 0;
-            Add(containerBox = new Container
+            Add(container = new());
+            int amount = 1;
+            int starRating = 1;
+            bool isRandomRating = false;
+
+            AddStep("Clear", () => container.ClearList());
+            AddStep("Add Entities", () =>
             {
-                CornerRadius = 20,
-                CornerExponent = 3,
-                RelativeSizeAxes = Axes.Both,
-                Origin = Anchor.Centre,
-                Anchor = Anchor.Centre,
-                Size = new Vector2(0.8f),
-                Masking = true,
-                // MaskingSmoothness = 3,
-                Children = new Drawable[]
-                {
-                    new Box
-                    {
-                        Origin = Anchor.Centre,
-                        Anchor = Anchor.Centre,
-                        RelativeSizeAxes = Axes.Both,
-                        Colour = Colour4.White,
-                    },
-                    scrollContainer = new BasicScrollContainer(Direction.Vertical)
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        ScrollbarAnchor = Anchor.TopLeft,
-                        Padding = new MarginPadding(20f),
-                        ScrollContent =
-                        {
-                        }
-                    },
-                }
+                List<GentrysQuest.Game.Entity.Entity> entityList = Enumerable.Repeat(new TestCharacter(isRandomRating ? RandomStarRating() : starRating), amount)
+                                                                             .Select(x => (GentrysQuest.Game.Entity.Entity)x)
+                                                                             .ToList();
+                container.AddFromList(entityList);
             });
+            AddSliderStep("Star rating value", 1, 5, 1, i => starRating = i);
+            AddSliderStep("Entity amount", 1, 50, 1, i => amount = i);
+            AddToggleStep("Random star rating", b => isRandomRating = b);
         }
 
-        [Test]
-        public void add_entity()
-        {
-            AddStep("Add entity", () =>
-            {
-                scrollContainer.ScrollContent.Add(new EntityInfoDrawable(new TestCharacter(Random.Shared.Next(1, 6))) { Y = yVal });
-                yVal += 110;
-            });
-        }
+        private int RandomStarRating() { return Random.Shared.Next(1, 6); }
     }
 }

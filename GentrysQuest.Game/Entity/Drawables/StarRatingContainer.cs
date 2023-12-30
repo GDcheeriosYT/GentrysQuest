@@ -18,6 +18,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public StarRatingContainer(int starRating)
         {
+            this.starRating.Value = 1;
             this.starRating.BindValueChanged(setStarRating, true);
             this.starRating.Value = starRating;
             Origin = Anchor.BottomLeft;

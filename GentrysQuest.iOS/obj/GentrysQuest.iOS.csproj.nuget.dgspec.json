@@ -145,11 +145,6 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
-      },
-      "runtimes": {
-        "iossimulator-x64": {
-          "#import": []
-        }
       }
     },
     "C:\\Users\\GDcheerios\\RiderProjects\\GentrysQuest\\GentrysQuest.Resources\\GentrysQuest.Resources.csproj": {

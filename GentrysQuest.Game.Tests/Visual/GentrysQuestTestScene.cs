@@ -18,5 +18,12 @@ namespace GentrysQuest.Game.Tests.Visual
 
             public void RunTestBlocking(TestScene test) => runner.RunTestBlocking(test);
         }
+
+        public GentrysQuestTestScene()
+        {
+
+        }
+
     }
+
 }

@@ -9,7 +9,7 @@
       "GentrysQuest.Game/1.0.0": {
         "dependencies": {
           "GentrysQuest.Resources": "1.0.0",
-          "ppy.osu.Framework": "2023.1121.1"
+          "ppy.osu.Framework": "2023.1201.1"
         },
         "runtime": {
           "GentrysQuest.Game.dll": {}
@@ -356,7 +356,7 @@
           }
         }
       },
-      "ppy.osu.Framework/2023.1121.1": {
+      "ppy.osu.Framework/2023.1201.1": {
         "dependencies": {
           "FFmpeg.AutoGen": "4.3.0.1",
           "JetBrains.Annotations": "2022.3.1",
@@ -377,18 +377,18 @@
           "ppy.SDL2-CS": "1.0.671-alpha",
           "ppy.Veldrid": "4.9.3-g91ce5a6cda",
           "ppy.Veldrid.SPIRV": "1.0.15-gca6cec7843",
-          "ppy.osu.Framework.NativeLibs": "2023.1013.0-nativelibs",
+          "ppy.osu.Framework.NativeLibs": "2023.1201.1-nativelibs",
           "ppy.osu.Framework.SourceGeneration": "2023.720.0",
           "ppy.osuTK.NS20": "1.0.211"
         },
         "runtime": {
           "lib/net6.0/osu.Framework.dll": {
-            "assemblyVersion": "2023.1121.1.0",
-            "fileVersion": "2023.1121.1.0"
+            "assemblyVersion": "2023.1201.1.0",
+            "fileVersion": "2023.1201.1.0"
           }
         }
       },
-      "ppy.osu.Framework.NativeLibs/2023.1013.0-nativelibs": {
+      "ppy.osu.Framework.NativeLibs/2023.1201.1-nativelibs": {
         "runtimeTargets": {
           "runtimes/linux-x64/native/libavcodec.so": {
             "rid": "linux-x64",
@@ -1457,19 +1457,19 @@
       "path": "ppy.managedbass.mix/2022.1216.0",
       "hashPath": "ppy.managedbass.mix.2022.1216.0.nupkg.sha512"
     },
-    "ppy.osu.Framework/2023.1121.1": {
+    "ppy.osu.Framework/2023.1201.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AO+Zu1jCgTQkj1mhxZxj2VDmKqNB3MenhU6frdRn0y8CTj3Ek9GWjlPipKRTCbIknRlc+k1J0ghIHMFu/hQoPA==",
-      "path": "ppy.osu.framework/2023.1121.1",
-      "hashPath": "ppy.osu.framework.2023.1121.1.nupkg.sha512"
+      "sha512": "sha512-MsgjSt9xZNzzDXSV6JdARurb59doLRFOfIwO9ocwQhDy5OLjkdGLVq+m1U0ayS6HZQBw36n3mnDpGe6m3L2rlA==",
+      "path": "ppy.osu.framework/2023.1201.1",
+      "hashPath": "ppy.osu.framework.2023.1201.1.nupkg.sha512"
     },
-    "ppy.osu.Framework.NativeLibs/2023.1013.0-nativelibs": {
+    "ppy.osu.Framework.NativeLibs/2023.1201.1-nativelibs": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+Yx1/p919NC5XPNO45DyAn5xZlsOyHoJAweG+NOZsK+FE0IoaBKcx4k6zROnpUH6h6LYiUw4oCpYKwdsHM9UQA==",
-      "path": "ppy.osu.framework.nativelibs/2023.1013.0-nativelibs",
-      "hashPath": "ppy.osu.framework.nativelibs.2023.1013.0-nativelibs.nupkg.sha512"
+      "sha512": "sha512-oivfa66iCQdv4IIWFHin6F9MHgN+8NQAdW89bDl/z+V/YkV61LUWFhH6kGZf9DNtcRxIMkxJsZrt256OW4hP5A==",
+      "path": "ppy.osu.framework.nativelibs/2023.1201.1-nativelibs",
+      "hashPath": "ppy.osu.framework.nativelibs.2023.1201.1-nativelibs.nupkg.sha512"
     },
     "ppy.osu.Framework.SourceGeneration/2023.720.0": {
       "type": "package",
