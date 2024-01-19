@@ -1,2 +1,15 @@
-# main project stuff
+# main
 **/obj/
+
+# Ignore NuGet package directories
+/packages/
+
+# Ignore Rider-specific NuGet files
+*.sln.iml
+*.csproj.iml
+*.csproj.DotSettings.user
+*.csproj.user
+
+# Ignore Rider workspace files
+.idea/
+*.sln.DotSettings.user
