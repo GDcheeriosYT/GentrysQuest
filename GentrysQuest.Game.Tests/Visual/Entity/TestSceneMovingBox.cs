@@ -14,7 +14,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
 
         public TestSceneMovingBox()
         {
-            Add(new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.Green});
+            Add(new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.Green });
             Add(testEntity = new DrawableEntity(new GentrysQuest.Game.Entity.Entity()));
             testEntity.Y = 100;
             Add(testBrayden = new DrawableEntity(new BraydenMesserschmidt()));
