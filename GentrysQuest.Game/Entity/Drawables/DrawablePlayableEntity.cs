@@ -1,4 +1,5 @@
 using System;
+using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 
@@ -7,9 +8,38 @@ namespace GentrysQuest.Game.Entity.Drawables;
 public partial class DrawablePlayableEntity : DrawableEntity
 {
     public DrawablePlayableEntity(Character entity)
-        : base(entity)
+        : base(entity, false)
     {
         // pass
+    }
+
+    /// <summary>
+    /// The move event
+    /// </summary>
+    /// <param name="isHorizontal">If it's horizontal target</param>
+    /// <param name="negative">If the value's going down or not</param>
+    private void move(bool isHorizontal, bool negative)
+    {
+        var speed = Entity.stats.Speed.Total();
+        var value = (float)(Clock.ElapsedFrameTime * 1);
+        var duration = 0;
+
+        if (negative) value = -value;
+
+        if (isHorizontal)
+        {
+            this.MoveToX(
+                X + value,
+                duration
+            );
+        }
+        else
+        {
+            this.MoveToY(
+                Y + value,
+                duration
+            );
+        }
     }
 
     protected override bool OnClick(ClickEvent e)
@@ -18,27 +48,13 @@ public partial class DrawablePlayableEntity : DrawableEntity
         return base.OnClick(e);
     }
 
-    protected override bool OnKeyDown(KeyDownEvent e)
+    protected override void Update()
     {
-        switch (e.Key)
-        {
-            case Key.A:
-                X -= (float)(Clock.ElapsedFrameTime * 3);
-                break;
+        base.Update();
 
-            case Key.D:
-                X += (float)(Clock.ElapsedFrameTime * 3);
-                break;
-
-            case Key.W:
-                Y -= (float)(Clock.ElapsedFrameTime * 3);
-                break;
-
-            case Key.S:
-                Y += (float)(Clock.ElapsedFrameTime * 3);
-                break;
-        }
-
-        return base.OnKeyDown(e);
+        if (Keyboard.GetState().IsKeyDown(Key.A)) move(true, true);
+        if (Keyboard.GetState().IsKeyDown(Key.D)) move(true, false);
+        if (Keyboard.GetState().IsKeyDown(Key.W)) move(false, true);
+        if (Keyboard.GetState().IsKeyDown(Key.S)) move(false, false);
     }
 }

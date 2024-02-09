@@ -21,11 +21,9 @@
                 progress = current / requirement;
                 return true;
             }
-            else
-            {
-                progress = current / requirement;
-                return false;
-            }
+
+            progress = current / requirement;
+            return false;
         }
     }
 }

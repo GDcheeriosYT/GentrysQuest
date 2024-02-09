@@ -20,16 +20,13 @@ namespace GentrysQuest.Game.Entity.Drawables
             Size = new Vector2(0.8f);
             Children = new Drawable[]
             {
-                scrollContainer = new BasicScrollContainer(Direction.Vertical)
+                scrollContainer = new BasicScrollContainer()
                 {
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     ScrollbarAnchor = Anchor.TopLeft,
-                    Padding = new MarginPadding(20f),
-                    ScrollContent =
-                    {
-                    }
+                    Padding = new MarginPadding(20f)
                 }
             };
         }
@@ -46,7 +43,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             EntityInfoDrawable entityInfoDrawable = new EntityInfoDrawable(entity);
             AddToList(entityInfoDrawable);
-            entityInfoDrawable.FadeOut(0).ScaleTo(0).Then()
+            entityInfoDrawable.FadeOut().ScaleTo(0).Then()
                               .FadeIn(duration).ScaleTo(new Vector2(1), duration);
         }
 
@@ -56,7 +53,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             EntityInfoDrawable entityInfoDrawable = new EntityInfoDrawable(entity);
             AddToList(entityInfoDrawable);
-            entityInfoDrawable.FadeOut(0).ScaleTo(0).Then()
+            entityInfoDrawable.FadeOut().ScaleTo(0).Then()
                               .Delay(delay).Then()
                               .FadeIn(duration).ScaleTo(new Vector2(1), duration);
         }

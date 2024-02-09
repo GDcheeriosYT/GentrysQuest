@@ -4,7 +4,7 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class EntityIconDrawable : Sprite
+    public class EntityIconDrawable : Sprite
     {
         public EntityIconDrawable()
         {

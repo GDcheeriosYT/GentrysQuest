@@ -2,7 +2,7 @@ using GentrysQuest.Game.Entity;
 
 namespace GentrysQuest.Game.Content.Characters
 {
-    public class TestCharacter : Entity.Entity
+    public class TestCharacter : Character
     {
         public TestCharacter(int starRating)
         {

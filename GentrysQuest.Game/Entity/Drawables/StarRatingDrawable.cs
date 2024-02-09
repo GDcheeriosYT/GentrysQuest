@@ -7,9 +7,9 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class StarRatingDrawable : SpriteIcon
+    public class StarRatingDrawable : SpriteIcon
     {
-        public Bindable<bool> isEnabled = new Bindable<bool>(false);
+        public Bindable<bool> isEnabled = new Bindable<bool>();
         private LimitedInt indicator;
 
         public StarRatingDrawable(int indicator)

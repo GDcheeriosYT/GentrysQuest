@@ -14,6 +14,8 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected readonly Sprite Sprite;
 
+        private readonly DrawableEntityBar entityBar;
+
         private Quad collisionQuad
         {
             get
@@ -23,16 +25,20 @@ namespace GentrysQuest.Game.Entity.Drawables
             }
         }
 
-        public DrawableEntity(Entity entity)
+        public DrawableEntity(Entity entity, bool showInfo = true)
         {
-            this.Entity = entity;
+            Entity = entity;
             Size = new Vector2(100, 100);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
-            InternalChild = Sprite = new Sprite
+            InternalChildren = new Drawable[]
             {
-                RelativeSizeAxes = Axes.Both
+                Sprite = new Sprite
+                {
+                    RelativeSizeAxes = Axes.Both,
+                },
+                entityBar = new DrawableEntityBar(Entity)
             };
         }
 

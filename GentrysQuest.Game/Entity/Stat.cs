@@ -1,4 +1,6 @@
-﻿namespace GentrysQuest.Game.Entity
+﻿using System;
+
+namespace GentrysQuest.Game.Entity
 {
     public class Stat
     {
@@ -31,14 +33,14 @@
         public void SetDefaultValue(double value)
         {
             oldTotal = Total();
-            this.defaultValue = value;
+            defaultValue = value;
             Calculate();
         }
 
         public void SetAdditionalValue(double value)
         {
             oldTotal = Total();
-            this.additionalValue = value;
+            additionalValue = value;
         }
 
         protected Stat()

@@ -1,21 +1,16 @@
-﻿using GentrysQuest.Game.Graphics;
-
-namespace GentrysQuest.Game.Entity
+﻿namespace GentrysQuest.Game.Entity
 {
     public class Entity : EntityBase
     {
         // stats
-        protected Stats stats = new Stats();
+        public Stats stats = new Stats();
 
         // experience
         protected Experience experience = new Experience(new Xp(0), new Level(1, 0));
-        protected int difficulty = 0;
+        protected int difficulty;
 
         // equips
         protected Weapon weapon;
-
-        // textures
-        public TextureMapping textureMapping { get; protected set; } = new();
 
         public virtual void UpdateStats()
         {

@@ -24,7 +24,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         {
             AddStep("start", () =>
             {
-                theGuy = new BraydenMesserschmidt();
+                theGuy = new TestCharacter(1);
                 gameplay.SetUp(theGuy);
             });
             AddStep("End", () => gameplay.End());

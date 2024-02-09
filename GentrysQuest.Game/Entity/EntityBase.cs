@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using GentrysQuest.Game.Graphics;
+using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -11,5 +12,8 @@ namespace GentrysQuest.Game.Entity
 
         public string description { get; protected set; }
         public Experience experience { get; protected set; }
+
+        // textures
+        public TextureMapping textureMapping { get; protected set; } = new();
     }
 }

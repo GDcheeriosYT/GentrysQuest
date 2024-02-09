@@ -8,7 +8,7 @@
         public Level(int current)
         {
             this.current = current;
-            this.limit = 0;
+            limit = 0;
         }
 
         public Level(int current, int limit)
