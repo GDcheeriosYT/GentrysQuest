@@ -20,7 +20,8 @@ public partial class DrawablePlayableEntity : DrawableEntity
     /// <param name="negative">If the value's going down or not</param>
     private void move(bool isHorizontal, bool negative)
     {
-        var speed = Entity.stats.Speed.Total();
+
+        var speed = Entity.Stats.Speed.Total();
         var value = (float)(Clock.ElapsedFrameTime * 1);
         var duration = 0;
 
@@ -52,9 +53,24 @@ public partial class DrawablePlayableEntity : DrawableEntity
     {
         base.Update();
 
-        if (Keyboard.GetState().IsKeyDown(Key.A)) move(true, true);
-        if (Keyboard.GetState().IsKeyDown(Key.D)) move(true, false);
-        if (Keyboard.GetState().IsKeyDown(Key.W)) move(false, true);
-        if (Keyboard.GetState().IsKeyDown(Key.S)) move(false, false);
+        if (Keyboard.GetState().IsKeyDown(Key.A))
+        {
+            move(true, true);
+        }
+
+        if (Keyboard.GetState().IsKeyDown(Key.D))
+        {
+            move(true, false);
+        }
+
+        if (Keyboard.GetState().IsKeyDown(Key.W))
+        {
+            move(false, true);
+        }
+
+        if (Keyboard.GetState().IsKeyDown(Key.S))
+        {
+            move(false, false);
+        }
     }
 }

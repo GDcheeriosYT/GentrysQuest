@@ -28,7 +28,7 @@ public partial class DrawableEntityBar : CompositeDrawable
                 Anchor = Anchor.TopCentre,
                 Origin = Anchor.BottomCentre
             },
-            healthProgressBar = new ProgressBar(0, entity.stats.Health.Total())
+            healthProgressBar = new ProgressBar(0, entity.Stats.Health.Total())
         };
         healthProgressBar.ForegroundColour = Colour4.Red;
     }

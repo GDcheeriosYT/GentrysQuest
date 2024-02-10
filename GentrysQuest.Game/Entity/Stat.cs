@@ -45,7 +45,7 @@ namespace GentrysQuest.Game.Entity
 
         protected Stat()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public double Total()

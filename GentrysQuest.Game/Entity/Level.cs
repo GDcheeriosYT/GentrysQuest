@@ -17,7 +17,7 @@
             this.limit = limit;
         }
 
-        public void add_level()
+        public void AddLevel()
         {
             if (current != limit) current++;
         }
