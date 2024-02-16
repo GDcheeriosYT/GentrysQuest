@@ -1,4 +1,5 @@
 ﻿using System;
+using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -7,40 +8,42 @@ namespace GentrysQuest.Game.Entity
         protected string name; // display name for other languages and etc
         protected StatTypes statType; // this is how we get what stat we're looking at
         protected int point; // this determines bonus stat value for entity
-        protected double defaultValue { get; private set; }
+        public double DefaultValue { get; private set; }
         private double oldTotal;
-        protected double minimumValue { get; }
-        protected double currentValue { get; private set; }
-        protected double additionalValue { get; private set; }
+        public double MinimumValue { get; }
+        public double CurrentValue { get; private set; }
+        public double AdditionalValue { get; private set; }
 
         public Stat(string name, StatTypes statType, double minimumValue)
         {
             this.name = name;
             this.statType = statType;
-            this.minimumValue = minimumValue;
+            MinimumValue = minimumValue;
         }
 
-        private void Calculate()
+        private void calculate()
         {
             UpdateCurrentValue(oldTotal - Total());
         }
 
         public void UpdateCurrentValue(double updateDifference)
         {
-            currentValue += updateDifference;
+            Logger.Log("updateDiff: " + updateDifference);
+            CurrentValue += updateDifference;
         }
 
         public void SetDefaultValue(double value)
         {
             oldTotal = Total();
-            defaultValue = value;
-            Calculate();
+            DefaultValue = value;
+            calculate();
         }
 
         public void SetAdditionalValue(double value)
         {
             oldTotal = Total();
-            additionalValue = value;
+            AdditionalValue = value;
+            calculate();
         }
 
         protected Stat()
@@ -50,12 +53,12 @@ namespace GentrysQuest.Game.Entity
 
         public double Total()
         {
-            return minimumValue + defaultValue + additionalValue;
+            return MinimumValue + DefaultValue + AdditionalValue;
         }
 
         public double Difference()
         {
-            return Total() - currentValue;
+            return Total() - CurrentValue;
         }
     }
 }

@@ -20,9 +20,8 @@ public partial class DrawablePlayableEntity : DrawableEntity
     /// <param name="negative">If the value's going down or not</param>
     private void move(bool isHorizontal, bool negative)
     {
-
-        var speed = Entity.Stats.Speed.Total();
-        var value = (float)(Clock.ElapsedFrameTime * 1);
+        var speed = Entity.Stats.Speed.CurrentValue;
+        var value = (float)(Clock.ElapsedFrameTime * speed);
         var duration = 0;
 
         if (negative) value = -value;

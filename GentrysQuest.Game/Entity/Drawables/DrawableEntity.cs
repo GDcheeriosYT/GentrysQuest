@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Graphics.TextStyles;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -39,6 +40,10 @@ namespace GentrysQuest.Game.Entity.Drawables
                     RelativeSizeAxes = Axes.Both,
                 },
                 entityBar = new DrawableEntityBar(Entity)
+            };
+            entity.OnDamage += delegate
+            {
+                AddInternal(new DamageIndicator(10));
             };
         }
 

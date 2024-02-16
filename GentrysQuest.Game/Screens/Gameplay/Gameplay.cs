@@ -8,7 +8,6 @@ using osu.Framework.Screens;
 using osuTK.Graphics;
 using GentrysQuest.Game.Entity;
 
-
 namespace GentrysQuest.Game.Screens.Gameplay
 {
     public partial class Gameplay : Screen
@@ -31,13 +30,14 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         public void SetUp(Character character)
         {
-            AddInternal(playerEntity = new(character));
+            if (playerEntity is null) AddInternal(playerEntity = new(character));
         }
 
         public void End()
         {
             RemoveInternal(playerEntity, true);
+            playerEntity.Dispose();
+            playerEntity = null;
         }
     }
 }
-

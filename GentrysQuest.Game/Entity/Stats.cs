@@ -7,7 +7,7 @@
         private IntStat defense = new IntStat("Defense", StatTypes.Defense, 30);
         private Stat critRate = new Stat("CritRate", StatTypes.CritRate, 1);
         private Stat critDamage = new Stat("CritDamage", StatTypes.CritDamage, 100);
-        private Stat speed = new Stat("Speed", StatTypes.Speed, 10);
+        private Stat speed = new Stat("Speed", StatTypes.Speed, 3);
         private Stat attackSpeed = new Stat("AttackSpeed", StatTypes.AttackSpeed, 1);
 
         public IntStat Health => health;

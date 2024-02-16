@@ -46,12 +46,19 @@ public partial class ProgressBar : CompositeDrawable
         };
     }
 
+    private void checkCurrent()
+    {
+        if (cur.Value > max.Value) cur.Value = max.Value;
+        else if (cur.Value < min.Value) cur.Value = min.Value;
+    }
+
     public double Current
     {
         get => cur.Value;
         set
         {
             cur.Value = value;
+            checkCurrent();
             set_progress();
         }
     }

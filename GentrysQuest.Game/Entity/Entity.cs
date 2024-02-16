@@ -44,26 +44,26 @@
 
         public void Damage(int amount)
         {
-            OnDamage?.Invoke();
             Stats.Health.UpdateCurrentValue(-amount);
+            OnDamage?.Invoke();
         }
 
         public void Heal(int amount)
         {
-            OnHeal?.Invoke();
             Stats.Health.UpdateCurrentValue(amount);
+            OnHeal?.Invoke();
         }
 
         public void AddXp(int amount)
         {
-            OnGainXp?.Invoke();
             while (Experience.xp.add_xp(amount)) levelUp();
+            OnGainXp?.Invoke();
         }
 
         private void levelUp()
         {
-            OnLevelUp?.Invoke();
             Experience.level.AddLevel();
+            OnLevelUp?.Invoke();
         }
 
         #endregion

@@ -10,12 +10,12 @@ namespace GentrysQuest.Game.Entity
             // The IntStat constructor.
         }
 
-        public int DefaultValue => (int)Math.Round(defaultValue);
+        public int DefaultValue => (int)Math.Round(base.DefaultValue);
 
-        public int AdditionalValue => (int)Math.Round(additionalValue);
+        public int AdditionalValue => (int)Math.Round(base.AdditionalValue);
 
-        public int MinimumValue => (int)Math.Round(minimumValue);
+        public int MinimumValue => (int)Math.Round(base.MinimumValue);
 
-        public int CurrentValue => (int)Math.Round(currentValue);
+        public int CurrentValue => (int)Math.Round(base.CurrentValue);
     }
 }
