@@ -43,7 +43,11 @@ namespace GentrysQuest.Game.Entity.Drawables
             };
             entity.OnDamage += delegate
             {
-                AddInternal(new DamageIndicator(10));
+                Indicator indicator;
+                AddInternal(indicator = new DamageIndicator(10));
+                indicator.MoveToX(X + 100, 500, Easing.In);
+                indicator.MoveToY(Y - 100, 500, Easing.Out);
+                indicator.FadeOut(450);
             };
         }
 

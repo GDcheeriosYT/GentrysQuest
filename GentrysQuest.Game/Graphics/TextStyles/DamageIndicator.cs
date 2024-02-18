@@ -3,14 +3,14 @@ using osu.Framework.Graphics.Sprites;
 
 namespace GentrysQuest.Game.Graphics.TextStyles;
 
-public partial class DamageIndicator : SpriteText
+public partial class Indicator : SpriteText
 {
-    public DamageIndicator(int damage)
+    public Indicator(int damage)
     {
         Text = "" + damage;
+        Anchor = Anchor.TopCentre;
+        Origin = Anchor.BottomCentre;
+        Font = FontUsage.Default.With(size: 50);
         Colour = Colour4.Red;
-        this.FadeOut(200).Then().;
-        this.MoveToX(this.X + 20, duration: 200);
-        this.MoveToY(this.Y - 20, duration: 200);
     }
 }
