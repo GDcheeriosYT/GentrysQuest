@@ -47,7 +47,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 },
                 name = new SpriteText
                 {
-                    Text = entity.name,
+                    Text = entity.Name,
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.TopLeft,
                     RelativePositionAxes = Axes.Both,
@@ -65,7 +65,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Anchor = Anchor.CentreLeft,
                     X = 0.05f
                 },
-                starRatingContainer = new StarRatingContainer(this.entity.starRating.Value)
+                starRatingContainer = new StarRatingContainer(this.entity.StarRating.Value)
                 {
                     Size = new Vector2(0.27f, 1f),
                     Y = 0.7f,
@@ -79,7 +79,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            icon.Texture = textures.Get(entity.textureMapping.Get("Idle"));
+            icon.Texture = textures.Get(entity.TextureMapping.Get("Idle"));
         }
 
         protected override bool OnHover(HoverEvent e)

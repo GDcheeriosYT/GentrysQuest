@@ -2,26 +2,23 @@
 {
     public class Stats
     {
-        private IntStat health = new IntStat("Health", StatTypes.Health, 1000);
-        private IntStat attack = new IntStat("Attack", StatTypes.Attack, 30);
-        private IntStat defense = new IntStat("Defense", StatTypes.Defense, 30);
-        private Stat critRate = new Stat("CritRate", StatTypes.CritRate, 1);
-        private Stat critDamage = new Stat("CritDamage", StatTypes.CritDamage, 100);
-        private Stat speed = new Stat("Speed", StatTypes.Speed, 3);
-        private Stat attackSpeed = new Stat("AttackSpeed", StatTypes.AttackSpeed, 1);
+        public readonly IntStat Health = new IntStat("Health", StatType.Health, 500);
+        public readonly IntStat Attack = new IntStat("Attack", StatType.Attack, 30);
+        public readonly IntStat Defense = new IntStat("Defense", StatType.Defense, 30);
+        public readonly Stat CritRate = new Stat("CritRate", StatType.CritRate, 1);
+        public readonly Stat CritDamage = new Stat("CritDamage", StatType.CritDamage, 100);
+        public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);
+        public readonly Stat AttackSpeed = new Stat("AttackSpeed", StatType.AttackSpeed, 1);
 
-        public IntStat Health => health;
-
-        public IntStat Attack => attack;
-
-        public IntStat Defense => defense;
-
-        public Stat CritRate => critRate;
-
-        public Stat CritDamage => critDamage;
-
-        public Stat Speed => speed;
-
-        public Stat AttackSpeed => attackSpeed;
+        public override string ToString()
+        {
+            return $"{Health}\n"
+                   + $"{Attack}\n"
+                   + $"{Defense}\n"
+                   + $"{CritRate}\n"
+                   + $"{CritDamage}\n"
+                   + $"{Speed}\n"
+                   + $"{AttackSpeed}";
+        }
     }
 }

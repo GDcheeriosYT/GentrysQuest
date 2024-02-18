@@ -1,19 +1,17 @@
 ﻿using GentrysQuest.Game.Graphics;
-using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
 {
     public class EntityBase
     {
-        public string name { get; protected set; }
+        public string Name { get; protected set; } = "Entity";
 
-        [CanBeNull]
-        public StarRating starRating { get; protected set; }
+        public StarRating StarRating { get; protected set; } = new StarRating(1);
 
-        public string description { get; protected set; }
+        public string Description { get; protected set; } = "This is a description";
         public Experience experience { get; protected set; }
 
         // textures
-        public TextureMapping textureMapping { get; protected set; } = new();
+        public TextureMapping TextureMapping { get; protected set; } = new();
     }
 }

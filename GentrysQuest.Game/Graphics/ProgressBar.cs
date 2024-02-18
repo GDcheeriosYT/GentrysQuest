@@ -97,6 +97,6 @@ public partial class ProgressBar : CompositeDrawable
 
     public void set_progress()
     {
-        foreground.ResizeWidthTo((float)(cur.Value / max.Value), 250, easing: Easing.OutBack);
+        foreground.ResizeWidthTo((float)(cur.Value / max.Value), 250, easing: Easing.OutCirc);
     }
 }

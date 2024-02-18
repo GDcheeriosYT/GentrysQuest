@@ -2,14 +2,13 @@
 {
     public class Experience
     {
-        public Xp xp { get; }
-        public Level level { get; }
+        public Xp Xp { get; }
+        public Level Level { get; }
 
         public Experience(Xp xp, Level level)
         {
-            this.xp = xp;
-            this.level = level;
+            this.Xp = xp;
+            this.Level = level;
         }
     }
 }
-

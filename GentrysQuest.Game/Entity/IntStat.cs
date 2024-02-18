@@ -4,7 +4,7 @@ namespace GentrysQuest.Game.Entity
 {
     public class IntStat : Stat
     {
-        public IntStat(string name, StatTypes statType, int minimumValue)
+        public IntStat(string name, StatType statType, int minimumValue)
             : base(name, statType, minimumValue)
         {
             // The IntStat constructor.

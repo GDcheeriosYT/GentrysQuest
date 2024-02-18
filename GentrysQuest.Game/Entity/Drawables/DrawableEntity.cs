@@ -17,6 +17,9 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private readonly DrawableEntityBar entityBar;
 
+        // stat modifiers
+        protected const double SPEED_MAIN = 0.25;
+
         private Quad collisionQuad
         {
             get
@@ -41,21 +44,56 @@ namespace GentrysQuest.Game.Entity.Drawables
                 },
                 entityBar = new DrawableEntityBar(Entity)
             };
-            entity.OnDamage += delegate
-            {
-                Indicator indicator;
-                AddInternal(indicator = new DamageIndicator(10));
-                indicator.MoveToX(X + 100, 500, Easing.In);
-                indicator.MoveToY(Y - 100, 500, Easing.Out);
-                indicator.FadeOut(450);
-            };
+            entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
+            entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
+            entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
         }
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
             Sprite.Colour = Colour4.White;
-            Sprite.Texture = textures.Get(Entity.textureMapping.Get("Idle"));
+            Sprite.Texture = textures.Get(Entity.TextureMapping.Get("Idle"));
+        }
+
+        /// <summary>
+        /// Adds a indicator text for when this entit1y heals/takes damage
+        /// </summary>
+        /// <param name="amount">The amount of health change</param>
+        /// <param name="type">The type of damage</param>
+        private void addIndicator(int amount, DamageType type)
+        {
+            Colour4 colour = default;
+
+            switch (type)
+            {
+                case DamageType.Heal:
+                    colour = Colour4.LimeGreen;
+                    break;
+
+                case DamageType.Damage:
+                    colour = Colour4.Red;
+                    break;
+
+                case DamageType.Crit:
+                    colour = Colour4.Pink;
+                    break;
+            }
+
+            Indicator indicatorReference;
+            AddInternal(indicatorReference = new Indicator(amount)
+            {
+                Colour = colour
+            });
+            Scheduler.AddDelayed(() =>
+            {
+                RemoveInternal(indicatorReference, false);
+            }, indicatorReference.FadeOut());
+        }
+
+        public double GetSpeed()
+        {
+            return SPEED_MAIN * Entity.Stats.Speed.CurrentValue;
         }
     }
 }

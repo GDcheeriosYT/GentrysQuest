@@ -6,9 +6,9 @@ namespace GentrysQuest.Game.Content.Characters
     {
         public BraydenMesserschmidt()
         {
-            name = "Brayden Messerschmidt";
-            textureMapping.Add("Idle", "brayden_idle.png");
-            starRating = new StarRating(5);
+            Name = "Brayden Messerschmidt";
+            TextureMapping.Add("Idle", "brayden_idle.png");
+            StarRating = new StarRating(5);
         }
     }
 }

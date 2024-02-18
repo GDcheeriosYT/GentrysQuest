@@ -9,7 +9,7 @@ namespace GentrysQuest.Game.Entity.Drawables;
 public partial class DrawableEntityBar : CompositeDrawable
 {
     // objects
-    private ProgressBar healthProgressBar;
+    private readonly ProgressBar healthProgressBar;
     private SpriteText entityName;
 
     public DrawableEntityBar(Entity entity)
@@ -24,7 +24,7 @@ public partial class DrawableEntityBar : CompositeDrawable
         {
             entityName = new SpriteText
             {
-                Text = entity.name,
+                Text = entity.Name,
                 Anchor = Anchor.TopCentre,
                 Origin = Anchor.BottomCentre,
                 Font = FontUsage.Default.With(size: 50)
@@ -36,5 +36,6 @@ public partial class DrawableEntityBar : CompositeDrawable
 
         entity.OnDamage += delegate { healthProgressBar.Current = entity.Stats.Health.CurrentValue; };
         entity.OnHeal += delegate { healthProgressBar.Current = entity.Stats.Health.CurrentValue; };
+        entity.OnLevelUp += delegate { healthProgressBar.Max = entity.Stats.Health.Total(); };
     }
 }

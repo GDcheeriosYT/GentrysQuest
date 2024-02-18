@@ -1,29 +1,41 @@
-﻿namespace GentrysQuest.Game.Entity
+﻿using osu.Framework.Logging;
+
+namespace GentrysQuest.Game.Entity
 {
     public class Xp
     {
-        public int current { get; private set; }
-        public int requirement { get; private set; }
-        public double progress { get; private set; }
+        public int Current { get; private set; }
+        public int Requirement;
+        public double Progress { get; private set; }
 
         public Xp(int current)
         {
-            this.current = current;
+            this.Current = current;
         }
 
         public bool add_xp(int amount)
         {
-            current += amount;
+            Current += amount;
+            Logger.Log($"{Current} {Requirement}");
 
-            if (current >= requirement)
+            if (Current >= Requirement)
             {
-                current -= requirement;
-                progress = current / requirement;
+                Current -= Requirement;
+                Progress = Current / Requirement;
                 return true;
             }
 
-            progress = current / requirement;
+            Progress = Current / Requirement;
             return false;
+        }
+
+        public void CalculateRequirment(int level, int starRating)
+        {
+            int difficulty = 1 + (int)(level / 20);
+            int starRatingExperience = starRating * 25;
+            int levelExperience = level * 10;
+
+            Requirement = difficulty * (levelExperience * starRatingExperience);
         }
     }
 }

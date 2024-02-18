@@ -1,6 +1,6 @@
 ﻿namespace GentrysQuest.Game.Entity
 {
-    public enum StatTypes
+    public enum StatType
     {
         Health = 1,
         Attack = 2,

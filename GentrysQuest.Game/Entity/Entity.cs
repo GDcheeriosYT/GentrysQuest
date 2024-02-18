@@ -1,4 +1,6 @@
-﻿namespace GentrysQuest.Game.Entity
+﻿using osu.Framework.Logging;
+
+namespace GentrysQuest.Game.Entity
 {
     public class Entity : EntityBase
     {
@@ -6,23 +8,35 @@
         public Stats Stats = new Stats();
 
         // experience
-        public Experience Experience { get; } = new Experience(new Xp(0), new Level(1, 0));
+        public Experience Experience;
         protected int difficulty;
 
         // equips
         protected Weapon weapon;
 
+        public Entity()
+        {
+            Experience = new Experience(new Xp(0), new Level(1));
+            Experience.Xp.CalculateRequirment(1, StarRating.Value);
+            UpdateStats();
+        }
+
         #region Events
 
         public delegate void EntityEvent();
 
+        public delegate void EntitySpawnEvent();
+
+        public delegate void EntityHealthEvent(int amount);
+
         // Spawn / Death events
-        public event EntityEvent OnSpawn;
-        public event EntityEvent OnDeath;
+        public event EntitySpawnEvent OnSpawn;
+        public event EntitySpawnEvent OnDeath;
 
         // Health events
-        public event EntityEvent OnDamage;
-        public event EntityEvent OnHeal;
+        public event EntityHealthEvent OnDamage;
+        public event EntityHealthEvent OnHeal;
+        public event EntityHealthEvent OnCrit;
 
         // Movement events
         public event EntityEvent OnMove;
@@ -45,37 +59,61 @@
         public void Damage(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
-            OnDamage?.Invoke();
+            OnDamage?.Invoke(amount);
         }
 
         public void Heal(int amount)
         {
             Stats.Health.UpdateCurrentValue(amount);
-            OnHeal?.Invoke();
+            OnHeal?.Invoke(amount);
+        }
+
+        public void Crit(int amount)
+        {
+            Stats.Health.UpdateCurrentValue(-amount);
+            OnCrit?.Invoke(amount);
         }
 
         public void AddXp(int amount)
         {
-            while (Experience.xp.add_xp(amount)) levelUp();
+            while (Experience.Xp.add_xp(amount)) LevelUp();
             OnGainXp?.Invoke();
         }
 
-        private void levelUp()
+        public void LevelUp()
         {
-            Experience.level.AddLevel();
+            Experience.Level.AddLevel();
+            Experience.Xp.CalculateRequirment(Experience.Level.current, StarRating.Value);
+
+            UpdateStats();
+
             OnLevelUp?.Invoke();
         }
 
         #endregion
 
-        public virtual void UpdateStats()
+        public void UpdateStats()
         {
-            difficulty = 1 + (Experience.level.current / 20);
-            Stats.Health.SetDefaultValue(Experience.level.current * 10);
-            Stats.Attack.SetDefaultValue(Experience.level.current * 1.2);
-            Stats.Defense.SetDefaultValue(Experience.level.current * 1.2);
-            Stats.CritRate.SetDefaultValue(Experience.level.current * 0.2);
-            Stats.CritDamage.SetDefaultValue(Experience.level.current * 10);
+            int level = Experience.Level.current;
+            int starRating = StarRating.Value;
+            difficulty = 1 + level / 20;
+
+            Stats.Health.SetDefaultValue(
+                calculatePointBenefit(difficulty * 100, Stats.Health.point, 500) +
+                calculatePointBenefit(level * 50, Stats.Health.point, 10) +
+                calculatePointBenefit(starRating * 50, Stats.Health.point, 50)
+            );
+            Stats.Attack.SetDefaultValue(Experience.Level.current * 1.2);
+            Stats.Defense.SetDefaultValue(Experience.Level.current * 1.2);
+            Stats.CritRate.SetDefaultValue(Experience.Level.current * 0.2);
+            Stats.CritDamage.SetDefaultValue(Experience.Level.current * 10);
+
+            Logger.Log(Stats.ToString());
+        }
+
+        private int calculatePointBenefit(int normalValue, int point, int pointBenefit)
+        {
+            return normalValue + (point * pointBenefit);
         }
     }
 }

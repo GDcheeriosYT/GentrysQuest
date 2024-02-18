@@ -3,7 +3,7 @@
     public class Buff
     {
         private double amount;
-        private StatTypes statTypeType;
+        private StatType statTypeType;
         private bool isPercent;
     }
 }

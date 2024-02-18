@@ -5,43 +5,60 @@ namespace GentrysQuest.Game.Entity
 {
     public class Stat
     {
-        protected string name; // display name for other languages and etc
-        protected StatTypes statType; // this is how we get what stat we're looking at
-        protected int point; // this determines bonus stat value for entity
+        protected string Name; // display name for other languages and etc
+        protected StatType StatType; // this is how we get what stat we're looking at
+
+        /// <summary>
+        /// This is the bonus stat calculation variable.
+        /// Use this in entities UpdateStats method to determine it's effect on the calculation.
+        /// </summary>
+        public int point;
+
         public double DefaultValue { get; private set; }
-        private double oldTotal;
         public double MinimumValue { get; }
         public double CurrentValue { get; private set; }
         public double AdditionalValue { get; private set; }
 
-        public Stat(string name, StatTypes statType, double minimumValue)
+        public Stat(string name, StatType statType, double minimumValue)
         {
-            this.name = name;
-            this.statType = statType;
+            this.Name = name;
+            StatType = statType;
             MinimumValue = minimumValue;
+            CurrentValue = Total();
+            calculate();
         }
 
         private void calculate()
         {
-            UpdateCurrentValue(oldTotal - Total());
+            double difference = CurrentValue;
+            CurrentValue = Total();
+            difference -= CurrentValue;
+            UpdateCurrentValue(difference);
+        }
+
+        public void RestoreValue()
+        {
+            CurrentValue = Total();
         }
 
         public void UpdateCurrentValue(double updateDifference)
         {
             Logger.Log("updateDiff: " + updateDifference);
-            CurrentValue += updateDifference;
+            var potentialChange = CurrentValue + updateDifference;
+
+            if (potentialChange > Total()) { CurrentValue = Total(); }
+            else if (potentialChange < 0) { CurrentValue = 0; }
+            else CurrentValue = potentialChange;
         }
 
         public void SetDefaultValue(double value)
         {
-            oldTotal = Total();
             DefaultValue = value;
             calculate();
         }
 
         public void SetAdditionalValue(double value)
         {
-            oldTotal = Total();
             AdditionalValue = value;
             calculate();
         }
@@ -56,9 +73,9 @@ namespace GentrysQuest.Game.Entity
             return MinimumValue + DefaultValue + AdditionalValue;
         }
 
-        public double Difference()
+        public override string ToString()
         {
-            return Total() - CurrentValue;
+            return $"{Name}: {MinimumValue + DefaultValue} + {AdditionalValue} ({Total()})";
         }
     }
 }

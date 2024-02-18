@@ -6,9 +6,9 @@ namespace GentrysQuest.Game.Content.Characters
     {
         public TestCharacter(int starRating)
         {
-            name = "Test Character";
-            description = "Just the character used for testing and stuff...";
-            this.starRating = new StarRating(starRating);
+            Name = "Test Character";
+            Description = "Just the character used for testing and stuff...";
+            this.StarRating = new StarRating(starRating);
             Stats.Speed.SetDefaultValue(0);
         }
     }
