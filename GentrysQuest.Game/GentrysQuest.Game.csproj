@@ -6,10 +6,11 @@
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2024.131.0" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Player\" />
     <Folder Include="User\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ppy.osu.Framework" Version="2024.131.0" />
+    <PackageReference Include="ppy.osu.Framework.iOS" Version="2024.217.0" />
   </ItemGroup>
 </Project>

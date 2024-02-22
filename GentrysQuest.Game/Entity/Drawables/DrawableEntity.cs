@@ -76,7 +76,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     break;
 
                 case DamageType.Crit:
-                    colour = Colour4.Pink;
+                    colour = Colour4.Orange;
                     break;
             }
 

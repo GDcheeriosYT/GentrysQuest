@@ -34,8 +34,7 @@ public partial class DrawableEntityBar : CompositeDrawable
         healthProgressBar.ForegroundColour = Colour4.Lime;
         healthProgressBar.BackgroundColour = Colour4.Red;
 
-        entity.OnDamage += delegate { healthProgressBar.Current = entity.Stats.Health.CurrentValue; };
-        entity.OnHeal += delegate { healthProgressBar.Current = entity.Stats.Health.CurrentValue; };
+        entity.OnHealthEvent += delegate { healthProgressBar.Current = entity.Stats.Health.CurrentValue; };
         entity.OnLevelUp += delegate { healthProgressBar.Max = entity.Stats.Health.Total(); };
     }
 }

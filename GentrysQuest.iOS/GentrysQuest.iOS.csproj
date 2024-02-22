@@ -20,7 +20,4 @@
     <ProjectReference Include="..\GentrysQuest.Game\GentrysQuest.Game.csproj" />
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework.iOS" Version="2023.1012.0" />
-  </ItemGroup>
 </Project>

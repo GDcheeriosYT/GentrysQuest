@@ -34,6 +34,7 @@ namespace GentrysQuest.Game.Entity
         public event EntitySpawnEvent OnDeath;
 
         // Health events
+        public event EntityEvent OnHealthEvent;
         public event EntityHealthEvent OnDamage;
         public event EntityHealthEvent OnHeal;
         public event EntityHealthEvent OnCrit;
@@ -59,18 +60,21 @@ namespace GentrysQuest.Game.Entity
         public void Damage(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
+            OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }
 
         public void Heal(int amount)
         {
             Stats.Health.UpdateCurrentValue(amount);
+            OnHealthEvent?.Invoke();
             OnHeal?.Invoke(amount);
         }
 
         public void Crit(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
+            OnHealthEvent?.Invoke();
             OnCrit?.Invoke(amount);
         }
 

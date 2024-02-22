@@ -64,6 +64,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             int amount = 100;
             AddSliderStep("Amount", 0, 1000, 100, i => amount = i);
             AddStep("Damage", () => entity.Damage(amount));
+            AddStep("Crit", () => entity.Crit((int)(amount * 1.5)));
             AddStep("Heal", () => entity.Heal(amount));
             AddStep("LevelUp", () => entity.LevelUp());
             AddStep("AddXp", () => entity.AddXp(amount));
