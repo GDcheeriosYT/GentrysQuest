@@ -1,10 +1,13 @@
 using GentrysQuest.Game.Graphics.TextStyles;
+using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -56,8 +59,31 @@ namespace GentrysQuest.Game.Entity.Drawables
             Sprite.Texture = textures.Get(Entity.TextureMapping.Get("Idle"));
         }
 
+        public void Attack(Vector2 position)
+        {
+            Vector2 direction = MathBase.GetDirection(Position, position);
+            Logger.Log($"I just attacked at {position} from {Position} [{direction}] ({MathBase.GetAngle(Position, position)})", LoggingTarget.Runtime);
+            Box testBox = new Box
+            {
+                RelativeSizeAxes = Axes.Both,
+                RelativePositionAxes = Axes.Both,
+                Position = direction,
+                Colour = Colour4.Red,
+                Size = new Vector2(0.2f, 1f),
+                Origin = Anchor.BottomCentre,
+                Anchor = Anchor.Centre,
+                Rotation = MathBase.GetAngle(Position, position),
+                OriginPosition = new Vector2(X, Y)
+            };
+            AddInternal(testBox);
+            Scheduler.AddDelayed(() =>
+            {
+                RemoveInternal(testBox, true);
+            }, 1000);
+        }
+
         /// <summary>
-        /// Adds a indicator text for when this entit1y heals/takes damage
+        /// Adds a indicator text for when this entity heals/takes damage
         /// </summary>
         /// <param name="amount">The amount of health change</param>
         /// <param name="type">The type of damage</param>
@@ -72,11 +98,11 @@ namespace GentrysQuest.Game.Entity.Drawables
                     break;
 
                 case DamageType.Damage:
-                    colour = Colour4.Red;
+                    colour = Colour4.White;
                     break;
 
                 case DamageType.Crit:
-                    colour = Colour4.Orange;
+                    colour = Colour4.Red;
                     break;
             }
 

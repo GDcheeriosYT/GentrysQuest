@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 using osuTK.Graphics;
 using GentrysQuest.Game.Entity;
+using osu.Framework.Input.Events;
 
 namespace GentrysQuest.Game.Screens.Gameplay
 {
@@ -38,6 +39,12 @@ namespace GentrysQuest.Game.Screens.Gameplay
             RemoveInternal(playerEntity, true);
             playerEntity.Dispose();
             playerEntity = null;
+        }
+
+        protected override bool OnMouseDown(MouseDownEvent e)
+        {
+            playerEntity.Attack(e.MousePosition);
+            return base.OnMouseDown(e);
         }
     }
 }

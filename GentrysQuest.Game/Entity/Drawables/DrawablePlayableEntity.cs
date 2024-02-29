@@ -1,6 +1,4 @@
-using System;
 using osu.Framework.Graphics;
-using osu.Framework.Input.Events;
 using osuTK.Input;
 
 namespace GentrysQuest.Game.Entity.Drawables;
@@ -40,12 +38,6 @@ public partial class DrawablePlayableEntity : DrawableEntity
                 duration
             );
         }
-    }
-
-    protected override bool OnClick(ClickEvent e)
-    {
-        Console.WriteLine(e.MousePosition);
-        return base.OnClick(e);
     }
 
     protected override void Update()

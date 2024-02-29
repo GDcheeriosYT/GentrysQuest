@@ -1,10 +1,12 @@
+using GentrysQuest.Game.Entity.Drawables;
+
 namespace GentrysQuest.Game.Entity.Weapon
 {
     public class AttackPattern
     {
-        private Weapon instanceWeapon;
+        private DrawableWeapon instanceWeapon;
 
-        public AttackPattern(Weapon instance)
+        public AttackPattern(DrawableWeapon instance)
         {
             instanceWeapon = instance;
         }
