@@ -7,7 +7,6 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -63,7 +62,6 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             Vector2 center = new Vector2(0);
             double angle = MathBase.GetAngle(center, position);
-            Logger.Log($"{center} {position} ({angle})");
             Box testBox = new Box
             {
                 RelativeSizeAxes = Axes.Both,
@@ -71,7 +69,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 Alpha = 0.5f,
                 Size = new Vector2(0.2f, 1f),
                 Origin = Anchor.BottomCentre,
-                Anchor = Anchor.TopLeft,
+                Anchor = Anchor.Centre,
                 Rotation = 90 + MathBase.GetAngle(center, position)
             };
             AddInternal(testBox);
