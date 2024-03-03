@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Screens.Gameplay;
 using osu.Framework.Graphics;
 using osuTK.Input;
 
@@ -5,10 +6,21 @@ namespace GentrysQuest.Game.Entity.Drawables;
 
 public partial class DrawablePlayableEntity : DrawableEntity
 {
+    private GameplayClickContainer clickContainer;
+
     public DrawablePlayableEntity(Character entity)
         : base(entity, false)
     {
         // pass
+    }
+
+    public void SetupClickContainer() { AddInternal(clickContainer = new GameplayClickContainer(this)); }
+
+    public void RemoveClickContainer()
+    {
+        RemoveInternal(clickContainer, true);
+        clickContainer.Dispose();
+        clickContainer = null;
     }
 
     /// <summary>

@@ -50,6 +50,9 @@ namespace GentrysQuest.Game.Entity
         public event EntityEvent OnGainXp;
         public event EntityEvent OnLevelUp;
 
+        // Other Events
+        public event EntityEvent OnAttack;
+
         #endregion
 
         #region Methods
@@ -94,8 +97,6 @@ namespace GentrysQuest.Game.Entity
             OnLevelUp?.Invoke();
         }
 
-        #endregion
-
         public void UpdateStats()
         {
             int level = Experience.Level.current;
@@ -114,6 +115,8 @@ namespace GentrysQuest.Game.Entity
 
             Logger.Log(Stats.ToString());
         }
+
+        #endregion
 
         private int calculatePointBenefit(int normalValue, int point, int pointBenefit)
         {

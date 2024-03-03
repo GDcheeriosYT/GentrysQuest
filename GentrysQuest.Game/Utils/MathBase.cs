@@ -14,14 +14,9 @@ namespace GentrysQuest.Game.Utils
 
         public static float GetAngle(Vector2 vector1, Vector2 vector2)
         {
-            double dotProduct = GetDot(vector1, vector2);
-            double magnitude1 = GetMagnitude(vector1);
-            double magnitude2 = GetMagnitude(vector2);
-
-            double cosAngle = dotProduct / (magnitude1 * magnitude2);
-            double angleRadians = Math.Acos(cosAngle);
-            float angle = (float)Math.Round(GetDegress(angleRadians));
-            return angle >= 0 ? angle : 0;
+            Vector2 direction = GetDirection(vector1, vector2);
+            double angleRadians = Math.Atan2(direction.Y, direction.X);
+            return (float)Math.Round(GetDegress(angleRadians));
         }
 
         public static double GetMagnitude(Vector2 vector)

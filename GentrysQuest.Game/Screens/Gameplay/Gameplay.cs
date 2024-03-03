@@ -1,4 +1,5 @@
-﻿using GentrysQuest.Game.Entity.Drawables;
+﻿using GentrysQuest.Game.Entity;
+using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -6,8 +7,6 @@ using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 using osuTK.Graphics;
-using GentrysQuest.Game.Entity;
-using osu.Framework.Input.Events;
 
 namespace GentrysQuest.Game.Screens.Gameplay
 {
@@ -15,6 +14,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
     {
         private Bindable<int> score = new(0);
         private DrawablePlayableEntity playerEntity;
+        // private GameplayClickContainer clickContainer;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -31,20 +31,23 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         public void SetUp(Character character)
         {
-            if (playerEntity is null) AddInternal(playerEntity = new(character));
+            if (playerEntity is null)
+            {
+                AddInternal(playerEntity = new(character));
+                playerEntity.SetupClickContainer();
+                // AddInternal(clickContainer = new GameplayClickContainer(playerEntity));
+            }
         }
 
         public void End()
         {
+            playerEntity.RemoveClickContainer();
             RemoveInternal(playerEntity, true);
             playerEntity.Dispose();
             playerEntity = null;
-        }
-
-        protected override bool OnMouseDown(MouseDownEvent e)
-        {
-            playerEntity.Attack(e.MousePosition);
-            return base.OnMouseDown(e);
+            // RemoveInternal(clickContainer, true);
+            // clickContainer.Dispose();
+            // clickContainer = null;
         }
     }
 }

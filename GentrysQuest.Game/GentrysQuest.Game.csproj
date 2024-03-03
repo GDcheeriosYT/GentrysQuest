@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
@@ -10,7 +10,7 @@
     <Folder Include="User\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ppy.osu.Framework" Version="2024.131.0" />
-    <PackageReference Include="ppy.osu.Framework.iOS" Version="2024.217.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2024.223.0" />
+    <PackageReference Include="ppy.osu.Framework.iOS" Version="2024.223.0" />
   </ItemGroup>
 </Project>
