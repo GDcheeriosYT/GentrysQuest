@@ -1,4 +1,5 @@
-﻿using GentrysQuest.Game.Entity;
+﻿using System.Collections.Generic;
+using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -14,11 +15,13 @@ namespace GentrysQuest.Game.Screens.Gameplay
     {
         private Bindable<int> score = new(0);
         private DrawablePlayableEntity playerEntity;
-        // private GameplayClickContainer clickContainer;
+        private List<DrawableEntity> enemies;
 
         [BackgroundDependencyLoader]
         private void load()
         {
+            Origin = Anchor.Centre;
+            Anchor = Anchor.Centre;
             InternalChildren = new Drawable[]
             {
                 new Box

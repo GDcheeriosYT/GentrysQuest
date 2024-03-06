@@ -1,17 +1,17 @@
 ﻿using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Screens.Gameplay;
 using GentrysQuest.Game.Screens.Intro;
+using GentrysQuest.Game.Screens.MainMenu;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
-using GentrysQuest.Game.Screens.MainMenu;
 
 namespace GentrysQuest.Game
 {
     public partial class GentrysQuestGame : GentrysQuestGameBase
     {
         private ScreenStack screenStack;
-        private VersionText versionText = new VersionText("Super Dooper Beta");
+        private readonly VersionText versionText = new VersionText("Super Dooper Beta");
         private bool arcadeMode;
 
         public GentrysQuestGame(bool arcadeMode)

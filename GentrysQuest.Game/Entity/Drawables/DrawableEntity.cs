@@ -60,17 +60,19 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public void Attack(Vector2 position)
         {
-            Vector2 center = new Vector2(0);
+            Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(center, position);
             Box testBox = new Box
             {
                 RelativeSizeAxes = Axes.Both,
+                RelativePositionAxes = Axes.Both,
                 Colour = Colour4.Red,
                 Alpha = 0.5f,
+                Position = MathBase.GetDirection(center, position) * 0.25f,
                 Size = new Vector2(0.2f, 1f),
                 Origin = Anchor.BottomCentre,
                 Anchor = Anchor.Centre,
-                Rotation = 90 + MathBase.GetAngle(center, position)
+                Rotation = (float)(90 + angle)
             };
             AddInternal(testBox);
             Scheduler.AddDelayed(() =>
