@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -49,6 +50,8 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
             entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
+            entity.Stats.Restore();
+            Logger.Log($"{SPEED_MAIN} {Entity.Stats.Speed.CurrentValue} {Entity.Stats.Speed.DefaultValue} ");
         }
 
         [BackgroundDependencyLoader]

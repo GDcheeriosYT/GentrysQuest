@@ -9,6 +9,29 @@
         public readonly Stat CritDamage = new Stat("CritDamage", StatType.CritDamage, 100);
         public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);
         public readonly Stat AttackSpeed = new Stat("AttackSpeed", StatType.AttackSpeed, 1);
+        private readonly Stat[] statGrouping;
+
+        public Stats()
+        {
+            statGrouping = new Stat[]
+            {
+                Health,
+                Attack,
+                Defense,
+                CritRate,
+                CritDamage,
+                Speed,
+                AttackSpeed
+            };
+        }
+
+        public void Restore()
+        {
+            foreach (Stat stat in statGrouping)
+            {
+                stat.RestoreValue();
+            }
+        }
 
         public override string ToString()
         {

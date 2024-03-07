@@ -4,6 +4,5 @@ public class Enemy : Entity
 {
     public Enemy()
     {
-
     }
 }

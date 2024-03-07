@@ -58,6 +58,7 @@ namespace GentrysQuest.Game.Entity
         #region Methods
 
         public void Spawn() { OnSpawn?.Invoke(); }
+
         public void Die() { OnDeath?.Invoke(); }
 
         public void Damage(int amount)
@@ -108,6 +109,7 @@ namespace GentrysQuest.Game.Entity
                 calculatePointBenefit(level * 50, Stats.Health.point, 10) +
                 calculatePointBenefit(starRating * 50, Stats.Health.point, 50)
             );
+
             Stats.Attack.SetDefaultValue(Experience.Level.current * 1.2);
             Stats.Defense.SetDefaultValue(Experience.Level.current * 1.2);
             Stats.CritRate.SetDefaultValue(Experience.Level.current * 0.2);

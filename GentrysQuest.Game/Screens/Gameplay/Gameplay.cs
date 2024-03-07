@@ -35,7 +35,9 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         public void AddEnemy()
         {
-            AddInternal(new DrawableEntity(new TestEnemy(3)));
+            DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(new TestEnemy(3));
+            AddInternal(newEnemy);
+            newEnemy.FollowEntity(playerEntity);
         }
 
         public void SetUp(Character character)
