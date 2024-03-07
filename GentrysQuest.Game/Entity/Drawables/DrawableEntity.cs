@@ -34,7 +34,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         public DrawableEntity(Entity entity, bool showInfo = true)
         {
             Entity = entity;
-            Size = new Vector2(100, 100);
+            Size = new Vector2(100);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;

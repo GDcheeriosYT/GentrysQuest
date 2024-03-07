@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Allocation;
@@ -30,6 +31,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     RelativeSizeAxes = Axes.Both
                 }
             };
+        }
+
+        public void AddEnemy()
+        {
+            AddInternal(new DrawableEntity(new TestEnemy(3)));
         }
 
         public void SetUp(Character character)

@@ -29,5 +29,14 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
             });
             AddStep("End", () => gameplay.End());
         }
+
+        [Test]
+        public void Management()
+        {
+            AddStep("AddEnemy", () =>
+            {
+                gameplay.AddEnemy();
+            });
+        }
     }
 }
