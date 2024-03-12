@@ -1,12 +1,16 @@
+using GentrysQuest.Game.Entity.Drawables;
+using osu.Framework.Extensions.PolygonExtensions;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shapes;
 
 namespace GentrysQuest.Game.Entity
 {
     public partial class HitBox : CompositeDrawable
     {
         private const bool DEBUG = true;
-        public readonly Affiliation affilation;
+        public readonly AffiliationType Affilation;
 
         private Quad collisionQuad
         {
@@ -17,10 +21,24 @@ namespace GentrysQuest.Game.Entity
             }
         }
 
-        public HitBox(Affiliation affilation)
+        public HitBox(AffiliationType affilation)
         {
-            this.affilation = affilation;
+            Affilation = affilation;
+            RelativeSizeAxes = Axes.Both;
+            RelativePositionAxes = Axes.Both;
+            Anchor = Anchor.Centre;
+            Origin = Anchor.Centre;
+            Colour = Colour4.Red;
+            Alpha = (float)(DEBUG ? .5 : 0);
+            InternalChild = new Box
+            {
+                RelativeSizeAxes = Axes.Both
+            };
+        }
 
+        public bool CheckCollision(DrawableEntity entity)
+        {
+            return collisionQuad.Intersects(entity.HitBox) && Affilation != entity.Affiliation;
         }
     }
 }

@@ -1,10 +1,12 @@
+using System;
+using System.Collections.Generic;
 using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Utils;
+using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Logging;
@@ -20,10 +22,15 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private readonly DrawableEntityBar entityBar;
 
+        public readonly AffiliationType Affiliation;
+
+        [CanBeNull]
+        protected List<DrawableEntity> EntitiesHitCheckList;
+
         // stat modifiers
         protected const double SPEED_MAIN = 0.25;
 
-        private Quad collisionQuad
+        public Quad HitBox
         {
             get
             {
@@ -32,9 +39,10 @@ namespace GentrysQuest.Game.Entity.Drawables
             }
         }
 
-        public DrawableEntity(Entity entity, bool showInfo = true)
+        public DrawableEntity(Entity entity, AffiliationType affiliationType = AffiliationType.None, bool showInfo = true)
         {
             Entity = entity;
+            Affiliation = affiliationType;
             Size = new Vector2(100);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
@@ -65,23 +73,33 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(center, position);
-            Box testBox = new Box
+            HitBox hitBox = new HitBox(Affiliation)
             {
-                RelativeSizeAxes = Axes.Both,
-                RelativePositionAxes = Axes.Both,
-                Colour = Colour4.Red,
-                Alpha = 0.5f,
                 Position = MathBase.GetDirection(center, position) * 0.25f,
                 Size = new Vector2(0.2f, 1f),
                 Origin = Anchor.BottomCentre,
-                Anchor = Anchor.Centre,
                 Rotation = (float)(90 + angle)
             };
-            AddInternal(testBox);
+            AddInternal(hitBox);
             Scheduler.AddDelayed(() =>
             {
-                RemoveInternal(testBox, true);
+                RemoveInternal(hitBox, true);
             }, 1000);
+
+            if (EntitiesHitCheckList != null)
+            {
+                try
+                {
+                    foreach (DrawableEntity entity in EntitiesHitCheckList)
+                    {
+                        if (hitBox.CheckCollision(entity)) entity.GetEntityObject().Damage(50);
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    Logger.Log("Collection Changed");
+                }
+            }
         }
 
         /// <summary>
@@ -118,6 +136,13 @@ namespace GentrysQuest.Game.Entity.Drawables
                 RemoveInternal(indicatorReference, false);
             }, indicatorReference.FadeOut());
         }
+
+        public void SetEntities(List<DrawableEntity> entities)
+        {
+            EntitiesHitCheckList = entities;
+        }
+
+        public Entity GetEntityObject() { return Entity; }
 
         public double GetSpeed()
         {

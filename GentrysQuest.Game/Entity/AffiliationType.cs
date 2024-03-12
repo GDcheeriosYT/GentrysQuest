@@ -14,7 +14,7 @@
 
 namespace GentrysQuest.Game.Entity;
 
-public enum Affiliation
+public enum AffiliationType
 {
     Player = 0,
     Enemy = 1,

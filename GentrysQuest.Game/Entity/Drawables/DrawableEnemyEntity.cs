@@ -1,5 +1,7 @@
+using System;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
+using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
@@ -8,7 +10,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         private DrawableEntity followEntity;
 
         public DrawableEnemyEntity(Enemy entity)
-            : base(entity, true)
+            : base(entity, AffiliationType.Enemy, true)
         {
             //empty constructor lol
         }
@@ -21,7 +23,15 @@ namespace GentrysQuest.Game.Entity.Drawables
         protected override void Update()
         {
             var value = Clock.ElapsedFrameTime * GetSpeed();
-            this.MoveTo(Position + MathBase.GetDirection(Position, followEntity.Position) * (float)value);
+
+            try
+            {
+                this.MoveTo(Position + MathBase.GetDirection(Position, followEntity.Position) * (float)value);
+            }
+            catch (ArgumentException)
+            {
+                Logger.Log("Error");
+            }
 
             base.Update();
         }

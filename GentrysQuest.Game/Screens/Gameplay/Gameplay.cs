@@ -16,7 +16,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
     {
         private Bindable<int> score = new(0);
         private DrawablePlayableEntity playerEntity;
-        private List<DrawableEntity> enemies;
+        private List<DrawableEntity> enemies = new List<DrawableEntity>();
 
         [BackgroundDependencyLoader]
         private void load()
@@ -37,7 +37,17 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(new TestEnemy(3));
             AddInternal(newEnemy);
+            enemies.Add(newEnemy);
+            newEnemy.GetEntityObject().OnDeath += delegate { RemoveEnemy(newEnemy); };
             newEnemy.FollowEntity(playerEntity);
+            playerEntity.SetEntities(enemies);
+        }
+
+        public void RemoveEnemy(DrawableEnemyEntity enemy)
+        {
+            enemies.Remove(enemy);
+            RemoveInternal(enemy, true);
+            playerEntity.SetEntities(enemies);
         }
 
         public void SetUp(Character character)

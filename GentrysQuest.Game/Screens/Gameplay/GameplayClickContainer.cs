@@ -3,7 +3,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Screens.Gameplay;
@@ -29,7 +28,6 @@ public partial class GameplayClickContainer : Container
 
     protected override bool OnMouseDown(MouseDownEvent e)
     {
-        Logger.Log("" + e.MousePosition);
         player.Attack(e.MousePosition);
         return base.OnMouseDown(e);
     }

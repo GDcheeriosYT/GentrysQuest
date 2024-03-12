@@ -4,6 +4,9 @@ namespace GentrysQuest.Game.Entity
 {
     public class Entity : EntityBase
     {
+        // info
+        public bool isDead;
+
         // stats
         public Stats Stats = new Stats();
 
@@ -57,13 +60,22 @@ namespace GentrysQuest.Game.Entity
 
         #region Methods
 
-        public void Spawn() { OnSpawn?.Invoke(); }
+        public void Spawn()
+        {
+            isDead = false;
+            OnSpawn?.Invoke();
+        }
 
-        public void Die() { OnDeath?.Invoke(); }
+        public void Die()
+        {
+            isDead = true;
+            OnDeath?.Invoke();
+        }
 
         public void Damage(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
+            if (Stats.Health.CurrentValue <= 0) Die();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }

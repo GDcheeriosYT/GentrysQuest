@@ -9,7 +9,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
     private GameplayClickContainer clickContainer;
 
     public DrawablePlayableEntity(Character entity)
-        : base(entity, false)
+        : base(entity, AffiliationType.Player, false)
     {
         // pass
     }
