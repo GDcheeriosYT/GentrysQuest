@@ -15,7 +15,7 @@ namespace GentrysQuest.Game.Entity
         protected int difficulty;
 
         // equips
-        protected Weapon.Weapon weapon;
+        public Weapon.Weapon Weapon;
 
         public Entity()
         {

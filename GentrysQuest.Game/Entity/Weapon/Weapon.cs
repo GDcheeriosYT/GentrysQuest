@@ -1,10 +1,18 @@
-﻿namespace GentrysQuest.Game.Entity.Weapon
+﻿using GentrysQuest.Game.Graphics;
+
+namespace GentrysQuest.Game.Entity.Weapon
 {
     public class Weapon : Item
     {
         private string type; // The weapon type
         private int damage; // Base damage
-        private int time; // The amount of time it takes for the attack pattern to finish
+        private int attackAmount; // How many times you've attacked
         private AttackPattern attackPattern; // Defines how the weapon attacks work
+        public readonly TextureMapping TextureMapping;
+
+        public void Attack()
+        {
+            // attackPattern.doSomething(theAmount, currTime);
+        }
     }
 }

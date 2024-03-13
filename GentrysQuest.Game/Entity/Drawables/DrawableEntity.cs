@@ -22,6 +22,8 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private readonly DrawableEntityBar entityBar;
 
+        protected DrawableWeapon weapon;
+
         public readonly AffiliationType Affiliation;
 
         [CanBeNull]
@@ -59,7 +61,6 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
             entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
             entity.Stats.Restore();
-            Logger.Log($"{SPEED_MAIN} {Entity.Stats.Speed.CurrentValue} {Entity.Stats.Speed.DefaultValue} ");
         }
 
         [BackgroundDependencyLoader]
@@ -73,33 +74,6 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(center, position);
-            HitBox hitBox = new HitBox(Affiliation)
-            {
-                Position = MathBase.GetDirection(center, position) * 0.25f,
-                Size = new Vector2(0.2f, 1f),
-                Origin = Anchor.BottomCentre,
-                Rotation = (float)(90 + angle)
-            };
-            AddInternal(hitBox);
-            Scheduler.AddDelayed(() =>
-            {
-                RemoveInternal(hitBox, true);
-            }, 1000);
-
-            if (EntitiesHitCheckList != null)
-            {
-                try
-                {
-                    foreach (DrawableEntity entity in EntitiesHitCheckList)
-                    {
-                        if (hitBox.CheckCollision(entity)) entity.GetEntityObject().Damage(50);
-                    }
-                }
-                catch (InvalidOperationException)
-                {
-                    Logger.Log("Collection Changed");
-                }
-            }
         }
 
         /// <summary>
@@ -140,6 +114,12 @@ namespace GentrysQuest.Game.Entity.Drawables
         public void SetEntities(List<DrawableEntity> entities)
         {
             EntitiesHitCheckList = entities;
+        }
+
+        public void SetWeapon(Weapon.Weapon weapon)
+        {
+            this.weapon = new DrawableWeapon(weapon);
+            Entity.Weapon = weapon;
         }
 
         public Entity GetEntityObject() { return Entity; }

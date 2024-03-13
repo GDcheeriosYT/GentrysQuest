@@ -56,7 +56,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 AddInternal(playerEntity = new(character));
                 playerEntity.SetupClickContainer();
-                // AddInternal(clickContainer = new GameplayClickContainer(playerEntity));
             }
         }
 
@@ -66,9 +65,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             RemoveInternal(playerEntity, true);
             playerEntity.Dispose();
             playerEntity = null;
-            // RemoveInternal(clickContainer, true);
-            // clickContainer.Dispose();
-            // clickContainer = null;
         }
     }
 }

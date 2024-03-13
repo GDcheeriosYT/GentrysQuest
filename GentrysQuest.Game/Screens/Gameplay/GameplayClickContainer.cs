@@ -7,15 +7,8 @@ using osuTK;
 
 namespace GentrysQuest.Game.Screens.Gameplay;
 
-public partial class GameplayClickContainer : Container
+public partial class GameplayClickContainer(DrawablePlayableEntity player) : Container
 {
-    private DrawablePlayableEntity player;
-
-    public GameplayClickContainer(DrawablePlayableEntity player)
-    {
-        this.player = player;
-    }
-
     [BackgroundDependencyLoader]
     private void load()
     {
