@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
+using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Allocation;
@@ -33,6 +34,9 @@ namespace GentrysQuest.Game.Screens.Gameplay
             };
         }
 
+        /// <summary>
+        /// Add an enemy to the gameplay scene
+        /// </summary>
         public void AddEnemy()
         {
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(new TestEnemy(3));
@@ -43,6 +47,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
             playerEntity.SetEntities(enemies);
         }
 
+        /// <summary>
+        /// Remove an enemy from the gameplay scene
+        /// </summary>
+        /// <param name="enemy">The enemy to remove</param>
         public void RemoveEnemy(DrawableEnemyEntity enemy)
         {
             enemies.Remove(enemy);
@@ -50,15 +58,23 @@ namespace GentrysQuest.Game.Screens.Gameplay
             playerEntity.SetEntities(enemies);
         }
 
+        /// <summary>
+        /// Sets up the gameplay scene
+        /// </summary>
+        /// <param name="character"></param>
         public void SetUp(Character character)
         {
             if (playerEntity is null)
             {
-                AddInternal(playerEntity = new(character));
+                AddInternal(playerEntity = new DrawablePlayableEntity(character));
+                playerEntity.SetWeapon(new BraydensOsuPen());
                 playerEntity.SetupClickContainer();
             }
         }
 
+        /// <summary>
+        /// Manages how to end the gameplay scene
+        /// </summary>
         public void End()
         {
             playerEntity.RemoveClickContainer();

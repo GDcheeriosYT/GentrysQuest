@@ -13,7 +13,12 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region AttackPattern
 
-            // AttackPattern = new AttackPattern()
+            AttackPattern.AddCase(1);
+            AttackPattern.Add(0, new AttackPatternEvent { Direction = -90, Distance = 0.5f });
+            AttackPattern.Add(1000, new AttackPatternEvent { Direction = 90, Distance = 0.5f });
+
+            AttackPattern.AddCase(2);
+            AttackPattern.Add(1000, new AttackPatternEvent { Direction = -90, Distance = 0.5f });
 
             #endregion
 

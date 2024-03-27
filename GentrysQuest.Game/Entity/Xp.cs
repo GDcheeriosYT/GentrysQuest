@@ -2,6 +2,9 @@
 
 namespace GentrysQuest.Game.Entity
 {
+    /// <summary>
+    /// Xp management class
+    /// </summary>
     public class Xp
     {
         public int Current { get; private set; }

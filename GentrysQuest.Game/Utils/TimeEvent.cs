@@ -6,5 +6,10 @@ namespace GentrysQuest.Game.Utils
     {
         private readonly int timeMS = timeMS;
         private readonly Action theEvent = theEvent;
+
+        public void Activate()
+        {
+            theEvent();
+        }
     }
 }

@@ -4,8 +4,15 @@ using osuTK.Input;
 
 namespace GentrysQuest.Game.Entity.Drawables;
 
+/// <summary>
+/// The playable version of the drawable entity
+/// </summary>
 public partial class DrawablePlayableEntity : DrawableEntity
 {
+    /// <summary>
+    /// A container that manages mouse clicks
+    /// Since it's a playable entity you should be able to click
+    /// </summary>
     private GameplayClickContainer clickContainer;
 
     public DrawablePlayableEntity(Character entity)
@@ -52,6 +59,9 @@ public partial class DrawablePlayableEntity : DrawableEntity
         }
     }
 
+    /// <summary>
+    /// Manage key inputs
+    /// </summary>
     protected override void Update()
     {
         base.Update();

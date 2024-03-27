@@ -1,14 +1,11 @@
-﻿using GentrysQuest.Game.Graphics;
-
-namespace GentrysQuest.Game.Entity.Weapon
+﻿namespace GentrysQuest.Game.Entity.Weapon
 {
     public class Weapon : Item
     {
         private string type; // The weapon type
         private int damage; // Base damage
-        private int attackAmount; // How many times you've attacked
-        private AttackPattern attackPattern; // Defines how the weapon attacks work
-        public readonly TextureMapping TextureMapping;
+        public int AttackAmount; // How many times you've attacked
+        public AttackPattern AttackPattern = new(); // Defines how the weapon attacks work
 
         public void Attack()
         {

@@ -1,8 +1,8 @@
 using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Screens.Gameplay;
 using NUnit.Framework;
 using osu.Framework.Screens;
-using GentrysQuest.Game.Entity;
 
 namespace GentrysQuest.Game.Tests.Visual.Screens
 {

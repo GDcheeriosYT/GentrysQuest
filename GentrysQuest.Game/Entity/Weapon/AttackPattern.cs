@@ -1,29 +1,53 @@
 using System.Collections.Generic;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Utils;
-using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
     public class AttackPattern
     {
-        [CanBeNull]
-        private DrawableWeapon instanceWeapon;
+        private DrawableWeapon weaponInstance;
+        private List<AttackPatternCaseHolder> caseEventList = new List<AttackPatternCaseHolder>();
+        private AttackPatternCaseHolder selectedCaseHolder;
 
-        private readonly List<TimeEvent> timingEvents;
-
-        public AttackPattern()
+        public void AddCase(int caseNumber)
         {
-            // instanceWeapon = instance;
+            AttackPatternCaseHolder thePattern = new AttackPatternCaseHolder(caseNumber);
+            selectedCaseHolder = thePattern;
+            caseEventList.Add(thePattern);
         }
 
-        public void SetDrawableInstance(DrawableWeapon drawableWeapon)
+        public void SetCaseHolder(int caseNumber)
         {
-            instanceWeapon = drawableWeapon;
+            selectedCaseHolder = GetCase(caseNumber);
         }
 
-        public void InitiatePattern(int amount)
+        public void Add(int timeMS, AttackPatternEvent attackPatternEvent)
         {
+            selectedCaseHolder.AddEvent(new TimeEvent(timeMS, delegate { attackPatternEvent.Activate(timeMS); }));
+        }
+
+        public AttackPatternCaseHolder GetCase(int caseNumber)
+        {
+            foreach (AttackPatternCaseHolder caseHolder in caseEventList)
+            {
+                if (caseHolder.attackNumberCase == caseNumber)
+                {
+                    return caseHolder;
+                }
+            }
+
+            return null;
+        }
+
+        private void setWeaponInstance(DrawableWeapon theWeapon)
+        {
+            weaponInstance = theWeapon;
+
+            foreach (AttackPatternCaseHolder caseHolder in caseEventList)
+            {
+                caseHolder.
+            }
         }
     }
 }

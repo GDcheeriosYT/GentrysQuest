@@ -1,5 +1,8 @@
 ﻿namespace GentrysQuest.Game.Entity
 {
+    /// <summary>
+    /// Stat management class
+    /// </summary>
     public class Stats
     {
         public readonly IntStat Health = new IntStat("Health", StatType.Health, 500);
@@ -25,6 +28,9 @@
             };
         }
 
+        /// <summary>
+        /// Restores all stat values to original value
+        /// </summary>
         public void Restore()
         {
             foreach (Stat stat in statGrouping)
