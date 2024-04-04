@@ -9,6 +9,9 @@ namespace GentrysQuest.Game.Screens.Gameplay;
 
 public partial class GameplayClickContainer(DrawablePlayableEntity player) : Container
 {
+    private bool isHeld;
+    private Vector2 mousePos;
+
     [BackgroundDependencyLoader]
     private void load()
     {
@@ -21,7 +24,25 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
 
     protected override bool OnMouseDown(MouseDownEvent e)
     {
-        player.Attack(e.MousePosition);
+        isHeld = true;
         return base.OnMouseDown(e);
+    }
+
+    protected override void OnMouseUp(MouseUpEvent e)
+    {
+        isHeld = false;
+        base.OnMouseUp(e);
+    }
+
+    protected override bool OnMouseMove(MouseMoveEvent e)
+    {
+        mousePos = e.MousePosition;
+        return base.OnMouseMove(e);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (isHeld) player.Attack(mousePos);
     }
 }

@@ -1,12 +1,9 @@
 using System.Collections.Generic;
-using GentrysQuest.Game.Entity.Drawables;
-using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
     public class AttackPattern
     {
-        private DrawableWeapon weaponInstance;
         private List<AttackPatternCaseHolder> caseEventList = new List<AttackPatternCaseHolder>();
         private AttackPatternCaseHolder selectedCaseHolder;
 
@@ -22,32 +19,22 @@ namespace GentrysQuest.Game.Entity.Weapon
             selectedCaseHolder = GetCase(caseNumber);
         }
 
-        public void Add(int timeMS, AttackPatternEvent attackPatternEvent)
+        public void Add(AttackPatternEvent attackPatternEvent)
         {
-            selectedCaseHolder.AddEvent(new TimeEvent(timeMS, delegate { attackPatternEvent.Activate(timeMS); }));
+            selectedCaseHolder.AddEvent(attackPatternEvent);
         }
 
         public AttackPatternCaseHolder GetCase(int caseNumber)
         {
             foreach (AttackPatternCaseHolder caseHolder in caseEventList)
             {
-                if (caseHolder.attackNumberCase == caseNumber)
+                if (caseHolder.AttackNumberCase == caseNumber)
                 {
                     return caseHolder;
                 }
             }
 
             return null;
-        }
-
-        private void setWeaponInstance(DrawableWeapon theWeapon)
-        {
-            weaponInstance = theWeapon;
-
-            foreach (AttackPatternCaseHolder caseHolder in caseEventList)
-            {
-                caseHolder.
-            }
         }
     }
 }

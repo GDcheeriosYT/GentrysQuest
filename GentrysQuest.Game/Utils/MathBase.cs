@@ -59,5 +59,18 @@ namespace GentrysQuest.Game.Utils
         {
             return value * (180 / Math.PI);
         }
+
+        public static Vector2 GetAngleToVector(double degrees)
+        {
+            double angleRadians = degrees * Math.PI / 180;
+            double x = Math.Cos(angleRadians);
+            double y = Math.Sin(angleRadians);
+            return new Vector2((float)x, (float)y) * 100;
+        }
+
+        public static double SecondToMs(double input)
+        {
+            return input * 1000;
+        }
     }
 }

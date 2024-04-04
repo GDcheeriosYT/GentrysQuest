@@ -89,10 +89,11 @@ namespace GentrysQuest.Game.Entity.Drawables
                 },
                 entityBar = new DrawableEntityBar(Entity)
             };
+            if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon);
+            Entity.OnSwapWeapon += setDrawableWeapon;
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
             entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
-            entity.OnAttack += delegate {};
             entity.Stats.Restore();
         }
 
@@ -111,7 +112,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(center, position);
-            if (weapon != null) weapon.Attack((float)angle);
+            if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle);
         }
 
         /// <summary>
@@ -149,6 +150,14 @@ namespace GentrysQuest.Game.Entity.Drawables
             }, indicatorReference.FadeOut());
         }
 
+        private void setDrawableWeapon()
+        {
+            if (weapon != null) RemoveInternal(weapon, false);
+
+            weapon = new DrawableWeapon(Entity.Weapon);
+            AddInternal(weapon);
+        }
+
         /// <summary>
         /// Set the EntityHitList
         /// should be used by some test class or by Gameplay class
@@ -157,17 +166,6 @@ namespace GentrysQuest.Game.Entity.Drawables
         public void SetEntities(List<DrawableEntity> entities)
         {
             EntitiesHitCheckList = entities;
-        }
-
-        /// <summary>
-        /// Set the weapon the entity will use
-        /// </summary>
-        /// <param name="weapon">The weapon</param>
-        public void SetWeapon(Weapon.Weapon weapon)
-        {
-            this.weapon = new DrawableWeapon(weapon);
-            weapon.AttackPattern.
-            Entity.Weapon = weapon;
         }
 
         /// <summary>

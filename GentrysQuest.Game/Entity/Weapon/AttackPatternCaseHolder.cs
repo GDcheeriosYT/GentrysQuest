@@ -1,31 +1,20 @@
 using System.Collections.Generic;
-using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
     public class AttackPatternCaseHolder
     {
-        public int attackNumberCase { get; private set; }
-        private List<TimeEvent> caseEvents;
+        public int AttackNumberCase { get; private set; }
+        private List<AttackPatternEvent> caseEvents;
 
         public AttackPatternCaseHolder(int attackNumberCase)
         {
-            this.attackNumberCase = attackNumberCase;
+            AttackNumberCase = attackNumberCase;
+            caseEvents = new List<AttackPatternEvent>();
         }
 
-        public void AddEvent(TimeEvent timedEvent)
-        {
-            caseEvents.Add(timedEvent);
-        }
+        public void AddEvent(AttackPatternEvent pattern) => caseEvents.Add(pattern);
 
-        public void ActivateCase(float direction)
-        {
-            foreach (TimeEvent timeEvent in caseEvents)
-            {
-                timeEvent.Activate();
-            }
-        }
-
-        public void 
+        public List<AttackPatternEvent> GetEvents() => caseEvents;
     }
 }

@@ -11,5 +11,7 @@ namespace GentrysQuest.Game.Utils
         {
             theEvent();
         }
+
+        public int TimeMs => timeMS;
     }
 }

@@ -1,27 +1,33 @@
-using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Graphics;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
-    public class AttackPatternEvent
+    public class AttackPatternEvent(int timeMs)
     {
-        private DrawableWeapon weaponInstance;
-
+        public int TimeMs = timeMs;
         public float? Direction = 0;
         public Vector2? Position = new Vector2(1);
         public Vector2? Size = new Vector2(1);
         public Vector2? HitboxSize = new Vector2(1);
         public float? Distance = 0;
         public int DamagePercent = 100;
+        public Easing Transition = Easing.None;
 
-        public void Activate(int timeMS)
+        public AttackPatternEvent()
+            : this(0)
         {
-            if (Direction != null) weaponInstance.RotateTo((float)Direction, duration: timeMS);
-            if (Position != null) weaponInstance.MoveTo((Vector2)Position, duration: timeMS);
-            if (Size != null) weaponInstance.ResizeTo((Vector2)Size, duration: timeMS);
-            if (HitboxSize != null) weaponInstance.MoveTo((Vector2)HitboxSize, duration: timeMS);
-            // if (Distance != null) weaponInstance.MoveTo((float)Distance);
+        }
+
+        public override string ToString()
+        {
+            return $"{timeMs}\n"
+                   + $"{Direction}\n"
+                   + $"{Position}\n"
+                   + $"{Size}\n"
+                   + $"{HitboxSize}\n"
+                   + $"{Distance}\n"
+                   + $"{DamagePercent}";
         }
     }
 }

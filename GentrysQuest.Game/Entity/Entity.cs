@@ -1,4 +1,5 @@
-﻿using osu.Framework.Logging;
+﻿using JetBrains.Annotations;
+using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -15,6 +16,7 @@ namespace GentrysQuest.Game.Entity
         protected int difficulty;
 
         // equips
+        [CanBeNull]
         public Weapon.Weapon Weapon;
 
         public Entity()
@@ -48,6 +50,10 @@ namespace GentrysQuest.Game.Entity
         public event EntityEvent OnMoveRight;
         public event EntityEvent OnMoveUp;
         public event EntityEvent OnMoveDown;
+
+        // Equipment events
+        public event EntityEvent OnSwapWeapon;
+        public event EntityEvent OnSwapArtifact;
 
         // Experience events
         public event EntityEvent OnGainXp;
@@ -108,6 +114,13 @@ namespace GentrysQuest.Game.Entity
             UpdateStats();
 
             OnLevelUp?.Invoke();
+        }
+
+        public void SetWeapon(Weapon.Weapon weapon)
+        {
+            Weapon = weapon;
+            weapon.Holder = this;
+            OnSwapWeapon.Invoke();
         }
 
         public void UpdateStats()

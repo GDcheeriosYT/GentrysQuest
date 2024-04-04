@@ -67,7 +67,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             if (playerEntity is null)
             {
                 AddInternal(playerEntity = new DrawablePlayableEntity(character));
-                playerEntity.SetWeapon(new BraydensOsuPen());
+                character.SetWeapon(new BraydensOsuPen());
                 playerEntity.SetupClickContainer();
             }
         }

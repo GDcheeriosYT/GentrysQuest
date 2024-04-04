@@ -21,7 +21,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
         // pass
     }
 
-    public void SetupClickContainer() { AddInternal(clickContainer = new GameplayClickContainer(this)); }
+    public void SetupClickContainer() => AddInternal(clickContainer = new GameplayClickContainer(this));
 
     public void RemoveClickContainer()
     {

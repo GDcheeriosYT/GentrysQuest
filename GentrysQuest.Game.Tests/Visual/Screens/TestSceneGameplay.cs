@@ -1,5 +1,7 @@
 using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
+using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Screens.Gameplay;
 using NUnit.Framework;
 using osu.Framework.Screens;
@@ -12,6 +14,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         private ScreenStack screens;
         private Gameplay gameplay;
         private Character theGuy;
+        private Weapon testWeapon;
 
         public TestSceneGameplay()
         {
@@ -25,6 +28,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
             AddStep("start", () =>
             {
                 theGuy = new TestCharacter(1);
+                testWeapon = new BraydensOsuPen();
                 gameplay.SetUp(theGuy);
             });
             AddStep("End", () => gameplay.End());
@@ -36,6 +40,10 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
             AddStep("AddEnemy", () =>
             {
                 gameplay.AddEnemy();
+            });
+            AddStep("SwapWeapon", () =>
+            {
+                theGuy.SetWeapon(testWeapon);
             });
         }
     }
