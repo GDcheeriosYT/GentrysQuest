@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osuTK;
@@ -43,6 +42,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// </summary>
         public readonly AffiliationType Affiliation;
 
+        protected HitBox hitBox;
+
         /// <summary>
         /// The entity list to check when attacking
         /// </summary>
@@ -56,18 +57,6 @@ namespace GentrysQuest.Game.Entity.Drawables
         protected const double SPEED_MAIN = 0.25;
 
         /// <summary>
-        /// The hitbox
-        /// </summary>
-        public Quad HitBox
-        {
-            get
-            {
-                RectangleF rect = ScreenSpaceDrawQuad.AABBFloat;
-                return Quad.FromRectangle(rect);
-            }
-        }
-
-        /// <summary>
         /// A drawable entity
         /// </summary>
         /// <param name="entity">The entity reference</param>
@@ -78,6 +67,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity = entity;
             Affiliation = affiliationType;
             Size = new Vector2(100);
+            hitBox = new HitBox(this);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
@@ -87,7 +77,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                 {
                     RelativeSizeAxes = Axes.Both,
                 },
-                entityBar = new DrawableEntityBar(Entity)
+                entityBar = new DrawableEntityBar(Entity),
+                hitBox
             };
             if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon);
             Entity.OnSwapWeapon += setDrawableWeapon;
@@ -155,6 +146,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             if (weapon != null) RemoveInternal(weapon, false);
 
             weapon = new DrawableWeapon(Entity.Weapon);
+            weapon.Affiliation = Affiliation;
             AddInternal(weapon);
         }
 

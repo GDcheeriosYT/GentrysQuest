@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
@@ -15,12 +16,14 @@ namespace GentrysQuest.Game.Entity.Drawables
         protected readonly Weapon.Weapon Weapon;
         protected readonly Sprite Sprite;
         protected readonly HitBox WeaponHitBox;
-        protected float distance;
+        protected readonly DamageQueue DamageQueue = new();
+        public AffiliationType Affiliation;
+        protected float Distance;
 
         public DrawableWeapon(Weapon.Weapon weapon)
         {
             Weapon = weapon;
-            WeaponHitBox = new HitBox(AffiliationType.None);
+            WeaponHitBox = new HitBox(this);
             Size = new Vector2(1f);
             RelativeSizeAxes = Axes.Both;
             Colour = Colour4.White;
@@ -71,6 +74,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public void Attack(float direction)
         {
+            DamageQueue.Clear();
             Weapon.CanAttack = false;
             enable();
             Weapon.AttackAmount += 1;
@@ -95,12 +99,12 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.Position != null) this.MoveTo((Vector2)pattern.Position, duration: speed, pattern.Transition);
                     if (pattern.Size != null) this.ResizeTo((Vector2)pattern.Size, duration: speed, pattern.Transition);
                     if (pattern.HitboxSize != null) this.MoveTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
-                    if (pattern.Distance != null) distance = (float)pattern.Distance;
+                    if (pattern.Distance != null) Distance = (float)pattern.Distance;
                 }, delay);
                 delay += speed;
             }
 
-            Scheduler.AddDelayed(() =>
+            Scheduler.AddDelayed(() => // Add delay to enable weapon attacking
             {
                 Weapon.CanAttack = true;
                 disable();
@@ -113,8 +117,24 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (!Weapon.CanAttack)
             {
-                Position = MathBase.GetAngleToVector(Rotation - 90) * distance;
-                if (WeaponHitBox.CheckCollision())
+                Position = MathBase.GetAngleToVector(Rotation - 90) * Distance;
+
+                foreach (var hitbox in HitBoxScene.GetIntersections(WeaponHitBox))
+                {
+                    try
+                    {
+                        if (!DamageQueue.Check(hitbox))
+                        {
+                            hitbox.getParent().GetEntityObject().Damage(100);
+                            DamageQueue.Add(hitbox);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
             }
         }
     }

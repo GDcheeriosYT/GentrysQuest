@@ -21,8 +21,8 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region AttackPattern
 
-            float distance = 0.35f;
-            int time = (int)MathBase.SecondToMs(0.7); // seconds
+            var distance = 0.35f;
+            var time = (int)MathBase.SecondToMs(0.7); // seconds
 
             AttackPattern.AddCase(1);
             AttackPattern.Add(new AttackPatternEvent { Direction = 0, Distance = distance });

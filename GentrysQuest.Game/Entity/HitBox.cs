@@ -1,4 +1,3 @@
-using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Extensions.PolygonExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -9,9 +8,10 @@ namespace GentrysQuest.Game.Entity
 {
     public partial class HitBox : CompositeDrawable
     {
-        private const bool DEBUG = false;
+        private const bool DEBUG = true;
         private bool enabled = true;
-        public readonly AffiliationType Affilation;
+        public readonly AffiliationType Affiliation;
+        private dynamic parent;
 
         private Quad collisionQuad
         {
@@ -22,28 +22,32 @@ namespace GentrysQuest.Game.Entity
             }
         }
 
-        public HitBox(AffiliationType affilation)
+        public HitBox(dynamic parent)
         {
-            Affilation = affilation;
+            this.parent = parent;
+            Affiliation = parent.Affiliation;
             RelativeSizeAxes = Axes.Both;
             RelativePositionAxes = Axes.Both;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
             Colour = Colour4.Red;
-            Alpha = (float)(DEBUG ? .5 : 0);
+            Alpha = (float)(DEBUG ? .2 : 0);
             InternalChild = new Box
             {
                 RelativeSizeAxes = Axes.Both
             };
+            HitBoxScene.Add(this);
         }
 
         public void Disable() { enabled = false; }
 
         public void Enable() { enabled = true; }
 
-        public bool CheckCollision(DrawableEntity entity)
+        public dynamic getParent() => parent;
+
+        public bool CheckCollision(HitBox hitBox)
         {
-            if (enabled) return collisionQuad.Intersects(entity.HitBox) && Affilation != entity.Affiliation;
+            if (enabled) return collisionQuad.Intersects(hitBox.collisionQuad) && Affiliation != hitBox.Affiliation;
             return false;
         }
     }
