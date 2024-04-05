@@ -13,6 +13,7 @@ namespace GentrysQuest.Game.Entity.Weapon
         public float? Distance = 0;
         public int DamagePercent = 0;
         public Easing Transition = Easing.None;
+        public bool ResetHitBox = false;
 
         public AttackPatternEvent()
             : this(0)

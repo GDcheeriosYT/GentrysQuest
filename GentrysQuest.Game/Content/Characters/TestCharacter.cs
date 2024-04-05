@@ -9,7 +9,6 @@ namespace GentrysQuest.Game.Content.Characters
             Name = "Test Character";
             Description = "Just the character used for testing and stuff...";
             StarRating = new StarRating(starRating);
-            Stats.Speed.SetDefaultValue(0.3);
         }
     }
 }

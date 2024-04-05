@@ -135,14 +135,21 @@ namespace GentrysQuest.Game.Entity
             );
 
             Stats.Attack.SetDefaultValue(Experience.Level.current * 1.2);
+
             Stats.Defense.SetDefaultValue(Experience.Level.current * 1.2);
-            Stats.CritRate.SetDefaultValue(Experience.Level.current * 0.2);
+
+            Stats.CritRate.SetDefaultValue(
+                calculatePointBenefit(0, Stats.CritRate.point, 2.5) +
+                Experience.Level.current * 0.2
+            );
             Stats.CritDamage.SetDefaultValue(Experience.Level.current * 10);
+            Stats.Speed.SetDefaultValue(calculatePointBenefit(0, Stats.Speed.point, 0.65));
+            Stats.AttackSpeed.SetDefaultValue(calculatePointBenefit(0, Stats.AttackSpeed.point, 0.3));
         }
 
         #endregion
 
-        private int calculatePointBenefit(int normalValue, int point, int pointBenefit)
+        private double calculatePointBenefit(double normalValue, int point, double pointBenefit)
         {
             return normalValue + (point * pointBenefit);
         }

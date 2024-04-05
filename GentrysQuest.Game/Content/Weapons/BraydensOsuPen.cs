@@ -35,8 +35,12 @@ namespace GentrysQuest.Game.Content.Weapons
             AttackPattern.Add(new AttackPatternEvent(time) { Direction = -90, Distance = distance, Transition = Easing.InOutQuart, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 5 });
 
             AttackPattern.AddCase(3);
-            AttackPattern.Add(new AttackPatternEvent { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1) });
-            AttackPattern.Add(new AttackPatternEvent((int)(time / 1.2)) { Direction = 360, Distance = distance, Transition = Easing.InOutSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15 });
+            AttackPattern.Add(new AttackPatternEvent
+                { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1) });
+            AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
+                { Direction = 180, Distance = distance, Transition = Easing.InSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15 });
+            AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
+                { Direction = 360, Distance = distance, Transition = Easing.OutSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, ResetHitBox = true });
 
             #endregion
 
