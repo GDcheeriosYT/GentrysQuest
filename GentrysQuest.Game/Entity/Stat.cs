@@ -1,4 +1,5 @@
 ﻿using System;
+using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -6,6 +7,7 @@ namespace GentrysQuest.Game.Entity
     {
         protected string Name; // display name for other languages and etc
         protected StatType StatType; // this is how we get what stat we're looking at
+        protected readonly bool ResetsOnUpdate;
 
         /// <summary>
         /// This is the bonus stat calculation variable.
@@ -18,12 +20,13 @@ namespace GentrysQuest.Game.Entity
         public double CurrentValue { get; private set; }
         public double AdditionalValue { get; private set; }
 
-        public Stat(string name, StatType statType, double minimumValue)
+        public Stat(string name, StatType statType, double minimumValue, bool resetsOnUpdate = true)
         {
-            this.Name = name;
+            Name = name;
             StatType = statType;
             MinimumValue = minimumValue;
             CurrentValue = Total();
+            ResetsOnUpdate = resetsOnUpdate;
             calculate();
         }
 
@@ -32,7 +35,7 @@ namespace GentrysQuest.Game.Entity
             double difference = CurrentValue;
             CurrentValue = Total();
             difference -= CurrentValue;
-            UpdateCurrentValue(difference);
+            if (!ResetsOnUpdate) UpdateCurrentValue(difference);
         }
 
         public void RestoreValue()
@@ -65,6 +68,10 @@ namespace GentrysQuest.Game.Entity
         {
             throw new NotImplementedException();
         }
+
+        public double GetPercentFromDefault(float percent) => MathBase.GetPercent(DefaultValue, percent);
+        public double GetPercentFromAdditional(float percent) => MathBase.GetPercent(AdditionalValue, percent);
+        public double GetPercentFromTotal(float percent) => MathBase.GetPercent(Total(), percent);
 
         public double Total()
         {

@@ -119,7 +119,7 @@ namespace GentrysQuest.Game.Entity
         {
             Weapon = weapon;
             weapon.Holder = this;
-            OnSwapWeapon.Invoke();
+            OnSwapWeapon?.Invoke();
         }
 
         public void UpdateStats()

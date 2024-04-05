@@ -7,7 +7,7 @@ namespace GentrysQuest.Game.Content.Enemies
         public TestEnemy(int starRating)
         {
             Name = "Test Enemy";
-            this.StarRating = new StarRating(starRating);
+            StarRating = new StarRating(starRating);
         }
     }
 }

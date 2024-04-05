@@ -53,6 +53,20 @@ namespace GentrysQuest.Game.Entity.Drawables
             Show();
         }
 
+        private void disable(int timeMs)
+        {
+            WeaponHitBox.Disable();
+            this.FadeOut(timeMs);
+            this.ScaleTo(0, timeMs);
+        }
+
+        private void enable(int timeMs)
+        {
+            WeaponHitBox.Enable();
+            this.FadeIn(timeMs);
+            this.ScaleTo(1, timeMs);
+        }
+
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
@@ -76,7 +90,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             DamageQueue.Clear();
             Weapon.CanAttack = false;
-            enable();
+            enable(100);
             Weapon.AttackAmount += 1;
             AttackPatternCaseHolder caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
             List<AttackPatternEvent> patterns;
@@ -100,15 +114,20 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.Size != null) this.ResizeTo((Vector2)pattern.Size, duration: speed, pattern.Transition);
                     if (pattern.HitboxSize != null) this.WeaponHitBox.ScaleTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
                     if (pattern.Distance != null) Distance = (float)pattern.Distance;
+                    Weapon.Damage.SetAdditionalValue(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
                 }, delay);
                 delay += speed;
             }
 
             Scheduler.AddDelayed(() => // Add delay to enable weapon attacking
             {
+                disable(100);
+            }, delay + 50);
+
+            Scheduler.AddDelayed((() =>
+            {
                 Weapon.CanAttack = true;
-                disable();
-            }, delay);
+            }), delay + 110);
         }
 
         protected override void Update()
@@ -126,8 +145,18 @@ namespace GentrysQuest.Game.Entity.Drawables
                         if (!DamageQueue.Check(hitbox))
                         {
                             Entity entity = hitbox.getParent().GetEntityObject();
-                            int damage = Weapon.Damage + Weapon.Holder.Stats.Attack.CurrentValue;
-                            entity.Damage(damage - entity.Stats.Defense.CurrentValue);
+                            int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
+
+                            if (Weapon.Holder.Stats.CritRate.CurrentValue > MathBase.RandomInt(0, 100))
+                            {
+                                damage += (int)MathBase.GetPercent(
+                                    Weapon.Holder.Stats.Attack.CurrentValue,
+                                    Weapon.Holder.Stats.CritDamage.CurrentValue
+                                );
+                                entity.Crit(damage - entity.Stats.Defense.CurrentValue);
+                            }
+                            else entity.Damage(damage - entity.Stats.Defense.CurrentValue);
+
                             DamageQueue.Add(hitbox);
                         }
                     }

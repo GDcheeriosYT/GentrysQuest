@@ -11,7 +11,7 @@ namespace GentrysQuest.Game.Entity.Weapon
         public Vector2? Size = new Vector2(1);
         public Vector2? HitboxSize = new Vector2(1);
         public float? Distance = 0;
-        public int DamagePercent = 100;
+        public int DamagePercent = 0;
         public Easing Transition = Easing.None;
 
         public AttackPatternEvent()

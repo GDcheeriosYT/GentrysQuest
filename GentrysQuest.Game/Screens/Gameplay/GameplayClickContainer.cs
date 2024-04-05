@@ -31,6 +31,7 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
     protected override void OnMouseUp(MouseUpEvent e)
     {
         isHeld = false;
+        player.GetEntityObject().Weapon!.AttackAmount = 0;
         base.OnMouseUp(e);
     }
 

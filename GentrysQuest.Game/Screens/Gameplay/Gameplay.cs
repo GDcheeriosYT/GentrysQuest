@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
-using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Allocation;
@@ -41,7 +40,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(new TestEnemy(3));
             AddInternal(newEnemy);
-            enemies.Add(newEnemy);
             newEnemy.GetEntityObject().OnDeath += delegate { RemoveEnemy(newEnemy); };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);
@@ -67,7 +65,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             if (playerEntity is null)
             {
                 AddInternal(playerEntity = new DrawablePlayableEntity(character));
-                character.SetWeapon(new BraydensOsuPen());
+                if (character.Weapon != null) character.SetWeapon(character.Weapon);
                 playerEntity.SetupClickContainer();
             }
         }

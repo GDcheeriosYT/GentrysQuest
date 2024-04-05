@@ -103,7 +103,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(center, position);
-            if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle);
+            if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle + 90);
         }
 
         /// <summary>
