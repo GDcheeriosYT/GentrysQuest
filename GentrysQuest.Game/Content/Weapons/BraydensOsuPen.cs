@@ -2,6 +2,7 @@ using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
+using osuTK;
 
 namespace GentrysQuest.Game.Content.Weapons
 {
@@ -15,7 +16,7 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region Design
 
-            origin = Anchor.BottomCentre;
+            Origin = Anchor.BottomCentre;
 
             #endregion
 
@@ -25,12 +26,12 @@ namespace GentrysQuest.Game.Content.Weapons
             var time = (int)MathBase.SecondToMs(0.7); // seconds
 
             AttackPattern.AddCase(1);
-            AttackPattern.Add(new AttackPatternEvent { Direction = 0, Distance = distance });
-            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 180, Distance = distance, Transition = Easing.InOutQuart });
+            AttackPattern.Add(new AttackPatternEvent { Direction = 0, Distance = distance, HitboxSize = new Vector2(0.1f, 1) });
+            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 180, Distance = distance, Transition = Easing.InOutQuart, HitboxSize = new Vector2(0.1f, 1) });
 
             AttackPattern.AddCase(2);
-            AttackPattern.Add(new AttackPatternEvent { Direction = 180, Distance = distance });
-            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 0, Distance = distance, Transition = Easing.InOutQuart });
+            AttackPattern.Add(new AttackPatternEvent { Direction = 180, Distance = distance, HitboxSize = new Vector2(0.1f, 1) });
+            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 0, Distance = distance, Transition = Easing.InOutQuart, HitboxSize = new Vector2(0.1f, 1) });
 
             #endregion
 

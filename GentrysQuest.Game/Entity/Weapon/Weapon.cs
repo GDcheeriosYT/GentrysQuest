@@ -9,7 +9,7 @@ namespace GentrysQuest.Game.Entity.Weapon
         public int AttackAmount; // How many times you've attacked
         public bool CanAttack; // If the weapon is able to attack in the current moment
         public AttackPattern AttackPattern = new(); // Defines how the weapon attacks work
-        public Entity Holder;
-        public Anchor origin = Anchor.Centre;
+        public Entity Holder; // The holder of the weapon
+        public Anchor Origin = Anchor.Centre; // Design purposes
     }
 }

@@ -28,7 +28,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             RelativeSizeAxes = Axes.Both;
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
-            Origin = weapon.origin;
+            Origin = weapon.Origin;
             InternalChildren = new Drawable[]
             {
                 Sprite = new Sprite
@@ -98,7 +98,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.Direction != null) this.RotateTo((float)pattern.Direction + direction, duration: speed, pattern.Transition);
                     if (pattern.Position != null) this.MoveTo((Vector2)pattern.Position, duration: speed, pattern.Transition);
                     if (pattern.Size != null) this.ResizeTo((Vector2)pattern.Size, duration: speed, pattern.Transition);
-                    if (pattern.HitboxSize != null) this.MoveTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
+                    if (pattern.HitboxSize != null) this.WeaponHitBox.ScaleTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
                     if (pattern.Distance != null) Distance = (float)pattern.Distance;
                 }, delay);
                 delay += speed;
