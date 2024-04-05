@@ -1,5 +1,4 @@
 ﻿using System;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -43,7 +42,6 @@ namespace GentrysQuest.Game.Entity
 
         public void UpdateCurrentValue(double updateDifference)
         {
-            Logger.Log("updateDiff: " + updateDifference);
             var potentialChange = CurrentValue + updateDifference;
 
             if (potentialChange > Total()) { CurrentValue = Total(); }

@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -139,8 +138,6 @@ namespace GentrysQuest.Game.Entity
             Stats.Defense.SetDefaultValue(Experience.Level.current * 1.2);
             Stats.CritRate.SetDefaultValue(Experience.Level.current * 0.2);
             Stats.CritDamage.SetDefaultValue(Experience.Level.current * 10);
-
-            Logger.Log(Stats.ToString());
         }
 
         #endregion

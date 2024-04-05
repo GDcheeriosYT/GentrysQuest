@@ -125,7 +125,9 @@ namespace GentrysQuest.Game.Entity.Drawables
                     {
                         if (!DamageQueue.Check(hitbox))
                         {
-                            hitbox.getParent().GetEntityObject().Damage(100);
+                            Entity entity = hitbox.getParent().GetEntityObject();
+                            int damage = Weapon.Damage + Weapon.Holder.Stats.Attack.CurrentValue;
+                            entity.Damage(damage - entity.Stats.Defense.CurrentValue);
                             DamageQueue.Add(hitbox);
                         }
                     }
