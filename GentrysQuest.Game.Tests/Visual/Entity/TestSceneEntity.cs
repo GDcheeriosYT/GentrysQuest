@@ -21,7 +21,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
         {
             Add(new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.Gray });
 
-            entity = new BraydenMesserschmidt();
+            entity = new TestCharacter(5);
             Add(levelTracker = new SpriteText
             {
                 Text = $"Level: {entity.Experience.Level.current}"
