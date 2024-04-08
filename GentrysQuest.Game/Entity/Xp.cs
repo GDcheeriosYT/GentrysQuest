@@ -1,6 +1,4 @@
-﻿using osu.Framework.Logging;
-
-namespace GentrysQuest.Game.Entity
+﻿namespace GentrysQuest.Game.Entity
 {
     /// <summary>
     /// Xp management class
@@ -19,7 +17,6 @@ namespace GentrysQuest.Game.Entity
         public bool add_xp(int amount)
         {
             Current += amount;
-            Logger.Log($"{Current} {Requirement}");
 
             if (Current >= Requirement)
             {
@@ -34,11 +31,11 @@ namespace GentrysQuest.Game.Entity
 
         public void CalculateRequirment(int level, int starRating)
         {
-            int difficulty = 1 + (int)(level / 20);
+            int difficulty = 1 + (level / 20);
             int starRatingExperience = starRating * 25;
             int levelExperience = level * 10;
 
-            Requirement = difficulty * (levelExperience * starRatingExperience);
+            Requirement = (difficulty * 100) + levelExperience + starRatingExperience;
         }
     }
 }

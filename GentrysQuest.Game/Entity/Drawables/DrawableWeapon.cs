@@ -157,6 +157,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 entity.Crit(damage - entity.Stats.Defense.CurrentValue);
                             }
                             else entity.Damage(damage - entity.Stats.Defense.CurrentValue);
+                            if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
 
                             DamageQueue.Add(hitbox);
                         }

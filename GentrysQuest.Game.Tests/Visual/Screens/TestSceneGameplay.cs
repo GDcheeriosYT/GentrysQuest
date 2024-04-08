@@ -42,6 +42,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
             {
                 gameplay.AddEnemy();
             });
+            AddStep("Damage", (() => theGuy.Damage(10)));
             AddStep("SwapWeapon", () =>
             {
                 theGuy.SetWeapon(testWeapon);

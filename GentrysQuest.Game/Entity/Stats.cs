@@ -39,6 +39,18 @@
             }
         }
 
+        public int GetPointTotal()
+        {
+            int points = 1;
+
+            foreach (Stat stat in statGrouping)
+            {
+                points += stat.point;
+            }
+
+            return points;
+        }
+
         public override string ToString()
         {
             return $"{Health}\n"

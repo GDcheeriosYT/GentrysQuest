@@ -21,7 +21,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
         {
             Add(new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.Gray });
 
-            entity = new TestCharacter(5);
+            entity = new BraydenMesserschmidt();
             Add(levelTracker = new SpriteText
             {
                 Text = $"Level: {entity.Experience.Level.current}"
@@ -62,6 +62,8 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
         public virtual void Start()
         {
             int amount = 100;
+            AddStep("Spawn", () => entity.Spawn());
+            AddStep("Die", () => entity.Die());
             AddSliderStep("Amount", 0, 1000, 100, i => amount = i);
             AddStep("Damage", () => entity.Damage(amount));
             AddStep("Crit", () => entity.Crit((int)(amount * 1.5)));

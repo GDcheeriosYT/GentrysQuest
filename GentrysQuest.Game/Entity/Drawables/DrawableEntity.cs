@@ -3,10 +3,12 @@ using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Utils;
 using JetBrains.Annotations;
 using osu.Framework.Allocation;
+using osu.Framework.Audio.Sample;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -85,14 +87,26 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
             entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
-            entity.Stats.Restore();
+            entity.OnDeath += delegate { Sprite.FadeOut(100); };
+            entity.OnSpawn += delegate { Sprite.FadeIn(100); };
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
+        private void load(TextureStore textures, ISampleStore samples)
         {
+            // textures
             Sprite.Colour = Colour4.White;
             Sprite.Texture = textures.Get(Entity.TextureMapping.Get("Idle"));
+
+            // sounds
+            Logger.Log(Entity.AudioMapping.Get("Spawn"));
+            Logger.Log(Entity.AudioMapping.Get("Damage"));
+            Logger.Log(Entity.AudioMapping.Get("Levelup"));
+            Logger.Log(Entity.AudioMapping.Get("Death"));
+            // Entity.OnSpawn += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Spawn")))); };
+            // Entity.OnDamage += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Damage")))); };
+            // Entity.OnLevelUp += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Levelup")))); };
+            // Entity.OnDeath += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Death")))); };
         }
 
         /// <summary>

@@ -16,6 +16,11 @@ public partial class ProgressBar : CompositeDrawable
     private Colour4 foregroundColour = Colour4.Blue;
     private Colour4 backgroundColour = Colour4.Gray;
 
+    // events
+    public delegate void ProgressChangeEvent();
+
+    public event ProgressChangeEvent OnProgressChange;
+
     // objects
     private Box foreground;
     private Box background;
@@ -98,5 +103,6 @@ public partial class ProgressBar : CompositeDrawable
     public void set_progress()
     {
         foreground.ResizeWidthTo((float)(cur.Value / max.Value), 250, easing: Easing.OutCirc);
+        OnProgressChange?.Invoke();
     }
 }

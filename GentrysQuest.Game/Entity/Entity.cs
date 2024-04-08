@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -60,6 +61,7 @@ namespace GentrysQuest.Game.Entity
 
         // Other Events
         public event EntityEvent OnAttack;
+        public event EntityEvent OnUpdateStats;
 
         #endregion
 
@@ -68,6 +70,8 @@ namespace GentrysQuest.Game.Entity
         public void Spawn()
         {
             isDead = false;
+            UpdateStats();
+            Stats.Restore();
             OnSpawn?.Invoke();
         }
 
@@ -111,6 +115,7 @@ namespace GentrysQuest.Game.Entity
             Experience.Xp.CalculateRequirment(Experience.Level.current, StarRating.Value);
 
             UpdateStats();
+            Stats.Restore();
 
             OnLevelUp?.Invoke();
         }
@@ -120,6 +125,16 @@ namespace GentrysQuest.Game.Entity
             Weapon = weapon;
             weapon.Holder = this;
             OnSwapWeapon?.Invoke();
+        }
+
+        public int GetXpReward()
+        {
+            int value = 0;
+
+            value += Experience.Level.current * 5;
+            value += Stats.GetPointTotal() * 2;
+
+            return value;
         }
 
         public void UpdateStats()
@@ -134,17 +149,39 @@ namespace GentrysQuest.Game.Entity
                 calculatePointBenefit(starRating * 50, Stats.Health.point, 50)
             );
 
-            Stats.Attack.SetDefaultValue(Experience.Level.current * 1.2);
+            Stats.Attack.SetDefaultValue(
+                calculatePointBenefit(difficulty * 8, Stats.Attack.point, 5) +
+                calculatePointBenefit(level * 2, Stats.Attack.point, 4) +
+                calculatePointBenefit(starRating * 5, Stats.Attack.point, 3)
+            );
 
-            Stats.Defense.SetDefaultValue(Experience.Level.current * 1.2);
+            Stats.Defense.SetDefaultValue(
+                calculatePointBenefit(difficulty * 10, Stats.Defense.point, 4) +
+                calculatePointBenefit(level * 2, Stats.Defense.point, 2) +
+                calculatePointBenefit(starRating * 3, Stats.Defense.point, 3)
+            );
 
             Stats.CritRate.SetDefaultValue(
-                calculatePointBenefit(0, Stats.CritRate.point, 2.5) +
-                Experience.Level.current * 0.2
+                calculatePointBenefit(5, Stats.CritRate.point, 5) +
+                difficulty + 1
             );
-            Stats.CritDamage.SetDefaultValue(Experience.Level.current * 10);
-            Stats.Speed.SetDefaultValue(calculatePointBenefit(0, Stats.Speed.point, 0.65));
-            Stats.AttackSpeed.SetDefaultValue(calculatePointBenefit(0, Stats.AttackSpeed.point, 0.3));
+
+            Stats.CritDamage.SetDefaultValue(
+                calculatePointBenefit(difficulty * 5, Stats.CritDamage.point, 1) +
+                calculatePointBenefit(starRating * 1, Stats.CritDamage.point, 1)
+            );
+
+            Stats.Speed.SetDefaultValue(
+                calculatePointBenefit(0, Stats.Speed.point, 0.2)
+            );
+
+            Stats.AttackSpeed.SetDefaultValue(
+                calculatePointBenefit(0, Stats.AttackSpeed.point, 0.3)
+            );
+
+            Logger.Log(Stats.ToString());
+
+            OnUpdateStats?.Invoke();
         }
 
         #endregion
