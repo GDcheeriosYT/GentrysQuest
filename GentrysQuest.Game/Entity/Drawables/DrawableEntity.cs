@@ -84,7 +84,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 entityBar = new DrawableEntityBar(Entity),
                 hitBox
             };
-            if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon);
+            if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
@@ -161,7 +161,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             if (weapon != null) RemoveInternal(weapon, false);
 
-            weapon = new DrawableWeapon(Entity.Weapon);
+            weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
             weapon.Affiliation = Affiliation;
             AddInternal(weapon);
         }
@@ -180,7 +180,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// In some cases you'll want to get the entity reference for this drawable class
         /// </summary>
         /// <returns>The entity reference for this drawable</returns>
-        public Entity GetEntityObject() { return Entity; }
+        public Entity GetEntityObject() => Entity;
 
         /// <summary>
         /// Manages the speed of the entity

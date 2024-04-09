@@ -20,9 +20,10 @@ namespace GentrysQuest.Game.Entity.Drawables
         public AffiliationType Affiliation;
         protected float Distance;
 
-        public DrawableWeapon(Weapon.Weapon weapon)
+        public DrawableWeapon(Weapon.Weapon weapon, AffiliationType affiliation)
         {
             Weapon = weapon;
+            Affiliation = affiliation;
             WeaponHitBox = new HitBox(this);
             Size = new Vector2(1f);
             RelativeSizeAxes = Axes.Both;
@@ -143,7 +144,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 {
                     try
                     {
-                        if (!DamageQueue.Check(hitbox))
+                        if (!DamageQueue.Check(hitbox) && hitbox.getParent().GetType() != typeof(DrawableWeapon))
                         {
                             Entity entity = hitbox.getParent().GetEntityObject();
                             int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
@@ -157,6 +158,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 entity.Crit(damage - entity.Stats.Defense.CurrentValue);
                             }
                             else entity.Damage(damage - entity.Stats.Defense.CurrentValue);
+
                             if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
 
                             DamageQueue.Add(hitbox);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
+using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using osu.Framework.Allocation;
@@ -40,8 +41,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void AddEnemy()
         {
+            Enemy enemy = new TestEnemy(3);
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(new TestEnemy(3));
             AddInternal(newEnemy);
+            newEnemy.GetEntityObject().SetWeapon(new Knife()); // Temp hardcode until I get good at coding
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);

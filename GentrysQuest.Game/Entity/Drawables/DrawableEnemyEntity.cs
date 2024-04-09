@@ -1,19 +1,12 @@
 using System;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class DrawableEnemyEntity : DrawableEntity
+    public partial class DrawableEnemyEntity(Enemy entity) : DrawableEntity(entity, AffiliationType.Enemy, true)
     {
         private DrawableEntity followEntity;
-
-        public DrawableEnemyEntity(Enemy entity)
-            : base(entity, AffiliationType.Enemy, true)
-        {
-            //empty constructor lol
-        }
 
         public void FollowEntity(DrawableEntity drawableEntity)
         {
@@ -30,7 +23,12 @@ namespace GentrysQuest.Game.Entity.Drawables
             }
             catch (ArgumentException)
             {
-                Logger.Log("Error");
+                // bad coding
+            }
+
+            if (GetEntityObject().Weapon != null)
+            {
+                Attack(followEntity.Position);
             }
 
             base.Update();

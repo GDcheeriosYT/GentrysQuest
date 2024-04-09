@@ -73,6 +73,11 @@ namespace GentrysQuest.Game.Utils
             return input * 1000;
         }
 
+        public static double GetDistance(Vector2 firstPos, Vector2 secondPos)
+        {
+            return Math.Sqrt(Math.Pow(secondPos.X - firstPos.X, 2) + Math.Pow(secondPos.Y - firstPos.Y, 2));
+        }
+
         public static double GetPercent(double value, double percent) => value * (percent * 0.01f);
 
         public static int RandomInt(int min, int max) => Random.Shared.Next(min, max);

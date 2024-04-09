@@ -27,8 +27,8 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         {
             AddStep("start", () =>
             {
-                theGuy = new BraydenMesserschmidt();
-                testWeapon = new Knife();
+                theGuy = new TestCharacter(1);
+                testWeapon = new BraydensOsuPen();
                 theGuy.SetWeapon(testWeapon);
                 gameplay.SetUp(theGuy);
             });
