@@ -10,7 +10,6 @@ using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -101,10 +100,6 @@ namespace GentrysQuest.Game.Entity.Drawables
             Sprite.Texture = textures.Get(Entity.TextureMapping.Get("Idle"));
 
             // sounds
-            Logger.Log(Entity.AudioMapping.Get("Spawn"));
-            Logger.Log(Entity.AudioMapping.Get("Damage"));
-            Logger.Log(Entity.AudioMapping.Get("Levelup"));
-            Logger.Log(Entity.AudioMapping.Get("Death"));
             Entity.OnSpawn += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Spawn")))); };
             Entity.OnDamage += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Damage")))); };
             Entity.OnLevelUp += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Levelup")))); };

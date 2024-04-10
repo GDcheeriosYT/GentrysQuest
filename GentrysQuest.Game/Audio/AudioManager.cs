@@ -8,9 +8,9 @@ namespace GentrysQuest.Game.Audio
 {
     public static class AudioManager
     {
-        private static Volume gameVolume = new Volume(1);
-        private static Volume musicVolume = new Volume(1);
-        private static Volume soundVolume = new Volume(1);
+        private static readonly Volume gameVolume = new Volume(0.5);
+        private static readonly Volume musicVolume = new Volume(0.25);
+        private static readonly Volume soundVolume = new Volume(0.25);
 
         [CanBeNull]
         private static DrawableTrack gameMusic;

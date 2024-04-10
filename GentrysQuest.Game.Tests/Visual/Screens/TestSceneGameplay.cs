@@ -27,7 +27,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         {
             AddStep("start", () =>
             {
-                theGuy = new TestCharacter(1);
+                theGuy = new BraydenMesserschmidt();
                 testWeapon = new BraydensOsuPen();
                 theGuy.SetWeapon(testWeapon);
                 gameplay.SetUp(theGuy);
@@ -40,13 +40,10 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         {
             AddStep("AddEnemy", () =>
             {
-                gameplay.AddEnemy();
+                gameplay.AddEnemy(theGuy.Experience.Level.current);
             });
             AddStep("Damage", (() => theGuy.Damage(10)));
-            AddStep("SwapWeapon", () =>
-            {
-                theGuy.SetWeapon(testWeapon);
-            });
+            AddStep("Spawn Enemys", () => gameplay.SpawnEntities());
         }
     }
 }

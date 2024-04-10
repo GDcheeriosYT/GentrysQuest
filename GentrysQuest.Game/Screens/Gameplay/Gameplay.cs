@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
-using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
+using osuTK;
 using osuTK.Graphics;
 
 namespace GentrysQuest.Game.Screens.Gameplay
@@ -19,6 +20,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private DrawablePlayableEntity playerEntity;
         private List<DrawableEntity> enemies = new List<DrawableEntity>();
         private GameplayHud gameplayHud;
+
+        private int enemySpawnLimit = 4;
+
+        private delegate void GameplayEvent();
 
         [BackgroundDependencyLoader]
         private void load()
@@ -39,15 +44,25 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <summary>
         /// Add an enemy to the gameplay scene
         /// </summary>
-        public void AddEnemy()
+        public void AddEnemy(int level)
         {
-            Enemy enemy = new TestEnemy(3);
-            DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(new TestEnemy(3));
+            Enemy enemy = new TestEnemy(1);
+            while (enemy.Experience.Level.current < level) enemy.LevelUp();
+            DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);
+            newEnemy.Position = new Vector2(MathBase.RandomInt(-500, 500), MathBase.RandomInt(-500, 500));
             AddInternal(newEnemy);
-            newEnemy.GetEntityObject().SetWeapon(new Knife()); // Temp hardcode until I get good at coding
+            enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);
+        }
+
+        public void SpawnEntities()
+        {
+            for (int enemyCounter = 0; enemyCounter < enemySpawnLimit; enemyCounter++)
+            {
+                AddEnemy(playerEntity.GetEntityObject().Experience.Level.current);
+            }
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -99,6 +98,7 @@ namespace GentrysQuest.Game.Entity
         public void Crit(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
+            if (Stats.Health.CurrentValue <= 0) Die();
             OnHealthEvent?.Invoke();
             OnCrit?.Invoke(amount);
         }
@@ -133,60 +133,19 @@ namespace GentrysQuest.Game.Entity
 
             value += Experience.Level.current * 5;
             value += Stats.GetPointTotal() * 2;
+            value += Weapon.Damage.CurrentValue / 4;
 
             return value;
         }
 
-        public void UpdateStats()
+        public virtual void UpdateStats()
         {
-            int level = Experience.Level.current;
-            int starRating = StarRating.Value;
-            difficulty = 1 + level / 20;
-
-            Stats.Health.SetDefaultValue(
-                calculatePointBenefit(difficulty * 100, Stats.Health.point, 500) +
-                calculatePointBenefit(level * 50, Stats.Health.point, 10) +
-                calculatePointBenefit(starRating * 50, Stats.Health.point, 50)
-            );
-
-            Stats.Attack.SetDefaultValue(
-                calculatePointBenefit(difficulty * 8, Stats.Attack.point, 5) +
-                calculatePointBenefit(level * 2, Stats.Attack.point, 4) +
-                calculatePointBenefit(starRating * 5, Stats.Attack.point, 3)
-            );
-
-            Stats.Defense.SetDefaultValue(
-                calculatePointBenefit(difficulty * 10, Stats.Defense.point, 4) +
-                calculatePointBenefit(level * 2, Stats.Defense.point, 2) +
-                calculatePointBenefit(starRating * 3, Stats.Defense.point, 3)
-            );
-
-            Stats.CritRate.SetDefaultValue(
-                calculatePointBenefit(5, Stats.CritRate.point, 5) +
-                difficulty + 1
-            );
-
-            Stats.CritDamage.SetDefaultValue(
-                calculatePointBenefit(difficulty * 5, Stats.CritDamage.point, 1) +
-                calculatePointBenefit(starRating * 1, Stats.CritDamage.point, 1)
-            );
-
-            Stats.Speed.SetDefaultValue(
-                calculatePointBenefit(0, Stats.Speed.point, 0.2)
-            );
-
-            Stats.AttackSpeed.SetDefaultValue(
-                calculatePointBenefit(0, Stats.AttackSpeed.point, 0.3)
-            );
-
-            Logger.Log(Stats.ToString());
-
             OnUpdateStats?.Invoke();
         }
 
         #endregion
 
-        private double calculatePointBenefit(double normalValue, int point, double pointBenefit)
+        protected static double CalculatePointBenefit(double normalValue, int point, double pointBenefit)
         {
             return normalValue + (point * pointBenefit);
         }

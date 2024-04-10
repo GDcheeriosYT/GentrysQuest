@@ -148,6 +148,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         {
                             Entity entity = hitbox.getParent().GetEntityObject();
                             int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
+                            damage -= entity.Stats.Defense.CurrentValue;
 
                             if (Weapon.Holder.Stats.CritRate.CurrentValue > MathBase.RandomInt(0, 100))
                             {
@@ -155,9 +156,9 @@ namespace GentrysQuest.Game.Entity.Drawables
                                     Weapon.Holder.Stats.Attack.CurrentValue,
                                     Weapon.Holder.Stats.CritDamage.CurrentValue
                                 );
-                                entity.Crit(damage - entity.Stats.Defense.CurrentValue);
+                                entity.Crit(damage);
                             }
-                            else entity.Damage(damage - entity.Stats.Defense.CurrentValue);
+                            else entity.Damage(damage);
 
                             if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
 
