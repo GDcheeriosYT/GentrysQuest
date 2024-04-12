@@ -46,6 +46,10 @@ namespace GentrysQuest.Game.Entity.Drawables
         public readonly AffiliationType Affiliation;
 
         protected HitBox hitBox;
+        protected CollisonHitBox colliderBox;
+
+        protected bool Moving;
+        protected Vector2 lastPosition;
 
         /// <summary>
         /// The entity list to check when attacking
@@ -59,6 +63,11 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// </summary>
         protected const double SPEED_MAIN = 0.25;
 
+        // Movement events
+        public delegate void Movement(MovementDirection movementDirection, double speed);
+
+        public event Movement OnMove;
+
         /// <summary>
         /// A drawable entity
         /// </summary>
@@ -71,6 +80,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Affiliation = affiliationType;
             Size = new Vector2(100);
             hitBox = new HitBox(this);
+            colliderBox = new CollisonHitBox(this);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
@@ -81,7 +91,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                     RelativeSizeAxes = Axes.Both,
                 },
                 entityBar = new DrawableEntityBar(Entity),
-                hitBox
+                hitBox,
+                colliderBox
             };
             if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
@@ -106,6 +117,12 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.OnDeath += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Death")))); };
         }
 
+        protected virtual void Move(MovementDirection movementDirection, double speed)
+        {
+            Moving = true;
+            OnMove?.Invoke(movementDirection, speed);
+        }
+
         /// <summary>
         /// Attacks towards a direction
         /// </summary>
@@ -113,7 +130,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         public void Attack(Vector2 position)
         {
             Vector2 center = new Vector2(50);
-            double angle = MathBase.GetAngle(center, position);
+            double angle = MathBase.GetAngle(Position + center, position);
             if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle + 90);
         }
 
@@ -184,6 +201,11 @@ namespace GentrysQuest.Game.Entity.Drawables
         public double GetSpeed()
         {
             return SPEED_MAIN * Entity.Stats.Speed.CurrentValue;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
         }
     }
 }

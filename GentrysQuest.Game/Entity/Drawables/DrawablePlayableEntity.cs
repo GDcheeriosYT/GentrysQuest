@@ -1,5 +1,4 @@
 using GentrysQuest.Game.Screens.Gameplay;
-using osu.Framework.Graphics;
 using osuTK.Input;
 
 namespace GentrysQuest.Game.Entity.Drawables;
@@ -31,35 +30,6 @@ public partial class DrawablePlayableEntity : DrawableEntity
     }
 
     /// <summary>
-    /// The move event
-    /// </summary>
-    /// <param name="isHorizontal">If it's horizontal target</param>
-    /// <param name="negative">If the value's going down or not</param>
-    private void move(bool isHorizontal, bool negative)
-    {
-        var speed = GetSpeed();
-        var value = (float)(Clock.ElapsedFrameTime * speed);
-        var duration = 0;
-
-        if (negative) value = -value;
-
-        if (isHorizontal)
-        {
-            this.MoveToX(
-                X + value,
-                duration
-            );
-        }
-        else
-        {
-            this.MoveToY(
-                Y + value,
-                duration
-            );
-        }
-    }
-
-    /// <summary>
     /// Manage key inputs
     /// </summary>
     protected override void Update()
@@ -68,22 +38,22 @@ public partial class DrawablePlayableEntity : DrawableEntity
 
         if (Keyboard.GetState().IsKeyDown(Key.A))
         {
-            move(true, true);
+            Move(MovementDirection.Left, GetSpeed());
         }
 
         if (Keyboard.GetState().IsKeyDown(Key.D))
         {
-            move(true, false);
+            Move(MovementDirection.Right, GetSpeed());
         }
 
         if (Keyboard.GetState().IsKeyDown(Key.W))
         {
-            move(false, true);
+            Move(MovementDirection.Up, GetSpeed());
         }
 
         if (Keyboard.GetState().IsKeyDown(Key.S))
         {
-            move(false, false);
+            Move(MovementDirection.Down, GetSpeed());
         }
     }
 }

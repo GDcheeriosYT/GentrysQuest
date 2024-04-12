@@ -20,6 +20,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private DrawablePlayableEntity playerEntity;
         private List<DrawableEntity> enemies = new List<DrawableEntity>();
         private GameplayHud gameplayHud;
+        private Box testBox;
 
         private int enemySpawnLimit = 4;
 
@@ -37,7 +38,14 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     Colour = ColourInfo.GradientVertical(Color4.DarkGray, Color4.White),
                     RelativeSizeAxes = Axes.Both
                 },
-                gameplayHud = new GameplayHud()
+                gameplayHud = new GameplayHud(),
+                testBox = new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(0.1f),
+                    Position = new Vector2(500),
+                    Colour = Colour4.Black
+                }
             };
         }
 
@@ -51,6 +59,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);
             newEnemy.Position = new Vector2(MathBase.RandomInt(-500, 500), MathBase.RandomInt(-500, 500));
             AddInternal(newEnemy);
+            enemies.Add(newEnemy);
             enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
             newEnemy.FollowEntity(playerEntity);
@@ -87,10 +96,43 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 AddInternal(playerEntity = new DrawablePlayableEntity(character));
                 if (character.Weapon != null) character.SetWeapon(character.Weapon);
                 playerEntity.SetupClickContainer();
+                playerEntity.OnMove += delegate(MovementDirection direction, double speed)
+                {
+                    manage_direction(direction, speed, testBox);
+
+                    foreach (DrawableEntity enemyEntity in enemies)
+                    {
+                        manage_direction(direction, speed, enemyEntity);
+                    }
+                };
             }
 
             gameplayHud.SetEntity(character);
             character.Spawn();
+        }
+
+        private void manage_direction(MovementDirection direction, double speed, Drawable drawable)
+        {
+            var value = (float)(Clock.ElapsedFrameTime * speed);
+
+            switch (direction)
+            {
+                case MovementDirection.Down:
+                    drawable.Y -= value;
+                    break;
+
+                case MovementDirection.Up:
+                    drawable.Y += value;
+                    break;
+
+                case MovementDirection.Left:
+                    drawable.X += value;
+                    break;
+
+                case MovementDirection.Right:
+                    drawable.X -= value;
+                    break;
+            }
         }
 
         /// <summary>
