@@ -111,6 +111,12 @@ namespace GentrysQuest.Game.Screens.Gameplay
             character.Spawn();
         }
 
+        /// <summary>
+        /// Manages how entities move depending on the direction.
+        /// </summary>
+        /// <param name="direction">Direction</param>
+        /// <param name="speed">The speed</param>
+        /// <param name="drawable">The drawable to invoke movement on</param>
         private void manage_direction(MovementDirection direction, double speed, Drawable drawable)
         {
             var value = (float)(Clock.ElapsedFrameTime * speed);
