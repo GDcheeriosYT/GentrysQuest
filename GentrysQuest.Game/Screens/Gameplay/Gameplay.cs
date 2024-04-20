@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
+using GentrysQuest.Game.Content.Maps;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Location.Drawables;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -20,7 +22,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private DrawablePlayableEntity playerEntity;
         private List<DrawableEntity> enemies = new List<DrawableEntity>();
         private GameplayHud gameplayHud;
-        private Box testBox;
+        private DrawableMap map;
 
         private int enemySpawnLimit = 4;
 
@@ -39,13 +41,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     RelativeSizeAxes = Axes.Both
                 },
                 gameplayHud = new GameplayHud(),
-                testBox = new Box
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(0.1f),
-                    Position = new Vector2(500),
-                    Colour = Colour4.Black
-                }
+                map = new DrawableMap(new TestMap())
             };
         }
 
@@ -98,7 +94,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 playerEntity.SetupClickContainer();
                 playerEntity.OnMove += delegate(MovementDirection direction, double speed)
                 {
-                    manage_direction(direction, speed, testBox);
+                    manage_direction(direction, speed, map);
 
                     foreach (DrawableEntity enemyEntity in enemies)
                     {
