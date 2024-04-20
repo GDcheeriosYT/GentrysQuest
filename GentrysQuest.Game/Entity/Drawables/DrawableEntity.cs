@@ -119,7 +119,6 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected virtual void Move(MovementDirection movementDirection, double speed)
         {
-            Moving = true;
             OnMove?.Invoke(movementDirection, speed);
         }
 

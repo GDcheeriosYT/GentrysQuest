@@ -81,5 +81,7 @@ namespace GentrysQuest.Game.Utils
         public static double GetPercent(double value, double percent) => value * (percent * 0.01f);
 
         public static int RandomInt(int min, int max) => Random.Shared.Next(min, max);
+
+        public static float RandomFloat(float min, float max) => min + Random.Shared.NextSingle() * (max - min);
     }
 }

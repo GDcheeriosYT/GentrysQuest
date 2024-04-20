@@ -142,33 +142,35 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 foreach (var hitbox in HitBoxScene.GetIntersections(WeaponHitBox))
                 {
-                    try
+                    if (!DamageQueue.Check(hitbox))
                     {
-                        if (!DamageQueue.Check(hitbox) && hitbox.getParent().GetType() != typeof(DrawableWeapon))
+                        Entity entity;
+
+                        try
                         {
-                            Entity entity = hitbox.getParent().GetEntityObject();
-                            int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
-                            damage -= entity.Stats.Defense.CurrentValue;
-
-                            if (Weapon.Holder.Stats.CritRate.CurrentValue > MathBase.RandomInt(0, 100))
-                            {
-                                damage += (int)MathBase.GetPercent(
-                                    Weapon.Holder.Stats.Attack.CurrentValue,
-                                    Weapon.Holder.Stats.CritDamage.CurrentValue
-                                );
-                                entity.Crit(damage);
-                            }
-                            else entity.Damage(damage);
-
-                            if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
-
-                            DamageQueue.Add(hitbox);
+                            entity = hitbox.getParent().GetEntityObject();
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
+                        catch (Exception e)
+                        {
+                            entity = new Entity();
+                        }
+
+                        int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
+                        damage -= entity.Stats.Defense.CurrentValue;
+
+                        if (Weapon.Holder.Stats.CritRate.CurrentValue > MathBase.RandomInt(0, 100))
+                        {
+                            damage += (int)MathBase.GetPercent(
+                                Weapon.Holder.Stats.Attack.CurrentValue,
+                                Weapon.Holder.Stats.CritDamage.CurrentValue
+                            );
+                            entity.Crit(damage);
+                        }
+                        else entity.Damage(damage);
+
+                        if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
+
+                        DamageQueue.Add(hitbox);
                     }
                 }
             }
