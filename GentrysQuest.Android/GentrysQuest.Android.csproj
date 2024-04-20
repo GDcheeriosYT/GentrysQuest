@@ -1,9 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0-android34.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ppy.osu.Framework" Version="2024.419.0" />
+    <PackageReference Include="ppy.osu.Framework.Android" Version="2024.419.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GentrysQuest.Game\GentrysQuest.Game.csproj" />
+  </ItemGroup>
 </Project>
