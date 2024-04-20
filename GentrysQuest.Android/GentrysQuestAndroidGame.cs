@@ -2,6 +2,10 @@
 
 namespace GentrysQuest.Android;
 
-public class GentrysQuestAndroidGame : GentrysQuestGame
+public partial class GentrysQuestAndroidGame : GentrysQuestGame
 {
+    public GentrysQuestAndroidGame()
+        : base(false)
+    {
+    }
 }

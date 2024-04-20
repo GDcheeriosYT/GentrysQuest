@@ -3,6 +3,7 @@
     <TargetFramework>net8.0-android34.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AndroidManifest>AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -13,5 +14,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GentrysQuest.Game\GentrysQuest.Game.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <AndroidSdkDirectory>C:\Users\GDcheerios\AppData\Local\Android\sdk</AndroidSdkDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="AndroidManifest.xml" />
   </ItemGroup>
 </Project>
