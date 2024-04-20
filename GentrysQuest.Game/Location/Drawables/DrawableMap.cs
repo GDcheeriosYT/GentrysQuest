@@ -27,7 +27,7 @@ namespace GentrysQuest.Game.Location.Drawables
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
 
-            Size = new Vector2(1000);
+            Size = new Vector2(5000);
         }
     }
 }

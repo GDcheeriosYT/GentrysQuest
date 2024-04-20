@@ -1,12 +1,21 @@
 using System;
 using GentrysQuest.Game.Utils;
-using osu.Framework.Graphics;
+using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class DrawableEnemyEntity(Enemy entity) : DrawableEntity(entity, AffiliationType.Enemy, true)
+    public partial class DrawableEnemyEntity : DrawableEntity
     {
         private DrawableEntity followEntity;
+
+        public DrawableEnemyEntity(Enemy entity)
+            : base(entity, AffiliationType.Enemy, true)
+        {
+            OnMove += delegate(float direction, double speed)
+            {
+                Position += (MathBase.GetAngleToVector(direction) * SLOWING_FACTOR) * (float)(Clock.ElapsedFrameTime * GetSpeed());
+            };
+        }
 
         public void FollowEntity(DrawableEntity drawableEntity)
         {
@@ -15,11 +24,11 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override void Update()
         {
-            var value = Clock.ElapsedFrameTime * GetSpeed();
+            Vector2 positionTo = MathBase.GetDirection(Position, followEntity.Position);
 
             try
             {
-                this.MoveTo(Position + MathBase.GetDirection(Position, followEntity.Position) * (float)value);
+                Move(MathBase.GetAngle(Position, positionTo), GetSpeed());
             }
             catch (ArgumentException)
             {

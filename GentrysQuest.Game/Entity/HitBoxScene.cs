@@ -29,5 +29,31 @@ namespace GentrysQuest.Game.Entity
 
             return hitboxList;
         }
+
+        public static List<CollisonHitBox> GetCollisions(CollisonHitBox theHitBox)
+        {
+            List<CollisonHitBox> colliders = new();
+
+            foreach (HitBox hitBox in hitBoxes)
+            {
+                if (hitBox.GetType() != typeof(CollisonHitBox)) continue;
+
+                if (theHitBox.CheckCollision(hitBox)) colliders.Add((CollisonHitBox)hitBox);
+            }
+
+            return colliders;
+        }
+
+        public static bool Collides(CollisonHitBox theHitBox)
+        {
+            foreach (HitBox hitBox in hitBoxes)
+            {
+                if (hitBox.GetType() != typeof(CollisonHitBox)) continue;
+
+                if (theHitBox.CheckCollision(hitBox)) return true;
+            }
+
+            return false;
+        }
     }
 }

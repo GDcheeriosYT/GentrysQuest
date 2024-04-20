@@ -38,22 +38,22 @@ public partial class DrawablePlayableEntity : DrawableEntity
 
         if (Keyboard.GetState().IsKeyDown(Key.A))
         {
-            Move(MovementDirection.Left, GetSpeed());
+            Move(180, GetSpeed());
         }
 
         if (Keyboard.GetState().IsKeyDown(Key.D))
         {
-            Move(MovementDirection.Right, GetSpeed());
+            Move(0, GetSpeed());
         }
 
         if (Keyboard.GetState().IsKeyDown(Key.W))
         {
-            Move(MovementDirection.Up, GetSpeed());
+            Move(270, GetSpeed());
         }
 
         if (Keyboard.GetState().IsKeyDown(Key.S))
         {
-            Move(MovementDirection.Down, GetSpeed());
+            Move(90, GetSpeed());
         }
     }
 }

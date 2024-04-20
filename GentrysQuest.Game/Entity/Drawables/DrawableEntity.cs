@@ -63,8 +63,13 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// </summary>
         protected const double SPEED_MAIN = 0.25;
 
+        /// <summary>
+        /// When doing some math you might need this
+        /// </summary>
+        public static readonly float SLOWING_FACTOR = 0.01f;
+
         // Movement events
-        public delegate void Movement(MovementDirection movementDirection, double speed);
+        public delegate void Movement(float direction, double speed);
 
         public event Movement OnMove;
 
@@ -117,9 +122,12 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.OnDeath += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Death")))); };
         }
 
-        protected virtual void Move(MovementDirection movementDirection, double speed)
+        protected virtual void Move(float direction, double speed)
         {
-            OnMove?.Invoke(movementDirection, speed);
+            float value = (float)(Clock.ElapsedFrameTime * speed);
+            colliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
+
+            if (!HitBoxScene.Collides(colliderBox)) OnMove?.Invoke(direction, speed);
         }
 
         /// <summary>
@@ -204,6 +212,8 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override void Update()
         {
+            colliderBox.Position = new Vector2(0);
+
             base.Update();
         }
     }

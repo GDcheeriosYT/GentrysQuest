@@ -92,7 +92,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 AddInternal(playerEntity = new DrawablePlayableEntity(character));
                 if (character.Weapon != null) character.SetWeapon(character.Weapon);
                 playerEntity.SetupClickContainer();
-                playerEntity.OnMove += delegate(MovementDirection direction, double speed)
+                playerEntity.OnMove += delegate(float direction, double speed)
                 {
                     manage_direction(direction, speed, map);
 
@@ -113,28 +113,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <param name="direction">Direction</param>
         /// <param name="speed">The speed</param>
         /// <param name="drawable">The drawable to invoke movement on</param>
-        private void manage_direction(MovementDirection direction, double speed, Drawable drawable)
+        private void manage_direction(float direction, double speed, Drawable drawable)
         {
             var value = (float)(Clock.ElapsedFrameTime * speed);
 
-            switch (direction)
-            {
-                case MovementDirection.Down:
-                    drawable.Y -= value;
-                    break;
-
-                case MovementDirection.Up:
-                    drawable.Y += value;
-                    break;
-
-                case MovementDirection.Left:
-                    drawable.X += value;
-                    break;
-
-                case MovementDirection.Right:
-                    drawable.X -= value;
-                    break;
-            }
+            drawable.MoveTo(drawable.Position + ((MathBase.GetAngleToVector(direction, true) * DrawableEntity.SLOWING_FACTOR) * value));
         }
 
         /// <summary>
