@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-android34.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net8.0-android</TargetFramework>
+    <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AndroidManifest>AndroidManifest.xml</AndroidManifest>
+    <RootNamespace>GentrysQuest.Android</RootNamespace>
+    <AssemblyName>GentrysQuest.Android</AssemblyName>
+    <Version>0.0.0</Version>
+    <ApplicationVersion Condition=" '$(ApplicationVersion)' == '' ">1</ApplicationVersion>
+    <ApplicationDisplayVersion Condition=" '$(ApplicationDisplayVersion)' == '' ">$(Version)</ApplicationDisplayVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -11,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="ppy.osu.Framework" Version="2024.419.0" />
     <PackageReference Include="ppy.osu.Framework.Android" Version="2024.419.0" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GentrysQuest.Game\GentrysQuest.Game.csproj" />
@@ -18,7 +23,4 @@
   <PropertyGroup>
     <AndroidSdkDirectory>C:\Users\GDcheerios\AppData\Local\Android\sdk</AndroidSdkDirectory>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="AndroidManifest.xml" />
-  </ItemGroup>
 </Project>
