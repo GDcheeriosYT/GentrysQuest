@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
+using GentrysQuest.Game.Content.Maps;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Location.Drawables;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -20,6 +22,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private DrawablePlayableEntity playerEntity;
         private List<DrawableEntity> enemies = new List<DrawableEntity>();
         private GameplayHud gameplayHud;
+        private DrawableMap map;
 
         private int enemySpawnLimit = 4;
 
@@ -37,7 +40,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     Colour = ColourInfo.GradientVertical(Color4.DarkGray, Color4.White),
                     RelativeSizeAxes = Axes.Both
                 },
-                gameplayHud = new GameplayHud()
+                gameplayHud = new GameplayHud(),
+                map = new DrawableMap(new TestMap())
             };
         }
 
@@ -51,6 +55,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);
             newEnemy.Position = new Vector2(MathBase.RandomInt(-500, 500), MathBase.RandomInt(-500, 500));
             AddInternal(newEnemy);
+            enemies.Add(newEnemy);
             enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
             newEnemy.FollowEntity(playerEntity);
@@ -87,10 +92,32 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 AddInternal(playerEntity = new DrawablePlayableEntity(character));
                 if (character.Weapon != null) character.SetWeapon(character.Weapon);
                 playerEntity.SetupClickContainer();
+                playerEntity.OnMove += delegate(float direction, double speed)
+                {
+                    manage_direction(direction, speed, map);
+
+                    foreach (DrawableEntity enemyEntity in enemies)
+                    {
+                        manage_direction(direction, speed, enemyEntity);
+                    }
+                };
             }
 
             gameplayHud.SetEntity(character);
             character.Spawn();
+        }
+
+        /// <summary>
+        /// Manages how entities move depending on the direction.
+        /// </summary>
+        /// <param name="direction">Direction</param>
+        /// <param name="speed">The speed</param>
+        /// <param name="drawable">The drawable to invoke movement on</param>
+        private void manage_direction(float direction, double speed, Drawable drawable)
+        {
+            var value = (float)(Clock.ElapsedFrameTime * speed);
+
+            drawable.MoveTo(drawable.Position + ((MathBase.GetAngleToVector(direction, true) * DrawableEntity.SLOWING_FACTOR) * value));
         }
 
         /// <summary>

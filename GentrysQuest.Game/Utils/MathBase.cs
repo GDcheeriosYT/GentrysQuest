@@ -60,11 +60,13 @@ namespace GentrysQuest.Game.Utils
             return value * (180 / Math.PI);
         }
 
-        public static Vector2 GetAngleToVector(double degrees)
+        public static Vector2 GetAngleToVector(double degrees, bool negative = false)
         {
             double angleRadians = degrees * Math.PI / 180;
             double x = Math.Cos(angleRadians);
             double y = Math.Sin(angleRadians);
+            if (negative) return new Vector2((float)-x, (float)-y) * 100;
+
             return new Vector2((float)x, (float)y) * 100;
         }
 
@@ -81,5 +83,7 @@ namespace GentrysQuest.Game.Utils
         public static double GetPercent(double value, double percent) => value * (percent * 0.01f);
 
         public static int RandomInt(int min, int max) => Random.Shared.Next(min, max);
+
+        public static float RandomFloat(float min, float max) => min + Random.Shared.NextSingle() * (max - min);
     }
 }

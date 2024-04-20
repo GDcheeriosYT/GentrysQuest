@@ -43,13 +43,6 @@ namespace GentrysQuest.Game.Entity
         public event EntityHealthEvent OnHeal;
         public event EntityHealthEvent OnCrit;
 
-        // Movement events
-        public event EntityEvent OnMove;
-        public event EntityEvent OnMoveLeft;
-        public event EntityEvent OnMoveRight;
-        public event EntityEvent OnMoveUp;
-        public event EntityEvent OnMoveDown;
-
         // Equipment events
         public event EntityEvent OnSwapWeapon;
         public event EntityEvent OnSwapArtifact;

@@ -9,7 +9,8 @@
       "GentrysQuest.Game/1.0.0": {
         "dependencies": {
           "GentrysQuest.Resources": "1.0.0",
-          "ppy.osu.Framework": "2023.1201.1"
+          "ppy.osu.Framework": "2024.131.0",
+          "ppy.osu.Framework.iOS": "2024.217.0"
         },
         "runtime": {
           "GentrysQuest.Game.dll": {}
@@ -281,47 +282,50 @@
           }
         }
       },
-      "OpenTabletDriver/0.6.3": {
+      "OpenTabletDriver/0.6.4": {
         "dependencies": {
           "HidSharpCore": "1.2.1.1",
           "Microsoft.Extensions.DependencyInjection": "6.0.0-rc.1.21451.13",
           "Newtonsoft.Json": "13.0.3",
-          "OpenTabletDriver.Configurations": "0.6.3",
-          "OpenTabletDriver.Native": "0.6.3",
-          "OpenTabletDriver.Plugin": "0.6.3"
+          "OpenTabletDriver.Configurations": "0.6.4",
+          "OpenTabletDriver.Native": "0.6.4",
+          "OpenTabletDriver.Plugin": "0.6.4"
         },
         "runtime": {
           "lib/net6.0/OpenTabletDriver.dll": {
-            "assemblyVersion": "0.6.3.0",
-            "fileVersion": "0.6.3.0"
+            "assemblyVersion": "0.6.4.0",
+            "fileVersion": "0.6.4.0"
           }
         }
       },
-      "OpenTabletDriver.Configurations/0.6.3": {
+      "OpenTabletDriver.Configurations/0.6.4": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
-          "OpenTabletDriver.Plugin": "0.6.3"
+          "OpenTabletDriver.Plugin": "0.6.4"
         },
         "runtime": {
           "lib/net6.0/OpenTabletDriver.Configurations.dll": {
-            "assemblyVersion": "0.6.3.0",
-            "fileVersion": "0.6.3.0"
+            "assemblyVersion": "0.6.4.0",
+            "fileVersion": "0.6.4.0"
           }
         }
       },
-      "OpenTabletDriver.Native/0.6.3": {
+      "OpenTabletDriver.Native/0.6.4": {
         "runtime": {
           "lib/net6.0/OpenTabletDriver.Native.dll": {
-            "assemblyVersion": "0.6.3.0",
-            "fileVersion": "0.6.3.0"
+            "assemblyVersion": "0.6.4.0",
+            "fileVersion": "0.6.4.0"
           }
         }
       },
-      "OpenTabletDriver.Plugin/0.6.3": {
+      "OpenTabletDriver.Plugin/0.6.4": {
+        "dependencies": {
+          "System.ComponentModel.Annotations": "5.0.0"
+        },
         "runtime": {
           "lib/net6.0/OpenTabletDriver.Plugin.dll": {
-            "assemblyVersion": "0.6.3.0",
-            "fileVersion": "0.6.3.0"
+            "assemblyVersion": "0.6.4.0",
+            "fileVersion": "0.6.4.0"
           }
         }
       },
@@ -356,7 +360,18 @@
           }
         }
       },
-      "ppy.osu.Framework/2023.1201.1": {
+      "ppy.ManagedBass.Wasapi/2022.1216.0": {
+        "dependencies": {
+          "ppy.ManagedBass": "2022.1216.0"
+        },
+        "runtime": {
+          "lib/netstandard2.1/ppy.ManagedBass.Wasapi.dll": {
+            "assemblyVersion": "2022.1216.0.0",
+            "fileVersion": "2022.1216.0.0"
+          }
+        }
+      },
+      "ppy.osu.Framework/2024.131.0": {
         "dependencies": {
           "FFmpeg.AutoGen": "4.3.0.1",
           "JetBrains.Annotations": "2022.3.1",
@@ -366,29 +381,300 @@
           "NUnit": "3.13.3",
           "Newtonsoft.Json": "13.0.3",
           "NuGet.ProjectModel": "5.11.0",
-          "OpenTabletDriver": "0.6.3",
+          "OpenTabletDriver": "0.6.4",
           "SharpFNT": "2.0.0",
           "SixLabors.ImageSharp": "2.1.0",
           "StbiSharp": "1.1.0",
+          "System.Numerics.Tensors": "8.0.0",
           "managed-midi": "1.10.0",
           "ppy.ManagedBass": "2022.1216.0",
           "ppy.ManagedBass.Fx": "2022.1216.0",
           "ppy.ManagedBass.Mix": "2022.1216.0",
-          "ppy.SDL2-CS": "1.0.671-alpha",
+          "ppy.ManagedBass.Wasapi": "2022.1216.0",
+          "ppy.SDL2-CS": "1.0.693-alpha",
           "ppy.Veldrid": "4.9.3-g91ce5a6cda",
           "ppy.Veldrid.SPIRV": "1.0.15-gca6cec7843",
-          "ppy.osu.Framework.NativeLibs": "2023.1201.1-nativelibs",
+          "ppy.osu.Framework.NativeLibs": "2023.1225.0-nativelibs",
           "ppy.osu.Framework.SourceGeneration": "2023.720.0",
           "ppy.osuTK.NS20": "1.0.211"
         },
         "runtime": {
           "lib/net6.0/osu.Framework.dll": {
-            "assemblyVersion": "2023.1201.1.0",
-            "fileVersion": "2023.1201.1.0"
+            "assemblyVersion": "2024.131.0.0",
+            "fileVersion": "2024.131.0.0"
           }
         }
       },
-      "ppy.osu.Framework.NativeLibs/2023.1201.1-nativelibs": {
+      "ppy.osu.Framework.iOS/2024.217.0": {
+        "runtimeTargets": {
+          "runtimes/ios/native/bass.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass.xcframework/ios-arm64_armv7_armv7s/bass.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass.xcframework/ios-arm64_armv7_armv7s/bass.framework/bass": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass.xcframework/ios-arm64_i386_x86_64-simulator/bass.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass.xcframework/ios-arm64_i386_x86_64-simulator/bass.framework/_CodeSignature/CodeResources": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass.xcframework/ios-arm64_i386_x86_64-simulator/bass.framework/bass": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass_fx.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass_fx.xcframework/ios-arm64_armv7_armv7s/bass_fx.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass_fx.xcframework/ios-arm64_armv7_armv7s/bass_fx.framework/bass_fx": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass_fx.xcframework/ios-arm64_i386_x86_64-simulator/bass_fx.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass_fx.xcframework/ios-arm64_i386_x86_64-simulator/bass_fx.framework/_CodeSignature/CodeResources": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bass_fx.xcframework/ios-arm64_i386_x86_64-simulator/bass_fx.framework/bass_fx": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bassmix.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bassmix.xcframework/ios-arm64_armv7_armv7s/bassmix.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bassmix.xcframework/ios-arm64_armv7_armv7s/bassmix.framework/bassmix": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bassmix.xcframework/ios-arm64_i386_x86_64-simulator/bassmix.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bassmix.xcframework/ios-arm64_i386_x86_64-simulator/bassmix.framework/_CodeSignature/CodeResources": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/bassmix.xcframework/ios-arm64_i386_x86_64-simulator/bassmix.framework/bassmix": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavcodec.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavcodec.xcframework/ios-arm64/libavcodec.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavcodec.xcframework/ios-arm64/libavcodec.framework/libavcodec": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavcodec.xcframework/ios-arm64_x86_64-simulator/libavcodec.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavcodec.xcframework/ios-arm64_x86_64-simulator/libavcodec.framework/libavcodec": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavdevice.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavdevice.xcframework/ios-arm64/libavdevice.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavdevice.xcframework/ios-arm64/libavdevice.framework/libavdevice": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavdevice.xcframework/ios-arm64_x86_64-simulator/libavdevice.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavdevice.xcframework/ios-arm64_x86_64-simulator/libavdevice.framework/libavdevice": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavformat.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavformat.xcframework/ios-arm64/libavformat.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavformat.xcframework/ios-arm64/libavformat.framework/libavformat": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavformat.xcframework/ios-arm64_x86_64-simulator/libavformat.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavformat.xcframework/ios-arm64_x86_64-simulator/libavformat.framework/libavformat": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavutil.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavutil.xcframework/ios-arm64/libavutil.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavutil.xcframework/ios-arm64/libavutil.framework/libavutil": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavutil.xcframework/ios-arm64_x86_64-simulator/libavutil.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libavutil.xcframework/ios-arm64_x86_64-simulator/libavutil.framework/libavutil": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswresample.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswresample.xcframework/ios-arm64/libswresample.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswresample.xcframework/ios-arm64/libswresample.framework/libswresample": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswresample.xcframework/ios-arm64_x86_64-simulator/libswresample.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswresample.xcframework/ios-arm64_x86_64-simulator/libswresample.framework/libswresample": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswscale.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswscale.xcframework/ios-arm64/libswscale.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswscale.xcframework/ios-arm64/libswscale.framework/libswscale": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswscale.xcframework/ios-arm64_x86_64-simulator/libswscale.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/libswscale.xcframework/ios-arm64_x86_64-simulator/libswscale.framework/libswscale": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/metal-mono-workaround.xcframework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/metal-mono-workaround.xcframework/ios-arm64/metal_mono_workaround.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/metal-mono-workaround.xcframework/ios-arm64/metal_mono_workaround.framework/metal_mono_workaround": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/metal-mono-workaround.xcframework/ios-arm64_x86_64-simulator/metal_mono_workaround.framework/Info.plist": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/ios/native/metal-mono-workaround.xcframework/ios-arm64_x86_64-simulator/metal_mono_workaround.framework/metal_mono_workaround": {
+            "rid": "ios",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "ppy.osu.Framework.NativeLibs/2023.1225.0-nativelibs": {
         "runtimeTargets": {
           "runtimes/linux-x64/native/libavcodec.so": {
             "rid": "linux-x64",
@@ -540,6 +826,11 @@
             "assetType": "native",
             "fileVersion": "2.4.11.1"
           },
+          "runtimes/win-x64/native/basswasapi.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "2.4.4.1"
+          },
           "runtimes/win-x64/native/swscale-5.dll": {
             "rid": "win-x64",
             "assetType": "native",
@@ -575,6 +866,11 @@
             "assetType": "native",
             "fileVersion": "2.4.11.1"
           },
+          "runtimes/win-x86/native/basswasapi.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "2.4.4.1"
+          },
           "runtimes/win-x86/native/swscale-5.dll": {
             "rid": "win-x86",
             "assetType": "native",
@@ -591,7 +887,7 @@
           }
         }
       },
-      "ppy.SDL2-CS/1.0.671-alpha": {
+      "ppy.SDL2-CS/1.0.693-alpha": {
         "runtime": {
           "lib/net6.0/SDL2-CS.dll": {
             "assemblyVersion": "0.0.0.0",
@@ -647,17 +943,17 @@
           "runtimes/win-arm64/native/SDL2.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "2.27.0.0"
+            "fileVersion": "2.29.0.0"
           },
           "runtimes/win-x64/native/SDL2.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "2.27.0.0"
+            "fileVersion": "2.29.0.0"
           },
           "runtimes/win-x86/native/SDL2.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "2.27.0.0"
+            "fileVersion": "2.29.0.0"
           }
         }
       },
@@ -856,6 +1152,7 @@
         }
       },
       "System.Collections.Immutable/1.7.1": {},
+      "System.ComponentModel.Annotations/5.0.0": {},
       "System.Diagnostics.Debug/4.0.11": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -947,6 +1244,14 @@
         }
       },
       "System.Memory/4.5.4": {},
+      "System.Numerics.Tensors/8.0.0": {
+        "runtime": {
+          "lib/net6.0/System.Numerics.Tensors.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
       "System.ObjectModel/4.0.12": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -1401,33 +1706,33 @@
       "path": "nunit/3.13.3",
       "hashPath": "nunit.3.13.3.nupkg.sha512"
     },
-    "OpenTabletDriver/0.6.3": {
+    "OpenTabletDriver/0.6.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+0tdVHOgNU8Bl/EfjkUVND1WD/ZCO/Bnf/Nv9Hk7goGqkaoyM2CtfOGG22PUg/LOcgDEUL7XkWokuSvd72l/tA==",
-      "path": "opentabletdriver/0.6.3",
-      "hashPath": "opentabletdriver.0.6.3.nupkg.sha512"
+      "sha512": "sha512-L5Ml2ohwKTukTRCDoOWfifHnD2dKhuBtoZiscChc2GwAV16LQ6z197NpZRF3xKK+IrnL4CH/d6cfhV9eFURN2g==",
+      "path": "opentabletdriver/0.6.4",
+      "hashPath": "opentabletdriver.0.6.4.nupkg.sha512"
     },
-    "OpenTabletDriver.Configurations/0.6.3": {
+    "OpenTabletDriver.Configurations/0.6.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-rg38eoiZclT8IpKfg3ttJrbgfH9gLmmzE73+LYaPsByJqrRsX3VgNhN3hsSOyBmZF4s8n5hkojJryASSb1wBRA==",
-      "path": "opentabletdriver.configurations/0.6.3",
-      "hashPath": "opentabletdriver.configurations.0.6.3.nupkg.sha512"
+      "sha512": "sha512-zl1sGJbrMEQffl/cHnNBug+xv/TmbqypkViZsWzOzMkdHgorwBGyEQmFHJfAMrJbR2mqWi9u3maff1TLcVmjAA==",
+      "path": "opentabletdriver.configurations/0.6.4",
+      "hashPath": "opentabletdriver.configurations.0.6.4.nupkg.sha512"
     },
-    "OpenTabletDriver.Native/0.6.3": {
+    "OpenTabletDriver.Native/0.6.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-U57uhfTG1+KBpUtm2cmcdqxAoaxddr3oXZmAk8Xp4+AkA9h3Fz9aiC8neHrXKUeXMNgtvCC37fECCOlMZ6r4ig==",
-      "path": "opentabletdriver.native/0.6.3",
-      "hashPath": "opentabletdriver.native.0.6.3.nupkg.sha512"
+      "sha512": "sha512-TZHMGg4c88cLPG0GYAfBrzzVgZND3gWXE1wG1cn0rAajW2e74Zf7LuSqTPiaPztAU5xvbaieIomSpvafyaVe3Q==",
+      "path": "opentabletdriver.native/0.6.4",
+      "hashPath": "opentabletdriver.native.0.6.4.nupkg.sha512"
     },
-    "OpenTabletDriver.Plugin/0.6.3": {
+    "OpenTabletDriver.Plugin/0.6.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6CUMn3hr2H+ZVcsJUwgyr3JLA55rxKDfHsc2lZBSc4AwbXdrKmbGiaLtk9/K6WRVmS+p4dMQHVDOm9794iFdtQ==",
-      "path": "opentabletdriver.plugin/0.6.3",
-      "hashPath": "opentabletdriver.plugin.0.6.3.nupkg.sha512"
+      "sha512": "sha512-xcPlu1OHzMKRH+I6vWUxMpQ3iGqSxDjMRbmIzEEelpHM8ncbsiRUOQBZuomIlK6oQcOrPpt7zx41ovhgJRX2UQ==",
+      "path": "opentabletdriver.plugin/0.6.4",
+      "hashPath": "opentabletdriver.plugin.0.6.4.nupkg.sha512"
     },
     "PolySharp/1.10.0": {
       "type": "package",
@@ -1457,19 +1762,33 @@
       "path": "ppy.managedbass.mix/2022.1216.0",
       "hashPath": "ppy.managedbass.mix.2022.1216.0.nupkg.sha512"
     },
-    "ppy.osu.Framework/2023.1201.1": {
+    "ppy.ManagedBass.Wasapi/2022.1216.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-MsgjSt9xZNzzDXSV6JdARurb59doLRFOfIwO9ocwQhDy5OLjkdGLVq+m1U0ayS6HZQBw36n3mnDpGe6m3L2rlA==",
-      "path": "ppy.osu.framework/2023.1201.1",
-      "hashPath": "ppy.osu.framework.2023.1201.1.nupkg.sha512"
+      "sha512": "sha512-xL8KjGdgQzSDjdwvKzRslZ2ejTzswJZPrkmgYAf8gGtCd2YyUu1xxGzu5fvSfHFqOjGeJiN2dEg8BfxpoTITZw==",
+      "path": "ppy.managedbass.wasapi/2022.1216.0",
+      "hashPath": "ppy.managedbass.wasapi.2022.1216.0.nupkg.sha512"
     },
-    "ppy.osu.Framework.NativeLibs/2023.1201.1-nativelibs": {
+    "ppy.osu.Framework/2024.131.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-oivfa66iCQdv4IIWFHin6F9MHgN+8NQAdW89bDl/z+V/YkV61LUWFhH6kGZf9DNtcRxIMkxJsZrt256OW4hP5A==",
-      "path": "ppy.osu.framework.nativelibs/2023.1201.1-nativelibs",
-      "hashPath": "ppy.osu.framework.nativelibs.2023.1201.1-nativelibs.nupkg.sha512"
+      "sha512": "sha512-MYu4GWEhwTrj2lEspw+ZSObIFKn9UGX7DM/lI0lYaA3ITmMpAZNltLqHkS0QiVd6hzC5o66FhgPIQFgZVj4eWQ==",
+      "path": "ppy.osu.framework/2024.131.0",
+      "hashPath": "ppy.osu.framework.2024.131.0.nupkg.sha512"
+    },
+    "ppy.osu.Framework.iOS/2024.217.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FH1CViVRHCITCKofG61yGMeouhxh0Oy71JrkAX6uI8OM/Ky8P6SGBn+vXjpy8W2uh6pq7L1ilsycev/w7I6Eog==",
+      "path": "ppy.osu.framework.ios/2024.217.0",
+      "hashPath": "ppy.osu.framework.ios.2024.217.0.nupkg.sha512"
+    },
+    "ppy.osu.Framework.NativeLibs/2023.1225.0-nativelibs": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hAiW9cNm3gxHE9OoXjIpTNIwzFnYHNwTo0acSQNYEoOa0Wu02cN3WVO883JNcpOnoucxpOHPZorYZbHF88EX0Q==",
+      "path": "ppy.osu.framework.nativelibs/2023.1225.0-nativelibs",
+      "hashPath": "ppy.osu.framework.nativelibs.2023.1225.0-nativelibs.nupkg.sha512"
     },
     "ppy.osu.Framework.SourceGeneration/2023.720.0": {
       "type": "package",
@@ -1485,12 +1804,12 @@
       "path": "ppy.osutk.ns20/1.0.211",
       "hashPath": "ppy.osutk.ns20.1.0.211.nupkg.sha512"
     },
-    "ppy.SDL2-CS/1.0.671-alpha": {
+    "ppy.SDL2-CS/1.0.693-alpha": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZIWSOrENbTNJCb4Wo0qyHBIt1gIOjTA1Qn6UK+jZKQawDoHq8J/NQohLRAXISlt0AEmNPn4ho92+Eyf3hU/cAA==",
-      "path": "ppy.sdl2-cs/1.0.671-alpha",
-      "hashPath": "ppy.sdl2-cs.1.0.671-alpha.nupkg.sha512"
+      "sha512": "sha512-ka8haqo4vEhf1AzuOCLUk7g+ZPKWhDiN80QXndRI9kiDo3LLD7xDefNJGQnKYwitaG0J85FwJly6zjat2z3/hg==",
+      "path": "ppy.sdl2-cs/1.0.693-alpha",
+      "hashPath": "ppy.sdl2-cs.1.0.693-alpha.nupkg.sha512"
     },
     "ppy.Veldrid/4.9.3-g91ce5a6cda": {
       "type": "package",
@@ -1590,6 +1909,13 @@
       "path": "system.collections.immutable/1.7.1",
       "hashPath": "system.collections.immutable.1.7.1.nupkg.sha512"
     },
+    "System.ComponentModel.Annotations/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg==",
+      "path": "system.componentmodel.annotations/5.0.0",
+      "hashPath": "system.componentmodel.annotations.5.0.0.nupkg.sha512"
+    },
     "System.Diagnostics.Debug/4.0.11": {
       "type": "package",
       "serviceable": true,
@@ -1659,6 +1985,13 @@
       "sha512": "sha512-1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
       "path": "system.memory/4.5.4",
       "hashPath": "system.memory.4.5.4.nupkg.sha512"
+    },
+    "System.Numerics.Tensors/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fhODzTe9ON9IzmRfyVeA6L8yXOciMtpq1YufkRVBliggcVKZE+XDxqIn46+yF4PWR6wNPuDpXtPpuY86VcKxUA==",
+      "path": "system.numerics.tensors/8.0.0",
+      "hashPath": "system.numerics.tensors.8.0.0.nupkg.sha512"
     },
     "System.ObjectModel/4.0.12": {
       "type": "package",
