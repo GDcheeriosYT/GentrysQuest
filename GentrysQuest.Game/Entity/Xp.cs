@@ -3,16 +3,11 @@
     /// <summary>
     /// Xp management class
     /// </summary>
-    public class Xp
+    public class Xp(int current = 0)
     {
-        public int Current { get; private set; }
+        public int Current { get; private set; } = current;
         public int Requirement;
         public double Progress { get; private set; }
-
-        public Xp(int current)
-        {
-            this.Current = current;
-        }
 
         public bool add_xp(int amount)
         {

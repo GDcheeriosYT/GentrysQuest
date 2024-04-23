@@ -11,7 +11,7 @@ namespace GentrysQuest.Game.Entity
         public Stats Stats = new Stats();
 
         // experience
-        public Experience Experience;
+        public new Experience Experience;
         protected int difficulty;
 
         // equips
@@ -20,8 +20,6 @@ namespace GentrysQuest.Game.Entity
 
         public Entity()
         {
-            Experience = new Experience(new Xp(0), new Level(1));
-            Experience.Xp.CalculateRequirment(1, StarRating.Value);
             UpdateStats();
         }
 
@@ -71,6 +69,11 @@ namespace GentrysQuest.Game.Entity
         {
             IsDead = true;
             OnDeath?.Invoke();
+        }
+
+        public void Attack()
+        {
+            OnAttack?.Invoke();
         }
 
         public void Damage(int amount)

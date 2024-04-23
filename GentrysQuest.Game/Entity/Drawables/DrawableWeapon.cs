@@ -94,6 +94,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             enable(100);
             Weapon.AttackAmount += 1;
             AttackPatternCaseHolder caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
+            Weapon.Holder.Attack(); // Call the holder base method to handle events.
             List<AttackPatternEvent> patterns;
 
             if (caseHolder == null)
@@ -168,7 +169,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         }
                         else entity.Damage(damage);
 
-                        if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
+                        if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
 
                         DamageQueue.Add(hitbox);
                     }
