@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Database;
 using osu.Framework.Testing;
 
 namespace GentrysQuest.Game.Tests.Visual
@@ -21,9 +22,7 @@ namespace GentrysQuest.Game.Tests.Visual
 
         public GentrysQuestTestScene()
         {
-
+            GameData.reset();
         }
-
     }
-
 }

@@ -16,14 +16,14 @@ namespace GentrysQuest.Game.Entity.Drawables
         private EntityIconDrawable icon;
         private SpriteText name;
         public StarRatingContainer starRatingContainer;
-        public Entity entity;
+        public EntityBase entity;
         private Colour4 firstColor = Colour4.Gray;
         private Colour4 secondColor = Colour4.Gray;
 
         // [Resolved]
         // private TextureStore textures { get; }
 
-        public EntityInfoDrawable(Entity entity)
+        public EntityInfoDrawable(EntityBase entity)
         {
             this.entity = entity;
 
@@ -63,6 +63,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                 {
                     Origin = Anchor.CentreLeft,
                     Anchor = Anchor.CentreLeft,
+                    RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(0.25f, 2.5f),
                     X = 0.05f
                 },
                 starRatingContainer = new StarRatingContainer(this.entity.StarRating.Value)
@@ -84,7 +86,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override bool OnHover(HoverEvent e)
         {
-            this.ScaleTo(new Vector2(1.2f, 1f), 30);
+            this.ScaleTo(new Vector2(1.05f, 1f), 30);
             this.FadeColour(ColourInfo.SingleColour(firstColor), 200);
             return base.OnHover(e);
         }

@@ -11,17 +11,12 @@ namespace GentrysQuest.Game.Entity
         public Stats Stats = new Stats();
 
         // experience
-        public new Experience Experience;
+        public Experience Experience = new();
         protected int difficulty;
 
         // equips
         [CanBeNull]
         public Weapon.Weapon Weapon;
-
-        public Entity()
-        {
-            UpdateStats();
-        }
 
         #region Events
 
