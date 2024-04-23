@@ -5,7 +5,7 @@ namespace GentrysQuest.Game.Entity
     public class Entity : EntityBase
     {
         // info
-        public bool isDead;
+        public bool IsDead;
 
         // stats
         public Stats Stats = new Stats();
@@ -61,7 +61,7 @@ namespace GentrysQuest.Game.Entity
 
         public void Spawn()
         {
-            isDead = false;
+            IsDead = false;
             UpdateStats();
             Stats.Restore();
             OnSpawn?.Invoke();
@@ -69,7 +69,7 @@ namespace GentrysQuest.Game.Entity
 
         public void Die()
         {
-            isDead = true;
+            IsDead = true;
             OnDeath?.Invoke();
         }
 

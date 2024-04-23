@@ -12,7 +12,7 @@ namespace GentrysQuest.Game
     {
         private ScreenStack screenStack;
         private readonly VersionText versionText = new VersionText("Super Dooper Beta");
-        private bool arcadeMode;
+        private readonly bool arcadeMode;
 
         public GentrysQuestGame(bool arcadeMode)
         {

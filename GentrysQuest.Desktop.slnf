@@ -2,9 +2,11 @@
   "solution": {
     "path": "GentrysQuest.sln",
     "projects": [
+      "GentrysQuest.Android\\GentrysQuest.Android.csproj",
       "GentrysQuest.Desktop\\GentrysQuest.Desktop.csproj",
-      "GentrysQuest.Game\\GentrysQuest.Game.csproj",
       "GentrysQuest.Game.Tests\\GentrysQuest.Game.Tests.csproj",
+      "GentrysQuest.Game\\GentrysQuest.Game.csproj",
+      "GentrysQuest.iOS\\GentrysQuest.iOS.csproj",
       "GentrysQuest.Resources\\GentrysQuest.Resources.csproj"
     ]
   }

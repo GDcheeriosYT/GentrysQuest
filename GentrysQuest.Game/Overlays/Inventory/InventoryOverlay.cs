@@ -1,6 +1,4 @@
-using GentrysQuest.Game.Entity;
-
-namespace GentrysQuest.Game.Overlays
+namespace GentrysQuest.Game.Overlays.Inventory
 {
     public class InventoryOverlay
     {

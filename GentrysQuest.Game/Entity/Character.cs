@@ -1,7 +1,9 @@
 namespace GentrysQuest.Game.Entity;
 
-public class Character : Entity
+public class Character : Entity, ICharacter
 {
+    public Artifact[] Artifacts { get; } = new Artifact[5];
+
     public override void UpdateStats()
     {
         int level = Experience.Level.current;
