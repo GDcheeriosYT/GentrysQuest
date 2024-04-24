@@ -7,7 +7,7 @@ using osu.Framework.Graphics.Containers;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public class StarRatingContainer : CompositeDrawable
+    public partial class StarRatingContainer : CompositeDrawable
     {
         public readonly Bindable<int> starRating = new Bindable<int>();
         private StarRatingDrawable starRatingDrawable1 = new StarRatingDrawable(1);

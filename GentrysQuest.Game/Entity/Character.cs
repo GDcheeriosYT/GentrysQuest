@@ -6,7 +6,7 @@ public class Character : Entity, ICharacter
 
     public override void UpdateStats()
     {
-        int level = Experience.Level.current;
+        int level = Experience.Level.Current.Value;
         int starRating = StarRating.Value;
         difficulty = 1 + level / 20;
 

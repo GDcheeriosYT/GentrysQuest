@@ -8,7 +8,7 @@ namespace GentrysQuest.Game.Entity
         public bool IsDead;
 
         // stats
-        public Stats Stats = new Stats();
+        public Stats Stats = new();
 
         // experience
         public Experience Experience = new();
@@ -74,7 +74,7 @@ namespace GentrysQuest.Game.Entity
         public void Damage(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
-            if (Stats.Health.CurrentValue <= 0) Die();
+            if (Stats.Health.Current.Value <= 0) Die();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }
@@ -89,7 +89,7 @@ namespace GentrysQuest.Game.Entity
         public void Crit(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
-            if (Stats.Health.CurrentValue <= 0) Die();
+            if (Stats.Health.Current.Value <= 0) Die();
             OnHealthEvent?.Invoke();
             OnCrit?.Invoke(amount);
         }
@@ -103,7 +103,7 @@ namespace GentrysQuest.Game.Entity
         public void LevelUp()
         {
             Experience.Level.AddLevel();
-            Experience.Xp.CalculateRequirment(Experience.Level.current, StarRating.Value);
+            Experience.Xp.CalculateRequirment(Experience.Level.Current.Value, StarRating.Value);
 
             UpdateStats();
             Stats.Restore();
@@ -122,9 +122,9 @@ namespace GentrysQuest.Game.Entity
         {
             int value = 0;
 
-            value += Experience.Level.current * 5;
+            value += Experience.Level.Current.Value * 5;
             value += Stats.GetPointTotal() * 2;
-            value += Weapon.Damage.CurrentValue / 4;
+            value += (int)(Weapon.Damage.Current.Value / 4);
 
             return value;
         }

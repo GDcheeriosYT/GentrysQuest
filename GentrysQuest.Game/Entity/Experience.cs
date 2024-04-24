@@ -6,7 +6,7 @@
         public Level Level { get; } = level;
 
         public Experience()
-            : this(new Xp(0), new Level(0))
+            : this(new Xp(), new Level())
         {
         }
     }

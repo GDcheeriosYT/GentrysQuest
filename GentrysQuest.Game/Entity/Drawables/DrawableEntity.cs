@@ -207,7 +207,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <returns></returns>
         public double GetSpeed()
         {
-            return SPEED_MAIN * Entity.Stats.Speed.CurrentValue;
+            return SPEED_MAIN * Entity.Stats.Speed.Current.Value;
         }
 
         protected override void Update()

@@ -40,7 +40,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         {
             AddStep("AddEnemy", () =>
             {
-                gameplay.AddEnemy(theGuy.Experience.Level.current);
+                gameplay.AddEnemy(theGuy.Experience.Level.Current.Value);
             });
             AddStep("Damage", (() => theGuy.Damage(10)));
             AddStep("Spawn Enemys", () => gameplay.SpawnEntities());

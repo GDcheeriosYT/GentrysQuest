@@ -24,7 +24,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             entity = new TestCharacter(5);
             Add(levelTracker = new SpriteText
             {
-                Text = $"Level: {entity.Experience.Level.current}"
+                Text = $"Level: {entity.Experience.Level.Current}"
                        + $"Xp: {entity.Experience.Xp.Current}/{entity.Experience.Xp.Requirement}",
                 // Font = FontUsage.Default.With(size: 100),
                 Origin = Anchor.BottomLeft,
@@ -42,18 +42,18 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
 
             entity.OnLevelUp += delegate
             {
-                levelTracker.Text = $"Level: {entity.Experience.Level.current}\n"
+                levelTracker.Text = $"Level: {entity.Experience.Level.Current}\n"
                                     + $"Xp: {entity.Experience.Xp.Current}/{entity.Experience.Xp.Requirement}";
-                xpProgress.Max = entity.Experience.Xp.Requirement;
-                xpProgress.Current = entity.Experience.Xp.Current;
+                xpProgress.Max = entity.Experience.Xp.Requirement.Value;
+                xpProgress.Current = entity.Experience.Xp.Current.Value;
                 xpProgress.Min = 0;
             };
             entity.OnGainXp += delegate
             {
-                levelTracker.Text = $"Level: {entity.Experience.Level.current}\n"
+                levelTracker.Text = $"Level: {entity.Experience.Level.Current}\n"
                                     + $"Xp: {entity.Experience.Xp.Current}/{entity.Experience.Xp.Requirement}";
-                xpProgress.Max = entity.Experience.Xp.Requirement;
-                xpProgress.Current = entity.Experience.Xp.Current;
+                xpProgress.Max = entity.Experience.Xp.Requirement.Value;
+                xpProgress.Current = entity.Experience.Xp.Current.Value;
                 xpProgress.Min = 0;
             };
         }

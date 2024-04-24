@@ -5,9 +5,9 @@
     /// </summary>
     public class Stats
     {
-        public readonly IntStat Health = new IntStat("Health", StatType.Health, 500, false);
-        public readonly IntStat Attack = new IntStat("Attack", StatType.Attack, 30);
-        public readonly IntStat Defense = new IntStat("Defense", StatType.Defense, 30);
+        public readonly Stat Health = new Stat("Health", StatType.Health, 500, false);
+        public readonly Stat Attack = new Stat("Attack", StatType.Attack, 30);
+        public readonly Stat Defense = new Stat("Defense", StatType.Defense, 30);
         public readonly Stat CritRate = new Stat("CritRate", StatType.CritRate, 1);
         public readonly Stat CritDamage = new Stat("CritDamage", StatType.CritDamage, 100);
         public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);

@@ -108,7 +108,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             foreach (AttackPatternEvent pattern in patterns)
             {
-                double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.CurrentValue;
+                double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
                 Scheduler.AddDelayed(() =>
                 {
                     if (pattern.Direction != null) this.RotateTo((float)pattern.Direction + direction, duration: speed, pattern.Transition);
@@ -156,14 +156,14 @@ namespace GentrysQuest.Game.Entity.Drawables
                             entity = new Entity();
                         }
 
-                        int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
-                        damage -= entity.Stats.Defense.CurrentValue;
+                        int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
+                        damage -= (int)entity.Stats.Defense.Current.Value;
 
-                        if (Weapon.Holder.Stats.CritRate.CurrentValue > MathBase.RandomInt(0, 100))
+                        if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {
                             damage += (int)MathBase.GetPercent(
-                                Weapon.Holder.Stats.Attack.CurrentValue,
-                                Weapon.Holder.Stats.CritDamage.CurrentValue
+                                Weapon.Holder.Stats.Attack.Current.Value,
+                                Weapon.Holder.Stats.CritDamage.Current.Value
                             );
                             entity.Crit(damage);
                         }

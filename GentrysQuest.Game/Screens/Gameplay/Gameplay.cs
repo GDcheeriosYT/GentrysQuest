@@ -51,7 +51,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         public void AddEnemy(int level)
         {
             Enemy enemy = new TestEnemy(1);
-            while (enemy.Experience.Level.current < level) enemy.LevelUp();
+            while (enemy.Experience.Level.Current.Value < level) enemy.LevelUp();
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);
             newEnemy.Position = new Vector2(MathBase.RandomInt(-500, 500), MathBase.RandomInt(-500, 500));
             AddInternal(newEnemy);
@@ -66,7 +66,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             for (int enemyCounter = 0; enemyCounter < enemySpawnLimit; enemyCounter++)
             {
-                AddEnemy(playerEntity.GetEntityObject().Experience.Level.current);
+                AddEnemy(playerEntity.GetEntityObject().Experience.Level.Current.Value);
             }
         }
 

@@ -74,8 +74,9 @@ namespace GentrysQuest.Game.Screens.Gameplay
             entityTracker = theEntity;
             SetHealth(theEntity.Stats.Health);
             SetExperience(theEntity.Experience);
-            entityTracker.OnHealthEvent += delegate { SetHealth(theEntity.Stats.Health); };
-            entityTracker.OnGainXp += delegate { SetExperience(theEntity.Experience); };
+            entityTracker.Stats.Health.Current.ValueChanged += delegate { SetHealth(theEntity.Stats.Health); };
+            entityTracker.Experience.Level.Current.ValueChanged += delegate { SetExperience(theEntity.Experience); };
+            entityTracker.Experience.Xp.Current.ValueChanged += delegate { SetExperience(theEntity.Experience); };
             entityTracker.OnUpdateStats += delegate
             {
                 SetHealth(theEntity.Stats.Health);
@@ -85,15 +86,15 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         public void SetHealth(Stat health)
         {
-            healthBar.Current = health.CurrentValue;
+            healthBar.Current = health.Current.Value;
             healthBar.Max = health.Total();
         }
 
         public void SetExperience(Experience experience)
         {
-            levelText.Text = $"Level {experience.Level.current}";
-            experienceBar.Current = experience.Xp.Current;
-            experienceBar.Max = experience.Xp.Requirement;
+            levelText.Text = $"Level {experience.Level.Current}";
+            experienceBar.Current = experience.Xp.Current.Value;
+            experienceBar.Max = experience.Xp.Requirement.Value;
         }
     }
 }

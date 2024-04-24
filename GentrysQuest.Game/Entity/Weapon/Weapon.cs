@@ -6,7 +6,7 @@ namespace GentrysQuest.Game.Entity.Weapon
     {
         public string Type { get; }
         public int AttackAmount { get; set; }
-        public IntStat Damage = new("Damage", StatType.Attack, 0); // Base damage
+        public Stat Damage = new("Damage", StatType.Attack, 0); // Base damage
         public bool CanAttack; // If the weapon is able to attack in the current moment
         public AttackPattern AttackPattern = new(); // Defines how the weapon attacks work
         public Entity Holder; // The holder of the weapon

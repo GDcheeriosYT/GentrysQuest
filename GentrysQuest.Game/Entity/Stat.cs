@@ -1,5 +1,6 @@
 ﻿using System;
 using GentrysQuest.Game.Utils;
+using osu.Framework.Bindables;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -11,56 +12,56 @@ namespace GentrysQuest.Game.Entity
 
         /// <summary>
         /// This is the bonus stat calculation variable.
-        /// Use this in entities UpdateStats method to determine it's effect on the calculation.
+        /// Use this in entities UpdateStats method to determine its effect on the calculation.
         /// </summary>
         public int point;
 
-        public double DefaultValue { get; private set; }
-        public double MinimumValue { get; }
-        public double CurrentValue { get; private set; }
-        public double AdditionalValue { get; private set; }
+        public Bindable<double> Default { get; private set; } = new();
+        public Bindable<double> Minimum { get; } = new();
+        public Bindable<double> Current { get; private set; } = new();
+        public Bindable<double> Additional { get; private set; } = new();
 
         public Stat(string name, StatType statType, double minimumValue, bool resetsOnUpdate = true)
         {
             Name = name;
             StatType = statType;
-            MinimumValue = minimumValue;
-            CurrentValue = Total();
+            Minimum.Value = minimumValue;
+            Current.Value = Total();
             ResetsOnUpdate = resetsOnUpdate;
             calculate();
         }
 
         private void calculate()
         {
-            double difference = CurrentValue;
-            CurrentValue = Total();
-            difference -= CurrentValue;
+            double difference = Current.Value;
+            Current.Value = Total();
+            difference -= Current.Value;
             if (!ResetsOnUpdate) UpdateCurrentValue(difference);
         }
 
         public void RestoreValue()
         {
-            CurrentValue = Total();
+            Current.Value = Total();
         }
 
         public void UpdateCurrentValue(double updateDifference)
         {
-            var potentialChange = CurrentValue + updateDifference;
+            var potentialChange = Current.Value + updateDifference;
 
-            if (potentialChange > Total()) { CurrentValue = Total(); }
-            else if (potentialChange < 0) { CurrentValue = 0; }
-            else CurrentValue = potentialChange;
+            if (potentialChange > Total()) { Current.Value = Total(); }
+            else if (potentialChange < 0) { Current.Value = 0; }
+            else Current.Value = potentialChange;
         }
 
         public void SetDefaultValue(double value)
         {
-            DefaultValue = value;
+            Default.Value = value;
             calculate();
         }
 
         public void SetAdditionalValue(double value)
         {
-            AdditionalValue = value;
+            Additional.Value = value;
             calculate();
         }
 
@@ -69,18 +70,18 @@ namespace GentrysQuest.Game.Entity
             throw new NotImplementedException();
         }
 
-        public double GetPercentFromDefault(float percent) => MathBase.GetPercent(DefaultValue, percent);
-        public double GetPercentFromAdditional(float percent) => MathBase.GetPercent(AdditionalValue, percent);
+        public double GetPercentFromDefault(float percent) => MathBase.GetPercent(Default.Value, percent);
+        public double GetPercentFromAdditional(float percent) => MathBase.GetPercent(Additional.Value, percent);
         public double GetPercentFromTotal(float percent) => MathBase.GetPercent(Total(), percent);
 
         public double Total()
         {
-            return MinimumValue + DefaultValue + AdditionalValue;
+            return Minimum.Value + Default.Value + Additional.Value;
         }
 
         public override string ToString()
         {
-            return $"{Name}: {MinimumValue + DefaultValue} + {AdditionalValue} ({Total()})";
+            return $"{Name}: {Minimum.Value + Default.Value} + {Additional.Value} ({Total()})";
         }
     }
 }
