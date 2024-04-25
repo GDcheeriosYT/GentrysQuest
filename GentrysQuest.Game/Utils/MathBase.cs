@@ -85,5 +85,7 @@ namespace GentrysQuest.Game.Utils
         public static int RandomInt(int min, int max) => Random.Shared.Next(min, max);
 
         public static float RandomFloat(float min, float max) => min + Random.Shared.NextSingle() * (max - min);
+
+        public static bool RandomBool() => Convert.ToBoolean(Random.Shared.Next(2));
     }
 }

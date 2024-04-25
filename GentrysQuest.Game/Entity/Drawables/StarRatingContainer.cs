@@ -21,27 +21,20 @@ namespace GentrysQuest.Game.Entity.Drawables
             this.starRating.Value = 1;
             this.starRating.BindValueChanged(setStarRating, true);
             this.starRating.Value = starRating;
-            Origin = Anchor.BottomLeft;
-            RelativeSizeAxes = Axes.Both;
-            Anchor = Anchor.CentreLeft;
-            RelativePositionAxes = Axes.Both;
 
-            InternalChild = new GridContainer
+            InternalChild = new FillFlowContainer()
             {
-                RelativeSizeAxes = Axes.Both,
-                RelativePositionAxes = Axes.Both,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Content = new[]
+                Direction = FillDirection.Horizontal,
+                AutoSizeAxes = Axes.Both,
+                Anchor = Anchor.CentreLeft,
+                Origin = Anchor.CentreLeft,
+                Children = new[]
                 {
-                    new[]
-                    {
-                        starRatingDrawable1,
-                        starRatingDrawable2,
-                        starRatingDrawable3,
-                        starRatingDrawable4,
-                        starRatingDrawable5
-                    }
+                    starRatingDrawable1,
+                    starRatingDrawable2,
+                    starRatingDrawable3,
+                    starRatingDrawable4,
+                    starRatingDrawable5
                 }
             };
         }

@@ -4,6 +4,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.Sprites;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
@@ -33,6 +34,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly InventoryButton exitButton;
 
         private readonly DrawSizePreservingFillContainer itemContainerBox;
+
+        private readonly SpriteText moneyText;
 
         private readonly EntityInfoListContainer itemContainer;
 
@@ -89,10 +92,27 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             RelativeSizeAxes = Axes.Both,
                             Colour = new Colour4(0, 0, 0, 185)
                         },
-                        itemContainer = new EntityInfoListContainer
+                        new DrawSizePreservingFillContainer
                         {
-                            RelativePositionAxes = Axes.Y,
-                            Size = new Vector2(1)
+                            Child = moneyText = new SpriteText
+                            {
+                                Anchor = Anchor.TopCentre,
+                                Origin = Anchor.TopCentre,
+                                Text = "$0",
+                                Font = FontUsage.Default.With(size: 56),
+                                Margin = new MarginPadding { Top = 20 }
+                            }
+                        },
+                        new DrawSizePreservingFillContainer
+                        {
+                            Child = itemContainer = new EntityInfoListContainer
+                            {
+                                RelativePositionAxes = Axes.Y,
+                                Y = 0.1f,
+                                Anchor = Anchor.TopCentre,
+                                Origin = Anchor.TopCentre,
+                                Size = new Vector2(1)
+                            }
                         }
                     }
                 },
@@ -146,6 +166,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
         public override void Show()
         {
             isShowing = true;
+            moneyText.Text = $"${GameData.Money.Amount}";
             base.Show();
             topButtons.MoveToY(0, FADE_TIME, Easing.InOutCubic);
             itemContainerBox.FadeIn(FADE_TIME, Easing.InOutCubic);

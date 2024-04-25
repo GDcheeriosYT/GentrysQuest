@@ -1,4 +1,6 @@
 using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Content.Families;
+using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Overlays.Inventory;
@@ -29,6 +31,9 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
             GameData.Characters.Add(new TestCharacter(5));
             GameData.Characters.Add(new BraydenMesserschmidt());
 
+            GameData.Artifacts.Add(new OsuTablet());
+            GameData.Artifacts.Add(new TestArtifact());
+
             GameData.Weapons.Add(new Knife());
             GameData.Weapons.Add(new BraydensOsuPen());
 
@@ -36,7 +41,7 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
         }
 
         [Test]
-        public void display()
+        public void Display()
         {
             AddStep("Show", () => inventoryOverlay.Show());
             AddStep("Hide", () => inventoryOverlay.Hide());

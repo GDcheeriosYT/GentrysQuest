@@ -5,6 +5,6 @@ namespace GentrysQuest.Game.Entity
         /// <summary>
         /// The artifacts of the character
         /// </summary>
-        Artifact[] Artifacts { get; }
+        ArtifactManager Artifacts { get; }
     }
 }

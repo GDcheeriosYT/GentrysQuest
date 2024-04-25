@@ -15,6 +15,8 @@ namespace GentrysQuest.Game.Entity.Drawables
     {
         private EntityIconDrawable icon;
         private SpriteText name;
+        private SpriteText level;
+        private TextFlowContainer mainInfoContainer;
         public StarRatingContainer starRatingContainer;
         public EntityBase entity;
         private Colour4 firstColor = Colour4.Gray;
@@ -45,56 +47,77 @@ namespace GentrysQuest.Game.Entity.Drawables
                     RelativeSizeAxes = Axes.Both,
                     Colour = ColourInfo.GradientHorizontal(firstColor, secondColor),
                 },
-                name = new SpriteText
+                new FillFlowContainer
                 {
-                    Text = entity.Name,
-                    Anchor = Anchor.CentreLeft,
-                    Origin = Anchor.TopLeft,
-                    RelativePositionAxes = Axes.Both,
-                    RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(0.2f),
-                    Scale = new Vector2(2.5f),
-                    AllowMultiline = false,
-                    Truncate = true,
-                    X = 0.2f,
-                    Y = -0.5f
-                },
-                icon = new EntityIconDrawable
-                {
-                    Origin = Anchor.CentreLeft,
-                    Anchor = Anchor.CentreLeft,
-                    RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(0.25f, 2.5f),
-                    X = 0.05f
-                },
-                starRatingContainer = new StarRatingContainer(this.entity.StarRating.Value)
-                {
-                    Size = new Vector2(0.27f, 1f),
-                    Y = 0.7f,
-                    X = 0.2f
-                },
+                    Direction = FillDirection.Horizontal,
+                    AutoSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        icon = new EntityIconDrawable
+                        {
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Margin = new MarginPadding(35),
+                            Size = new Vector2(250)
+                        },
+                        new FillFlowContainer
+                        {
+                            Direction = FillDirection.Vertical,
+                            AutoSizeAxes = Axes.Both,
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Padding = new MarginPadding { Left = 5 },
+                            Children = new Drawable[]
+                            {
+                                mainInfoContainer = new TextFlowContainer
+                                {
+                                    Size = new Vector2(400, 40)
+                                },
+                                starRatingContainer = new StarRatingContainer(entity.StarRating.Value)
+                                {
+                                    Size = new Vector2(200, 40)
+                                }
+                            }
+                        }
+                    }
+                }
             };
 
+            mainInfoContainer.AddText(name = new SpriteText
+                {
+                    Text = entity.Name,
+                    Size = new Vector2(300, 35),
+                    Font = FontUsage.Default.With(size: 38),
+                    Truncate = true,
+                    AllowMultiline = false
+                }
+            );
+            mainInfoContainer.AddText(level = new SpriteText
+            {
+                Text = $"Level 0",
+                Size = new Vector2(100, 35),
+                Padding = new MarginPadding { Left = 10 },
+                Font = FontUsage.Default.With(size: 24),
+                AllowMultiline = false
+            });
             starRatingContainer.starRating.BindValueChanged(updateColorWithStarRating, true);
         }
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            icon.Texture = textures.Get(entity.TextureMapping.Get("Idle"));
+            icon.Texture = textures.Get(entity.TextureMapping.Get("Icon"));
         }
 
         protected override bool OnHover(HoverEvent e)
         {
             this.ScaleTo(new Vector2(1.05f, 1f), 30);
-            this.FadeColour(ColourInfo.SingleColour(firstColor), 200);
             return base.OnHover(e);
         }
 
         protected override void OnHoverLost(HoverLostEvent e)
         {
             this.ScaleTo(new Vector2(1f, 1f), 30);
-            setColor();
             base.OnHoverLost(e);
         }
 

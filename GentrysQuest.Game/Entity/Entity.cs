@@ -12,7 +12,7 @@ namespace GentrysQuest.Game.Entity
 
         // experience
         public Experience Experience = new();
-        protected int difficulty;
+        protected int difficulty = 1;
 
         // equips
         [CanBeNull]
@@ -127,6 +127,21 @@ namespace GentrysQuest.Game.Entity
             value += (int)(Weapon.Damage.Current.Value / 4);
 
             return value;
+        }
+
+        public int GetMoneyReward()
+        {
+            int value = 0;
+
+            value += Experience.Level.Current.Value;
+            value += Stats.GetPointTotal();
+
+            return value;
+        }
+
+        public virtual Weapon.Weapon GetWeaponReward()
+        {
+            return Weapon;
         }
 
         public virtual void UpdateStats()

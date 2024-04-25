@@ -2,12 +2,12 @@ namespace GentrysQuest.Game.Database
 {
     public class Money(int amount = 0)
     {
-        private int amount = amount;
+        public int Amount { get; private set; } = amount;
 
-        public bool CanAfford(int amount) => this.amount >= amount;
+        public bool CanAfford(int amount) => this.Amount >= amount;
 
-        public void Spend(int amount) => this.amount -= amount;
+        public void Spend(int amount) => this.Amount -= amount;
 
-        public void Hand(int amount) => this.amount += amount;
+        public void Hand(int amount) => this.Amount += amount;
     }
 }

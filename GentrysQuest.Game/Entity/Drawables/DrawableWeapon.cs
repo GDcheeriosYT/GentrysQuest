@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
@@ -170,6 +171,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                         else entity.Damage(damage);
 
                         if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
+                        if (entity.IsDead) GameData.Money.Hand(entity.GetMoneyReward());
+                        if (entity.IsDead) GameData.Weapons.Add(entity.GetWeaponReward());
 
                         DamageQueue.Add(hitbox);
                     }

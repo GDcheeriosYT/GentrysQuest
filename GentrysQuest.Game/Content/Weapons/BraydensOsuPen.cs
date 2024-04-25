@@ -46,6 +46,7 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region TextureMapping
 
+            TextureMapping.Add("Icon", "brayden_osu_pen_base.png");
             TextureMapping.Add("Base", "brayden_osu_pen_base.png");
 
             #endregion

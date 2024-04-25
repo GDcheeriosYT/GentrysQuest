@@ -34,6 +34,7 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region TextureMapping
 
+            TextureMapping.Add("Icon", "knife.png");
             TextureMapping.Add("Base", "knife.png");
 
             #endregion

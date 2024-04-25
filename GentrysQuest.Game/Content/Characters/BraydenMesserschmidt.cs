@@ -13,6 +13,7 @@ namespace GentrysQuest.Game.Content.Characters
             Stats.AttackSpeed.point = 1;
             Stats.CritRate.point = 2;
 
+            TextureMapping.Add("Icon", "brayden_idle.png");
             TextureMapping.Add("Idle", "brayden_idle.png");
 
             AudioMapping.Add("Spawn", "Brayden_Messerschmidt_Spawn.mp3");

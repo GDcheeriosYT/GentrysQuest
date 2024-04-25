@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GentrysQuest.Game.Content;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 
@@ -6,6 +7,11 @@ namespace GentrysQuest.Game.Database
 {
     public static class GameData
     {
+        /// <summary>
+        /// The game content.
+        /// </summary>
+        public static ContentManager Content = new ContentManager();
+
         /// <summary>
         /// The equipped character
         /// </summary>

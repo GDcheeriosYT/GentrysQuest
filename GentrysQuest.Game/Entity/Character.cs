@@ -2,7 +2,7 @@ namespace GentrysQuest.Game.Entity;
 
 public class Character : Entity, ICharacter
 {
-    public Artifact[] Artifacts { get; } = new Artifact[5];
+    public ArtifactManager Artifacts { get; } = new ArtifactManager();
 
     public override void UpdateStats()
     {
