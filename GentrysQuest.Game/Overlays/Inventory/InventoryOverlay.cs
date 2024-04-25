@@ -11,24 +11,40 @@ namespace GentrysQuest.Game.Overlays.Inventory
     public partial class InventoryOverlay : CompositeDrawable
     {
         /// <summary>
+        /// The time it takes to fade
+        /// </summary>
+        private const int FADE_TIME = 300;
+
+        /// <summary>
+        /// if the inventory is being displayed
+        /// </summary>
+        private bool isShowing = false;
+
+        /// <summary>
         /// The section being displayed in the inventory
         /// </summary>
-        private Bindable<InventoryDisplay> displayingSection = new Bindable<InventoryDisplay>(InventoryDisplay.Characters);
+        private readonly Bindable<InventoryDisplay> displayingSection = new Bindable<InventoryDisplay>(InventoryDisplay.Hidden);
 
-        private InventoryButton charactersButton;
-        private InventoryButton artifactsButton;
-        private InventoryButton weaponsButton;
+        private readonly DrawSizePreservingFillContainer topButtons;
 
-        private EntityInfoListContainer itemContainer;
+        private readonly InventoryButton charactersButton;
+        private readonly InventoryButton artifactsButton;
+        private readonly InventoryButton weaponsButton;
+        private readonly InventoryButton exitButton;
+
+        private readonly DrawSizePreservingFillContainer itemContainerBox;
+
+        private readonly EntityInfoListContainer itemContainer;
 
         public InventoryOverlay()
         {
             RelativeSizeAxes = Axes.Both;
             RelativePositionAxes = Axes.Both;
             Anchor = Anchor.Centre;
+            Depth = -3;
             InternalChildren = new Drawable[]
             {
-                new DrawSizePreservingFillContainer
+                topButtons = new DrawSizePreservingFillContainer
                 {
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
@@ -44,7 +60,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         FillMode = FillMode.Stretch,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Size = new Vector2(0.3f, 1),
+                        Size = new Vector2(0.2f, 1),
                         Spacing = new Vector2(40),
                         Children = new[]
                         {
@@ -52,9 +68,9 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             artifactsButton = new InventoryButton("Artifacts"),
                             weaponsButton = new InventoryButton("Weapons")
                         }
-                    },
+                    }
                 },
-                new DrawSizePreservingFillContainer
+                itemContainerBox = new DrawSizePreservingFillContainer
                 {
                     Masking = true,
                     CornerExponent = 2,
@@ -79,32 +95,74 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             Size = new Vector2(1)
                         }
                     }
-                }
+                },
             };
             Origin = Anchor.Centre;
             itemContainer.AddFromList(GameData.Characters);
             displayingSection.BindValueChanged(_ =>
             {
-                itemContainer.ClearList();
-
-                switch (displayingSection.Value)
-                {
-                    case InventoryDisplay.Characters:
-                        itemContainer.AddFromList(GameData.Characters);
-                        break;
-
-                    case InventoryDisplay.Artifacts:
-                        itemContainer.AddFromList(GameData.Artifacts);
-                        break;
-
-                    case InventoryDisplay.Weapons:
-                        itemContainer.AddFromList(GameData.Weapons);
-                        break;
-                }
+                changeState();
             });
             charactersButton.SetAction(() => { displayingSection.Value = InventoryDisplay.Characters; });
             artifactsButton.SetAction(() => { displayingSection.Value = InventoryDisplay.Artifacts; });
             weaponsButton.SetAction(() => { displayingSection.Value = InventoryDisplay.Weapons; });
+            Hide();
+        }
+
+        private void changeState()
+        {
+            itemContainer.ClearList();
+
+            switch (displayingSection.Value)
+            {
+                case InventoryDisplay.Characters:
+                    itemContainer.AddFromList(GameData.Characters);
+                    break;
+
+                case InventoryDisplay.Artifacts:
+                    itemContainer.AddFromList(GameData.Artifacts);
+                    break;
+
+                case InventoryDisplay.Weapons:
+                    itemContainer.AddFromList(GameData.Weapons);
+                    break;
+            }
+        }
+
+        public void ToggleDisplay()
+        {
+            switch (isShowing)
+            {
+                case true:
+                    Hide();
+                    break;
+
+                case false:
+                    Show();
+                    break;
+            }
+        }
+
+        public override void Show()
+        {
+            isShowing = true;
+            base.Show();
+            topButtons.MoveToY(0, FADE_TIME, Easing.InOutCubic);
+            itemContainerBox.FadeIn(FADE_TIME, Easing.InOutCubic);
+            displayingSection.Value = InventoryDisplay.Characters;
+        }
+
+        public override void Hide()
+        {
+            isShowing = false;
+            topButtons.MoveToY(-2, FADE_TIME, Easing.InOutCubic);
+            itemContainer.ClearList();
+            displayingSection.Value = InventoryDisplay.Hidden;
+            itemContainerBox.FadeOut(FADE_TIME, Easing.InOutCubic);
+            Scheduler.AddDelayed(() =>
+            {
+                base.Hide();
+            }, FADE_TIME);
         }
     }
 }

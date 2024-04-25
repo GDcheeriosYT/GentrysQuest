@@ -28,7 +28,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
                 container.AddFromList(entityList);
             });
             AddSliderStep("Star rating value", 1, 5, 1, i => starRating = i);
-            AddSliderStep("Entity amount", 1, 50, 1, i => amount = i);
+            AddSliderStep("Entity amount", 1, 200, 1, i => amount = i);
             AddToggleStep("Random star rating", b => isRandomRating = b);
         }
 

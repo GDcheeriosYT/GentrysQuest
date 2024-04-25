@@ -34,5 +34,12 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
 
             Add(inventoryOverlay = new InventoryOverlay());
         }
+
+        [Test]
+        public void display()
+        {
+            AddStep("Show", () => inventoryOverlay.Show());
+            AddStep("Hide", () => inventoryOverlay.Hide());
+        }
     }
 }

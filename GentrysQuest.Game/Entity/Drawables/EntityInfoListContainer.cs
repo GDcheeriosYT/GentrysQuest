@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
     public partial class EntityInfoListContainer : Container
     {
-        private BasicScrollContainer scrollContainer;
+        private readonly BasicScrollContainer scrollContainer;
         private bool queued = false;
-        private List<EntityBase> queuedEntities = new();
+        private readonly List<EntityBase> queuedEntities = new();
         private const int DURATION = 150;
+        private readonly SpriteText noItemsDisclaimer;
 
         public EntityInfoListContainer()
         {
@@ -18,12 +20,21 @@ namespace GentrysQuest.Game.Entity.Drawables
             Origin = Anchor.TopCentre;
             Anchor = Anchor.TopCentre;
             Size = new Vector2(0.8f);
+            Padding = new MarginPadding(3f);
             Children = new Drawable[]
             {
                 scrollContainer = new BasicScrollContainer()
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Padding = new MarginPadding(5f)
+                    RelativeSizeAxes = Axes.Both
+                },
+                noItemsDisclaimer = new SpriteText
+                {
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Y = 20,
+                    Text = "This list is empty...",
+                    Font = new FontUsage().With(size: 48),
+                    Colour = Colour4.White
                 }
             };
         }
@@ -45,6 +56,9 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public void AddFromList<T>(List<T> entityList, bool isNew = false) where T : EntityBase
         {
+            if (entityList.Count == 0) noItemsDisclaimer.FadeIn(DURATION);
+            else noItemsDisclaimer.FadeOut(DURATION);
+
             if (queued)
             {
                 queuedEntities.Clear();
@@ -58,7 +72,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 for (int i = 0; i < entityList.Count; i++)
                 {
-                    addEntity(entityList[i], i * 50);
+                    addEntity(entityList[i], i * 35);
                 }
             }
         }

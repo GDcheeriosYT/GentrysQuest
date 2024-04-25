@@ -4,6 +4,7 @@ using GentrysQuest.Game.Content.Maps;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Location.Drawables;
+using GentrysQuest.Game.Overlays.Inventory;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -23,6 +24,9 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private List<DrawableEntity> enemies = new List<DrawableEntity>();
         private GameplayHud gameplayHud;
         private DrawableMap map;
+        private InventoryOverlay inventoryOverlay;
+        private InventoryButton inventoryButton;
+        private bool showingInventory = false;
 
         private int enemySpawnLimit = 4;
 
@@ -41,8 +45,20 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     RelativeSizeAxes = Axes.Both
                 },
                 gameplayHud = new GameplayHud(),
-                map = new DrawableMap(new TestMap())
+                map = new DrawableMap(new TestMap()),
+                inventoryOverlay = new InventoryOverlay(),
+                inventoryButton = new InventoryButton("Inventory")
+                {
+                    Anchor = Anchor.TopLeft,
+                    Origin = Anchor.TopLeft,
+                    RelativeSizeAxes = Axes.Both,
+                    RelativePositionAxes = Axes.Both,
+                    Size = new Vector2(0.15f, 0.06f),
+                    Position = new Vector2(0.005f),
+                }
             };
+
+            inventoryButton.SetAction(inventoryOverlay.ToggleDisplay);
         }
 
         /// <summary>
