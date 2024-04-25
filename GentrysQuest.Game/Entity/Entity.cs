@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using GentrysQuest.Game.Database;
+using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -63,6 +64,7 @@ namespace GentrysQuest.Game.Entity
         public void Die()
         {
             IsDead = true;
+            GameData.currentStats.Deaths.Add();
             OnDeath?.Invoke();
         }
 
@@ -75,6 +77,9 @@ namespace GentrysQuest.Game.Entity
         {
             Stats.Health.UpdateCurrentValue(-amount);
             if (Stats.Health.Current.Value <= 0) Die();
+            GameData.currentStats.DamageTaken.Add(amount);
+            if (GameData.currentStats.MostDamageTaken.Bigger(amount)) GameData.currentStats.MostDamageTaken.Set(amount);
+            GameData.currentStats.HitsTaken.Add();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }

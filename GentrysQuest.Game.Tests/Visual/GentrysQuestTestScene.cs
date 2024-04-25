@@ -22,7 +22,7 @@ namespace GentrysQuest.Game.Tests.Visual
 
         public GentrysQuestTestScene()
         {
-            GameData.reset();
+            GameData.Reset();
         }
     }
 }

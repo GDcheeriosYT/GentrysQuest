@@ -22,18 +22,34 @@ namespace GentrysQuest.Game.Database
         /// </summary>
         public static Money Money { get; private set; }
 
+        /// <summary>
+        /// Game stats
+        /// </summary>
+        public static Statistics Statistics { get; private set; }
+
+        public static StatTracker currentStats { get; private set; }
+
         // The lists of entities
         public static List<Character> Characters { get; private set; }
         public static List<Artifact> Artifacts { get; private set; }
         public static List<Weapon> Weapons { get; private set; }
 
-        public static void reset()
+        public static void Reset()
         {
             EquipedCharacter = null;
             Money = new Money();
+            Statistics = new Statistics();
+            currentStats = new StatTracker();
             Characters = new List<Character>();
             Artifacts = new List<Artifact>();
             Weapons = new List<Weapon>();
+        }
+
+        public static void WrapUpStats()
+        {
+            Statistics.Totals.Merge(currentStats);
+            Statistics.Most = Statistics.Most.GetBest(currentStats);
+            currentStats = new StatTracker();
         }
     }
 }

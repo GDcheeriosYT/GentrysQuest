@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -14,6 +15,11 @@ namespace GentrysQuest.Game.Entity
         {
             Artifacts.Add(artifact);
             artifact.SetFamily(this);
+        }
+
+        public Artifact GetArtifact()
+        {
+            return Artifacts[Random.Shared.Next(Artifacts.Count + 1)];
         }
     }
 }
