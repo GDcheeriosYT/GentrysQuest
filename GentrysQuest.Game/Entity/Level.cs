@@ -13,20 +13,20 @@ namespace GentrysQuest.Game.Entity
             Limit.Value = 0;
         }
 
-        private Level(int current, int limit)
+        public Level(int current, int limit)
         {
             Current.Value = current;
             Limit.Value = limit;
         }
 
-        public static Level CreateInstance(int current, int limit)
-        {
-            return new Level(current, limit);
-        }
-
         public void AddLevel()
         {
             if (Current != Limit) Current.Value++;
+        }
+
+        public override string ToString()
+        {
+            return $"Level {Current.Value}{(Limit.Value > 0 ? $"/{Limit.Value}" : "")}";
         }
     }
 }

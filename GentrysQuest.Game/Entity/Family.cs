@@ -21,5 +21,10 @@ namespace GentrysQuest.Game.Entity
         {
             return Artifacts[Random.Shared.Next(Artifacts.Count + 1)];
         }
+
+        public List<Artifact> GetArtifacts()
+        {
+            return Artifacts;
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace GentrysQuest.Android;
 
 public partial class GentrysQuestAndroidGame : GentrysQuestGame
 {
-    public GentrysQuestAndroidGame()
+    public GentrysQuestAndroidGame(MainActivity mainActivity)
         : base(false)
     {
     }

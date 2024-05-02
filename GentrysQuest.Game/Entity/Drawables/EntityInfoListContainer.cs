@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GentrysQuest.Game.Graphics;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -13,6 +14,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         private readonly List<EntityBase> queuedEntities = new();
         private const int DURATION = 150;
         private readonly SpriteText noItemsDisclaimer;
+        private readonly LoadingIndicator loadingIndicator;
 
         public EntityInfoListContainer()
         {
@@ -35,8 +37,14 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Text = "This list is empty...",
                     Font = new FontUsage().With(size: 48),
                     Colour = Colour4.White
+                },
+                loadingIndicator = new LoadingIndicator
+                {
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre
                 }
             };
+            loadingIndicator.FadeOut(0);
         }
 
         private void addToList(EntityInfoDrawable drawable)
@@ -47,7 +55,27 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private void addEntity(EntityBase entity, int delay = 0)
         {
-            EntityInfoDrawable entityInfoDrawable = new EntityInfoDrawable(entity);
+            EntityInfoDrawable entityInfoDrawable;
+
+            switch (entity)
+            {
+                case Character:
+                    entityInfoDrawable = new EntityInfoDrawable(entity);
+                    break;
+
+                case Artifact:
+                    entityInfoDrawable = new ArtifactInfoDrawable((Artifact)entity);
+                    break;
+
+                case Weapon.Weapon:
+                    entityInfoDrawable = new WeaponInfoDrawable((Weapon.Weapon)entity);
+                    break;
+
+                default:
+                    entityInfoDrawable = new EntityInfoDrawable(entity);
+                    break;
+            }
+
             addToList(entityInfoDrawable);
             entityInfoDrawable.FadeOut().ScaleTo(0).Then()
                               .Delay(delay).Then()
@@ -91,11 +119,13 @@ namespace GentrysQuest.Game.Entity.Drawables
             int count = 0;
             int added_delay = 35;
             queued = true;
+            loadingIndicator.FadeIn(50);
 
             Scheduler.AddDelayed(() =>
             {
+                loadingIndicator.FadeOut(50);
                 queued = false;
-            }, (scrollContainer.Count * DURATION));
+            }, (scrollContainer.Count + 1) * DURATION);
 
             foreach (EntityInfoDrawable drawable in scrollContainer)
             {

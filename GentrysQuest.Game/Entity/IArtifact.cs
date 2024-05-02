@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace GentrysQuest.Game.Entity
 {
     public interface IArtifact
@@ -12,6 +14,10 @@ namespace GentrysQuest.Game.Entity
         /// <summary>
         /// The other attributes for this artifact.
         /// </summary>
-        Buff[] Attributes { get; protected set; }
+        List<Buff> Attributes { get; protected set; }
+
+        List<StatType> ValidMainAttributes { get; protected set; }
+        List<int> ValidStarRatings { get; protected set; }
+        AllowedPercentMethod AllowedPercentMethod { get; protected set; }
     }
 }

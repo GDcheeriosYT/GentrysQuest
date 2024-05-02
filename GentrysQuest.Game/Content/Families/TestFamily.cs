@@ -15,9 +15,9 @@ namespace GentrysQuest.Game.Content.Families
     public class TestArtifact : Artifact, IArtifact
     {
         public TestArtifact()
+            : base()
         {
             Name = "Test Artifact";
-            MainAttribute = new Buff();
         }
     }
 }

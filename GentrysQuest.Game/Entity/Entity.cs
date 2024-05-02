@@ -12,7 +12,6 @@ namespace GentrysQuest.Game.Entity
         public Stats Stats = new();
 
         // experience
-        public Experience Experience = new();
         protected int difficulty = 1;
 
         // equips

@@ -22,7 +22,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Origin = Anchor.Centre;
             Colour = ColourInfo.GradientVertical(Colour4.DarkGray, Colour4.LightGray);
             Alpha = 0.5f;
-            Size = new Vector2(35);
+            Size = new Vector2(40);
 
             isEnabled.BindValueChanged(whenChanged, true);
         }

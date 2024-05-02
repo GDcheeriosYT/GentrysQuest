@@ -14,6 +14,7 @@ namespace GentrysQuest.Game.Content.Weapons
             StarRating = new StarRating(5);
             Description = "A osu pen";
             Damage.SetDefaultValue(50);
+            Buff = new Buff(this, StatType.CritRate);
 
             #region Design
 

@@ -1,7 +1,5 @@
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Families;
-using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
-using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Overlays.Inventory;
 using NUnit.Framework;
@@ -29,13 +27,24 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
             GameData.Characters.Add(new TestCharacter(3));
             GameData.Characters.Add(new TestCharacter(4));
             GameData.Characters.Add(new TestCharacter(5));
-            GameData.Characters.Add(new BraydenMesserschmidt());
 
-            GameData.Artifacts.Add(new OsuTablet());
-            GameData.Artifacts.Add(new TestArtifact());
+            foreach (var character in GameData.Content.Characters)
+            {
+                GameData.Characters.Add(character);
+            }
 
-            GameData.Weapons.Add(new Knife());
-            GameData.Weapons.Add(new BraydensOsuPen());
+            foreach (var family in GameData.Content.Families)
+            {
+                foreach (var artifact in family.GetArtifacts())
+                {
+                    GameData.Artifacts.Add(artifact);
+                }
+            }
+
+            foreach (var weapon in GameData.Content.Weapons)
+            {
+                GameData.Weapons.Add(weapon);
+            }
 
             Add(inventoryOverlay = new InventoryOverlay());
         }
@@ -45,6 +54,12 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
         {
             AddStep("Show", () => inventoryOverlay.Show());
             AddStep("Hide", () => inventoryOverlay.Hide());
+        }
+
+        [Test]
+        public void Collection()
+        {
+            AddStep("Add Artifact", () => GameData.Artifacts.Add(new TestArtifact()));
         }
     }
 }

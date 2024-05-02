@@ -13,17 +13,15 @@ namespace GentrysQuest.Game.Entity.Drawables
 {
     public partial class EntityInfoDrawable : CompositeDrawable
     {
-        private EntityIconDrawable icon;
-        private SpriteText name;
-        private SpriteText level;
-        private TextFlowContainer mainInfoContainer;
+        protected EntityIconDrawable icon;
+        protected SpriteText name;
+        protected SpriteText level;
+        protected TextFlowContainer mainInfoContainer;
         public StarRatingContainer starRatingContainer;
         public EntityBase entity;
-        private Colour4 firstColor = Colour4.Gray;
-        private Colour4 secondColor = Colour4.Gray;
-
-        // [Resolved]
-        // private TextureStore textures { get; }
+        protected Container BuffContainer;
+        protected Colour4 firstColor = Colour4.Gray;
+        protected Colour4 secondColor = Colour4.Gray;
 
         public EntityInfoDrawable(EntityBase entity)
         {
@@ -66,41 +64,44 @@ namespace GentrysQuest.Game.Entity.Drawables
                             AutoSizeAxes = Axes.Both,
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft,
-                            Padding = new MarginPadding { Left = 5 },
+                            Padding = new MarginPadding { Left = 5, Right = 20 },
                             Children = new Drawable[]
                             {
-                                mainInfoContainer = new TextFlowContainer
+                                name = new SpriteText
                                 {
-                                    Size = new Vector2(400, 40)
+                                    Text = entity.Name,
+                                    Size = new Vector2(250, 35),
+                                    Font = FontUsage.Default.With(size: 28),
+                                    Truncate = true,
+                                    AllowMultiline = false
                                 },
                                 starRatingContainer = new StarRatingContainer(entity.StarRating.Value)
                                 {
                                     Size = new Vector2(200, 40)
                                 }
                             }
+                        },
+                        level = new SpriteText
+                        {
+                            Text = entity.Experience.Level.ToString(),
+                            Size = new Vector2(120, 35),
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Font = FontUsage.Default.With(size: 24),
+                            AllowMultiline = false
+                        },
+                        BuffContainer = new Container
+                        {
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Position = new Vector2(50, 0),
+                            Size = new Vector2(100, 80)
                         }
                     }
                 }
             };
-
-            mainInfoContainer.AddText(name = new SpriteText
-                {
-                    Text = entity.Name,
-                    Size = new Vector2(300, 35),
-                    Font = FontUsage.Default.With(size: 38),
-                    Truncate = true,
-                    AllowMultiline = false
-                }
-            );
-            mainInfoContainer.AddText(level = new SpriteText
-            {
-                Text = $"Level 0",
-                Size = new Vector2(100, 35),
-                Padding = new MarginPadding { Left = 10 },
-                Font = FontUsage.Default.With(size: 24),
-                AllowMultiline = false
-            });
             starRatingContainer.starRating.BindValueChanged(updateColorWithStarRating, true);
+            entity.Experience.Level.Current.ValueChanged += delegate { level.Text = entity.Experience.Level.ToString(); };
         }
 
         [BackgroundDependencyLoader]
