@@ -39,6 +39,10 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         private readonly EntityInfoListContainer itemContainer;
 
+        private ItemDisplay itemInfo;
+
+        private bool displayingInfo = false;
+
         public InventoryOverlay()
         {
             RelativeSizeAxes = Axes.Both;
@@ -109,9 +113,18 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             {
                                 RelativePositionAxes = Axes.Y,
                                 Y = 0.1f,
-                                Anchor = Anchor.TopCentre,
-                                Origin = Anchor.TopCentre,
+                                Anchor = Anchor.TopLeft,
+                                Origin = Anchor.TopLeft,
                                 Size = new Vector2(1)
+                            }
+                        },
+                        new DrawSizePreservingFillContainer
+                        {
+                            Child = itemInfo = new ItemDisplay
+                            {
+                                Size = new Vector2(0, 1),
+                                Anchor = Anchor.CentreRight,
+                                Origin = Anchor.CentreRight,
                             }
                         }
                     }
@@ -131,6 +144,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         private void changeState()
         {
+            if (displayingInfo) DisplayInfo();
+
             itemContainer.ClearList();
 
             switch (displayingSection.Value)
@@ -163,6 +178,26 @@ namespace GentrysQuest.Game.Overlays.Inventory
             }
         }
 
+        public void DisplayInfo()
+        {
+            displayingInfo = !displayingInfo;
+
+            switch (displayingInfo)
+            {
+                case true:
+                    itemContainer.ResizeTo(new Vector2(0.5f, 1), 100);
+                    itemInfo.ResizeTo(new Vector2(0.5f, 1), 100);
+                    moneyText.MoveToX(-100f, 100);
+                    break;
+
+                case false:
+                    itemContainer.ResizeTo(new Vector2(1), 100);
+                    itemInfo.ResizeTo(new Vector2(0, 1), 100);
+                    moneyText.MoveToX(0f, 100);
+                    break;
+            }
+        }
+
         public override void Show()
         {
             isShowing = true;
@@ -175,6 +210,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public override void Hide()
         {
+            if (displayingInfo) DisplayInfo();
             isShowing = false;
             topButtons.MoveToY(-2, FADE_TIME, Easing.InOutCubic);
             itemContainer.ClearList();

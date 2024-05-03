@@ -20,8 +20,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         public StarRatingContainer starRatingContainer;
         public EntityBase entity;
         protected Container BuffContainer;
-        protected Colour4 firstColor = Colour4.Gray;
-        protected Colour4 secondColor = Colour4.Gray;
+        protected Box ColourBox;
+        private bool isSelected = false;
 
         public EntityInfoDrawable(EntityBase entity)
         {
@@ -43,7 +43,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = ColourInfo.GradientHorizontal(firstColor, secondColor),
+                    Colour = Colour4.Gray
                 },
                 new FillFlowContainer
                 {
@@ -70,7 +70,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 name = new SpriteText
                                 {
                                     Text = entity.Name,
-                                    Size = new Vector2(250, 35),
+                                    Size = new Vector2(200, 35),
                                     Font = FontUsage.Default.With(size: 28),
                                     Truncate = true,
                                     AllowMultiline = false
@@ -89,15 +89,33 @@ namespace GentrysQuest.Game.Entity.Drawables
                             Origin = Anchor.CentreLeft,
                             Font = FontUsage.Default.With(size: 24),
                             AllowMultiline = false
-                        },
-                        BuffContainer = new Container
-                        {
-                            Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.CentreLeft,
-                            Position = new Vector2(50, 0),
-                            Size = new Vector2(100, 80)
                         }
                     }
+                },
+                ColourBox = new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    RelativePositionAxes = Axes.Both,
+                    Size = new Vector2(0.5f, 1),
+                    Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.White),
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
+                },
+                new Container
+                {
+                    Masking = true,
+                    CornerExponent = 2,
+                    CornerRadius = 15,
+                    Child = new Box
+                    {
+                    }
+                },
+                BuffContainer = new Container
+                {
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
+                    Position = new Vector2(-100, 5),
+                    Size = new Vector2(100, 80)
                 }
             };
             starRatingContainer.starRating.BindValueChanged(updateColorWithStarRating, true);
@@ -122,39 +140,63 @@ namespace GentrysQuest.Game.Entity.Drawables
             base.OnHoverLost(e);
         }
 
+        protected override bool OnClick(ClickEvent e)
+        {
+            switch (isSelected)
+            {
+                case true:
+                    Unselect();
+                    break;
+
+                case false:
+                    Select();
+                    break;
+            }
+
+            return base.OnClick(e);
+        }
+
+        public void Select()
+        {
+            isSelected = true;
+            Colour = Colour4.Lime;
+        }
+
+        public void Unselect()
+        {
+            isSelected = false;
+            Colour = Colour4.White;
+        }
+
         private void updateColorWithStarRating(ValueChangedEvent<int> valueChangedEvent)
         {
             switch (valueChangedEvent.NewValue)
             {
                 case 1:
-                    firstColor = Colour4.LightGray;
-                    secondColor = Colour4.Gray;
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.White, Colour4.White);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.Gray);
                     break;
 
                 case 2:
-                    firstColor = Colour4.WhiteSmoke;
-                    secondColor = Colour4.White;
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.White, Colour4.LimeGreen);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.LimeGreen);
                     break;
 
                 case 3:
-                    firstColor = Colour4.WhiteSmoke;
-                    secondColor = Colour4.Aquamarine;
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.White, Colour4.Aqua);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.Aqua);
                     break;
 
                 case 4:
-                    firstColor = Colour4.FromHex("#FDBAF4");
-                    secondColor = Colour4.FromHex("#ECA5E2");
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.DeepPink, Colour4.White);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.DeepPink);
                     break;
 
                 case 5:
-                    firstColor = Colour4.FromHex("#FDF9BA");
-                    secondColor = Colour4.FromHex("#F5EE77");
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.Gold, Colour4.White);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.Gold);
                     break;
             }
-
-            setColor();
         }
-
-        private void setColor() { this.FadeColour(ColourInfo.GradientVertical(firstColor, secondColor), 200); }
     }
 }
