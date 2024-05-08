@@ -51,5 +51,10 @@ namespace GentrysQuest.Game.Database
             Statistics.Most = Statistics.Most.GetBest(currentStats);
             currentStats = new StatTracker();
         }
+
+        public static void EquipCharacter(Character character)
+        {
+            EquipedCharacter = character;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Utils;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -35,13 +36,23 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         private readonly DrawSizePreservingFillContainer itemContainerBox;
 
+        private readonly FillFlowContainer inventoryTop;
+
         private readonly SpriteText moneyText;
 
         private readonly EntityInfoListContainer itemContainer;
 
+        private readonly InventoryReverseButton reverseButton;
+
+        private readonly InnerInventoryButton sortButton;
+
+        private readonly string[] sortTypes = new[] { "Star Rating", "Name", "Level" };
+        private int sortIndexCounter = 0;
+
         private ItemDisplay itemInfo;
 
-        private bool displayingInfo = false;
+        private bool displayingInfo;
+        private SelectionModes selectionMode = SelectionModes.Single;
 
         public InventoryOverlay()
         {
@@ -98,13 +109,44 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         },
                         new DrawSizePreservingFillContainer
                         {
-                            Child = moneyText = new SpriteText
+                            Children = new Drawable[]
                             {
-                                Anchor = Anchor.TopCentre,
-                                Origin = Anchor.TopCentre,
-                                Text = "$0",
-                                Font = FontUsage.Default.With(size: 56),
-                                Margin = new MarginPadding { Top = 20 }
+                                moneyText = new SpriteText
+                                {
+                                    Anchor = Anchor.TopLeft,
+                                    Origin = Anchor.TopLeft,
+                                    Text = "$0",
+                                    Font = FontUsage.Default.With(size: 56),
+                                    Margin = new MarginPadding { Top = 20, Left = 50 }
+                                },
+                                new FillFlowContainer
+                                {
+                                    Direction = FillDirection.Horizontal,
+                                    Anchor = Anchor.TopRight,
+                                    Origin = Anchor.TopRight,
+                                    Margin = new MarginPadding { Top = 20, Right = 50 },
+                                    Children = new Drawable[]
+                                    {
+                                        reverseButton = new InventoryReverseButton
+                                        {
+                                            Anchor = Anchor.TopRight,
+                                            Origin = Anchor.TopRight,
+                                            Margin = new MarginPadding { Left = 12 },
+                                            Size = new Vector2(46)
+                                        },
+                                        sortButton = new InnerInventoryButton(new SpriteText
+                                        {
+                                            Text = sortTypes[sortIndexCounter],
+                                            Anchor = Anchor.Centre,
+                                            Origin = Anchor.Centre
+                                        })
+                                        {
+                                            Anchor = Anchor.TopRight,
+                                            Origin = Anchor.TopRight,
+                                            Size = new Vector2(200, 46),
+                                        }
+                                    }
+                                }
                             }
                         },
                         new DrawSizePreservingFillContainer
@@ -122,7 +164,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         {
                             Child = itemInfo = new ItemDisplay
                             {
-                                Size = new Vector2(0, 1),
+                                Size = new Vector2(0, 0.8f),
                                 Anchor = Anchor.CentreRight,
                                 Origin = Anchor.CentreRight,
                             }
@@ -139,27 +181,64 @@ namespace GentrysQuest.Game.Overlays.Inventory
             charactersButton.SetAction(() => { displayingSection.Value = InventoryDisplay.Characters; });
             artifactsButton.SetAction(() => { displayingSection.Value = InventoryDisplay.Artifacts; });
             weaponsButton.SetAction(() => { displayingSection.Value = InventoryDisplay.Weapons; });
+            sortButton.OnClickEvent += delegate
+            {
+                sortButton.Text.Text = HelpMe.GetNextValueFromArray(sortTypes, ref sortIndexCounter);
+                itemContainer.Sort(sortTypes[sortIndexCounter], reverseButton.Reversed);
+            };
+            reverseButton.OnClickEvent += delegate { itemContainer.Sort(sortTypes[sortIndexCounter], reverseButton.Reversed); };
+            itemContainer.FinishedLoading += delegate { itemContainer.Sort(sortTypes[sortIndexCounter], reverseButton.Reversed); };
+            itemContainer.FinishedLoading += delegate
+            {
+                switch (selectionMode)
+                {
+                    case SelectionModes.Single:
+                        foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
+                        {
+                            entityInfoDrawable.OnClickEvent += delegate
+                            {
+                                foreach (EntityInfoDrawable entityInfoDrawable2 in itemContainer.GetEntityInfoDrawables())
+                                {
+                                    if (entityInfoDrawable != entityInfoDrawable2) entityInfoDrawable2.Unselect();
+                                }
+
+                                unDisplayInfo();
+                                if (entityInfoDrawable.IsSelected) displayInfo(entityInfoDrawable);
+                            };
+                        }
+
+                        break;
+
+                    case SelectionModes.Multi:
+                        break;
+
+                    case SelectionModes.Equipping:
+                        break;
+                }
+            };
             Hide();
         }
 
         private void changeState()
         {
-            if (displayingInfo) DisplayInfo();
-
             itemContainer.ClearList();
+            unDisplayInfo();
 
             switch (displayingSection.Value)
             {
                 case InventoryDisplay.Characters:
                     itemContainer.AddFromList(GameData.Characters);
+                    itemContainer.Sort(sortTypes[sortIndexCounter], reverseButton.Reversed);
                     break;
 
                 case InventoryDisplay.Artifacts:
                     itemContainer.AddFromList(GameData.Artifacts);
+                    itemContainer.Sort(sortTypes[sortIndexCounter], reverseButton.Reversed);
                     break;
 
                 case InventoryDisplay.Weapons:
                     itemContainer.AddFromList(GameData.Weapons);
+                    itemContainer.Sort(sortTypes[sortIndexCounter], reverseButton.Reversed);
                     break;
             }
         }
@@ -178,24 +257,20 @@ namespace GentrysQuest.Game.Overlays.Inventory
             }
         }
 
-        public void DisplayInfo()
+        private void displayInfo(EntityInfoDrawable entityInfoDrawable)
         {
-            displayingInfo = !displayingInfo;
+            displayingInfo = true;
+            itemContainer.ResizeTo(new Vector2(0.5f, 1), 100);
+            itemInfo.ResizeTo(new Vector2(0.5f, 0.8f), 100);
+            itemInfo.DisplayItem(entityInfoDrawable.entity);
+        }
 
-            switch (displayingInfo)
-            {
-                case true:
-                    itemContainer.ResizeTo(new Vector2(0.5f, 1), 100);
-                    itemInfo.ResizeTo(new Vector2(0.5f, 1), 100);
-                    moneyText.MoveToX(-100f, 100);
-                    break;
-
-                case false:
-                    itemContainer.ResizeTo(new Vector2(1), 100);
-                    itemInfo.ResizeTo(new Vector2(0, 1), 100);
-                    moneyText.MoveToX(0f, 100);
-                    break;
-            }
+        private void unDisplayInfo()
+        {
+            itemContainer.ResizeTo(new Vector2(1), 100);
+            itemInfo.ResizeTo(new Vector2(0, 0.8f), 100);
+            itemInfo.FadeOut(100);
+            displayingInfo = false;
         }
 
         public override void Show()
@@ -210,7 +285,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public override void Hide()
         {
-            if (displayingInfo) DisplayInfo();
+            unDisplayInfo();
             isShowing = false;
             topButtons.MoveToY(-2, FADE_TIME, Easing.InOutCubic);
             itemContainer.ClearList();

@@ -9,5 +9,10 @@
             : this(new Xp(), new Level())
         {
         }
+
+        public override string ToString()
+        {
+            return $"{Level} {Xp}";
+        }
     }
 }

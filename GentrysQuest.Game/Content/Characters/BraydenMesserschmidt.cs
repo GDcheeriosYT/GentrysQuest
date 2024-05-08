@@ -8,6 +8,7 @@ namespace GentrysQuest.Game.Content.Characters
         {
             Name = "Brayden Messerschmidt";
             StarRating = new StarRating(5);
+            Description = "An osu player who formed a contract with ppy(Dean Herbert) to not talk to females.";
 
             Stats.Speed.point = 1;
             Stats.AttackSpeed.point = 1;

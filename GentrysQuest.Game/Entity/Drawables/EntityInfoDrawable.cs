@@ -1,4 +1,5 @@
-﻿using osu.Framework.Allocation;
+﻿using System;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
@@ -21,7 +22,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         public EntityBase entity;
         protected Container BuffContainer;
         protected Box ColourBox;
-        private bool isSelected = false;
+        public bool IsSelected { get; private set; }
+        public event EventHandler OnClickEvent;
 
         public EntityInfoDrawable(EntityBase entity)
         {
@@ -142,7 +144,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override bool OnClick(ClickEvent e)
         {
-            switch (isSelected)
+            switch (IsSelected)
             {
                 case true:
                     Unselect();
@@ -153,19 +155,21 @@ namespace GentrysQuest.Game.Entity.Drawables
                     break;
             }
 
+            OnClickEvent?.Invoke(this, null);
+
             return base.OnClick(e);
         }
 
         public void Select()
         {
-            isSelected = true;
-            Colour = Colour4.Lime;
+            IsSelected = true;
+            BorderColour = StarRatingContainer.GetColor(entity.StarRating.Value);
         }
 
         public void Unselect()
         {
-            isSelected = false;
-            Colour = Colour4.White;
+            IsSelected = false;
+            BorderColour = Colour4.Black;
         }
 
         private void updateColorWithStarRating(ValueChangedEvent<int> valueChangedEvent)

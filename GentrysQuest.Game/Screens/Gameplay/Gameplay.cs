@@ -91,6 +91,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 Padding = new MarginPadding { Left = 15 }
             });
             score.ValueChanged += delegate { scoreText.Text = $"{score}"; };
+            SetUp();
         }
 
         /// <summary>
@@ -107,9 +108,9 @@ namespace GentrysQuest.Game.Screens.Gameplay
             enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
             newEnemy.GetEntityObject().OnDeath += delegate { score.Value += KILL_SCORE; };
-            newEnemy.GetEntityObject().OnDeath += delegate { GameData.Artifacts.Add(new OsuTablet()); };
             newEnemy.GetEntityObject().OnDamage += delegate { score.Value += HIT_SCORE; };
             newEnemy.GetEntityObject().OnCrit += delegate { score.Value += CRIT_SCORE; };
+            newEnemy.GetEntityObject().OnDeath += delegate { GameData.Artifacts.Add(new OsuTablet()); };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);
         }
@@ -137,12 +138,12 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// Sets up the gameplay scene
         /// </summary>
         /// <param name="character"></param>
-        public void SetUp(Character character)
+        public void SetUp()
         {
             if (playerEntity is null)
             {
-                AddInternal(playerEntity = new DrawablePlayableEntity(character));
-                if (character.Weapon != null) character.SetWeapon(character.Weapon);
+                AddInternal(playerEntity = new DrawablePlayableEntity(GameData.EquipedCharacter));
+                if (GameData.EquipedCharacter.Weapon != null) GameData.EquipedCharacter.SetWeapon(GameData.EquipedCharacter.Weapon);
                 playerEntity.SetupClickContainer();
                 playerEntity.OnMove += delegate(float direction, double speed)
                 {
@@ -155,8 +156,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 };
             }
 
-            gameplayHud.SetEntity(character);
-            character.Spawn();
+            gameplayHud.SetEntity(GameData.EquipedCharacter);
+            GameData.EquipedCharacter.Spawn();
         }
 
         /// <summary>

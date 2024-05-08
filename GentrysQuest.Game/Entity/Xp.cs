@@ -34,5 +34,10 @@ namespace GentrysQuest.Game.Entity
 
             Requirement.Value = (difficulty * 100) + levelExperience + starRatingExperience;
         }
+
+        public override string ToString()
+        {
+            return $"{Current.Value}/{Requirement.Value} ({Progress}%)";
+        }
     }
 }

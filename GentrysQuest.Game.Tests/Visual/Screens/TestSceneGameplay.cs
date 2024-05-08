@@ -19,23 +19,14 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
 
         public TestSceneGameplay()
         {
+            theGuy = new BraydenMesserschmidt();
+            testWeapon = new BraydensOsuPen();
+            GameData.EquipCharacter(theGuy);
+            GameData.Characters.Add(theGuy);
+            GameData.Characters.Add(new TestCharacter(1));
+            theGuy.SetWeapon(testWeapon);
             Add(screens = new ScreenStack());
             screens.Push(gameplay = new Gameplay());
-        }
-
-        [Test]
-        public virtual void Start()
-        {
-            AddStep("start", () =>
-            {
-                theGuy = new BraydenMesserschmidt();
-                testWeapon = new BraydensOsuPen();
-                GameData.Characters.Add(theGuy);
-                GameData.Characters.Add(new TestCharacter(1));
-                theGuy.SetWeapon(testWeapon);
-                gameplay.SetUp(theGuy);
-            });
-            AddStep("End", () => gameplay.End());
         }
 
         [Test]

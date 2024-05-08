@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GentrysQuest.Game.Graphics;
 using osu.Framework.Graphics;
@@ -10,11 +11,13 @@ namespace GentrysQuest.Game.Entity.Drawables
     public partial class EntityInfoListContainer : Container
     {
         private readonly BasicScrollContainer scrollContainer;
+        private readonly List<EntityInfoDrawable> entityReferences;
         private bool queued = false;
         private readonly List<EntityBase> queuedEntities = new();
         private const int DURATION = 150;
         private readonly SpriteText noItemsDisclaimer;
         private readonly LoadingIndicator loadingIndicator;
+        public event EventHandler FinishedLoading;
 
         public EntityInfoListContainer()
         {
@@ -45,12 +48,19 @@ namespace GentrysQuest.Game.Entity.Drawables
                 }
             };
             loadingIndicator.FadeOut(0);
+            entityReferences = new();
         }
 
         private void addToList(EntityInfoDrawable drawable)
         {
             drawable.Y = 110 * scrollContainer.Count;
             scrollContainer.Add(drawable);
+            entityReferences.Add(drawable);
+        }
+
+        public List<EntityInfoDrawable> GetEntityInfoDrawables()
+        {
+            return entityReferences;
         }
 
         private void addEntity(EntityBase entity, int delay = 0)
@@ -77,9 +87,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             }
 
             addToList(entityInfoDrawable);
-            entityInfoDrawable.FadeOut().ScaleTo(0).Then()
-                              .Delay(delay).Then()
-                              .FadeIn(DURATION).ScaleTo(new Vector2(1), DURATION);
+            entityInfoDrawable.FadeOut().Then().Delay(delay).Then().FadeIn(DURATION);
         }
 
         public void AddFromList<T>(List<T> entityList, bool isNew = false) where T : EntityBase
@@ -100,7 +108,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 for (int i = 0; i < entityList.Count; i++)
                 {
-                    addEntity(entityList[i], i * 35);
+                    addEntity(entityList[i], 35);
                 }
             }
         }
@@ -116,24 +124,19 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public void ClearList()
         {
-            int count = 0;
-            int added_delay = 35;
             queued = true;
             loadingIndicator.FadeIn(50);
+            entityReferences.Clear();
 
             Scheduler.AddDelayed(() =>
             {
                 loadingIndicator.FadeOut(50);
                 queued = false;
-            }, (scrollContainer.Count + 1) * DURATION);
+            }, DURATION);
 
             foreach (EntityInfoDrawable drawable in scrollContainer)
             {
-                Scheduler.AddDelayed(() =>
-                {
-                    drawableFadeOut(drawable);
-                }, count * added_delay);
-                count++;
+                drawableFadeOut(drawable);
             }
         }
 
@@ -143,9 +146,46 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 AddFromList(queuedEntities);
                 queuedEntities.Clear();
+                FinishedLoading?.Invoke(null, null);
             }
 
             base.Update();
+        }
+
+        public void Sort(string condition, bool reversed)
+        {
+            List<dynamic[]> newList = new();
+
+            foreach (EntityInfoDrawable entityInfoDrawable in scrollContainer.Children)
+            {
+                newList.Add(new dynamic[] { entityInfoDrawable.entity, entityInfoDrawable });
+            }
+
+            switch (condition)
+            {
+                case "Star Rating":
+                    newList.Sort((x, y) => x[0].StarRating.Value.CompareTo(y[0].StarRating.Value));
+                    break;
+
+                case "Name":
+                    newList.Sort((x, y) => string.Compare(x[0].Name, y[0].Name));
+                    break;
+
+                case "Level":
+                    newList.Sort((x, y) => x[0].Experience.Level.Current.Value.CompareTo(y[0].Experience.Level.Current.Value));
+                    break;
+            }
+
+            if (!reversed) newList.Reverse();
+
+            int yPos = 0;
+
+            foreach (var pair in newList)
+            {
+                EntityInfoDrawable entityInfoDrawable = pair[1];
+                entityInfoDrawable.MoveToY(yPos, 100, Easing.InOutCirc);
+                yPos += 110;
+            }
         }
     }
 }
