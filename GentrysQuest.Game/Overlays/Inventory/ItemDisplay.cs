@@ -1,10 +1,12 @@
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Entity.Weapon;
+using GentrysQuest.Game.Graphics;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
@@ -18,9 +20,11 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly SpriteText nameText;
         private readonly SpriteText descriptionText;
         private readonly SpriteText levelText;
+        private readonly ProgressBar experienceBar;
         private readonly StarRatingContainer starRatingContainer;
         private readonly Sprite entityDisplay;
         private readonly Container entityAttributeContainer;
+        private readonly InventoryButton levelUpButton;
         private TextureStore textureStore;
 
         public ItemDisplay()
@@ -98,12 +102,46 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     Size = new Vector2(1),
                                     RelativeSizeAxes = Axes.Both
                                 },
-                                starRatingContainer = new StarRatingContainer(1)
+                                new Container
                                 {
-                                    Anchor = Anchor.TopLeft,
-                                    Origin = Anchor.TopLeft,
-                                    Size = new Vector2(0.75f, 80),
-                                    RelativeSizeAxes = Axes.X,
+                                    RelativeSizeAxes = Axes.Both,
+                                    Size = new Vector2(1, 0),
+                                    Position = new Vector2(0, 30),
+                                    Children = new Drawable[]
+                                    {
+                                        starRatingContainer = new StarRatingContainer(1)
+                                        {
+                                            Anchor = Anchor.CentreLeft,
+                                            Origin = Anchor.CentreLeft,
+                                            Size = new Vector2(0, 80)
+                                        },
+                                        new Container
+                                        {
+                                            Size = new Vector2(130, 40),
+                                            Masking = true,
+                                            EdgeEffect = new EdgeEffectParameters
+                                            {
+                                                Type = EdgeEffectType.Shadow,
+                                                Colour = new Colour4(0, 0, 0, 180),
+                                                Radius = 20,
+                                                Roundness = 3
+                                            },
+                                            Anchor = Anchor.CentreRight,
+                                            Origin = Anchor.CentreRight,
+                                            Children = new Drawable[]
+                                            {
+                                                levelText = new SpriteText
+                                                {
+                                                    Anchor = Anchor.CentreRight,
+                                                    Origin = Anchor.CentreRight,
+                                                    Text = "",
+                                                    Font = FontUsage.Default.With(size: 32),
+                                                    AllowMultiline = false,
+                                                    RelativeSizeAxes = Axes.Both
+                                                }
+                                            }
+                                        }
+                                    }
                                 },
                                 descriptionText = new SpriteText
                                 {
@@ -116,7 +154,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     Width = 1f,
                                     AllowMultiline = true,
                                     Padding = new MarginPadding { Left = 5 }
-                                },
+                                }
                             }
                         }
                     }
@@ -181,21 +219,30 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                 }
                             }
                         },
-                        levelText = new SpriteText
-                        {
-                            Anchor = Anchor.TopLeft,
-                            Origin = Anchor.TopLeft,
-                            Text = "",
-                            Position = new Vector2(10, 60),
-                            Font = FontUsage.Default.With(size: 32),
-                            Colour = Colour4.SandyBrown
-                        },
+
                         entityAttributeContainer = new Container
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             RelativePositionAxes = Axes.Both,
                             RelativeSizeAxes = Axes.Both,
+                        },
+                        levelUpButton = new InventoryButton("Levelus Uppus")
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Size = new Vector2(0.95f, 0.2f),
+                            Position = new Vector2(0, -5),
+                            Scale = new Vector2(0.5f),
+                            Anchor = Anchor.BottomCentre,
+                            Origin = Anchor.BottomCentre
+                        },
+                        experienceBar = new ProgressBar(0, 1)
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Size = new Vector2(0.6f, 0.2f),
+                            Anchor = Anchor.CentreRight,
+                            Origin = Anchor.CentreRight,
+                            ForegroundColour = Colour4.Aqua
                         }
                     }
                 }
@@ -213,23 +260,19 @@ namespace GentrysQuest.Game.Overlays.Inventory
             this.FadeIn(50);
             nameText.Text = entity.Name;
             descriptionText.Text = entity.Description;
-            levelText.Text = entity.Experience.ToString();
+            updateExperienceBar(entity);
+            levelUpButton.SetAction(delegate
+            {
+                entity.LevelUp();
+                updateExperienceBar(entity);
+            });
             starRatingContainer.starRating.Value = entity.StarRating.Value;
             entityDisplay.Texture = textureStore.Get(entity.TextureMapping.Get("Icon"));
 
             switch (entity)
             {
                 case Character:
-                    entityAttributeContainer.Add(new FillFlowContainer
-                    {
-                        Anchor = Anchor.BottomCentre,
-                        Origin = Anchor.BottomCentre,
-                        AutoSizeAxes = Axes.Both,
-                        Children = new Drawable[]
-                        {
 
-                        }
-                    });
                     break;
 
                 case Artifact:
@@ -238,6 +281,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 case Weapon:
                     break;
             }
+        }
+
+        private void updateExperienceBar(EntityBase entity)
+        {
+            levelText.Text = entity.Experience.Level.ToString();
+            experienceBar.Min = 0;
+            experienceBar.Current = entity.Experience.Xp.Current.Value;
+            experienceBar.Max = entity.Experience.Xp.Requirement.Value;
         }
     }
 }

@@ -10,5 +10,27 @@ namespace GentrysQuest.Game.Entity
         public Experience Experience { get; protected set; } = new();
         public TextureMapping TextureMapping { get; protected set; } = new();
         public AudioMapping AudioMapping { get; protected set; } = new();
+        public int Difficulty { get; protected set; } = 1;
+
+        public delegate void EntityEvent();
+
+        // Experience events
+        public event EntityEvent OnGainXp;
+        public event EntityEvent OnLevelUp;
+
+        public void AddXp(int amount)
+        {
+            while (Experience.Xp.add_xp(amount)) LevelUp();
+            OnGainXp?.Invoke();
+        }
+
+        public void LevelUp()
+        {
+            Experience.Level.AddLevel();
+            Experience.Xp.CalculateRequirment(Experience.Level.Current.Value, StarRating.Value);
+            Difficulty = Experience.Level.Current.Value / 20;
+
+            OnLevelUp?.Invoke();
+        }
     }
 }

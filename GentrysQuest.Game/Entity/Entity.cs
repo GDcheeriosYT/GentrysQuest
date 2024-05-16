@@ -11,16 +11,17 @@ namespace GentrysQuest.Game.Entity
         // stats
         public Stats Stats = new();
 
-        // experience
-        protected int difficulty = 1;
-
         // equips
         [CanBeNull]
         public Weapon.Weapon Weapon;
 
-        #region Events
+        public Entity()
+        {
+            OnLevelUp += UpdateStats;
+            OnLevelUp += Stats.Restore;
+        }
 
-        public delegate void EntityEvent();
+        #region Events
 
         public delegate void EntitySpawnEvent();
 
@@ -39,10 +40,6 @@ namespace GentrysQuest.Game.Entity
         // Equipment events
         public event EntityEvent OnSwapWeapon;
         public event EntityEvent OnSwapArtifact;
-
-        // Experience events
-        public event EntityEvent OnGainXp;
-        public event EntityEvent OnLevelUp;
 
         // Other Events
         public event EntityEvent OnAttack;
@@ -96,23 +93,6 @@ namespace GentrysQuest.Game.Entity
             if (Stats.Health.Current.Value <= 0) Die();
             OnHealthEvent?.Invoke();
             OnCrit?.Invoke(amount);
-        }
-
-        public void AddXp(int amount)
-        {
-            while (Experience.Xp.add_xp(amount)) LevelUp();
-            OnGainXp?.Invoke();
-        }
-
-        public void LevelUp()
-        {
-            Experience.Level.AddLevel();
-            Experience.Xp.CalculateRequirment(Experience.Level.Current.Value, StarRating.Value);
-
-            UpdateStats();
-            Stats.Restore();
-
-            OnLevelUp?.Invoke();
         }
 
         public void SetWeapon(Weapon.Weapon weapon)
