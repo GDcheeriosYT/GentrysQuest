@@ -21,6 +21,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly SpriteText descriptionText;
         private readonly SpriteText levelText;
         private readonly ProgressBar experienceBar;
+        private readonly InventoryLevelUpBox inventoryLevelUpBox;
         private readonly StarRatingContainer starRatingContainer;
         private readonly Sprite entityDisplay;
         private readonly Container entityAttributeContainer;
@@ -31,7 +32,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
         {
             RelativeSizeAxes = Axes.Both;
             RelativePositionAxes = Axes.Both;
-            Masking = true;
             InternalChildren = new Drawable[]
             {
                 new Container
@@ -117,7 +117,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                         },
                                         new Container
                                         {
-                                            Size = new Vector2(130, 40),
+                                            Size = new Vector2(140, 40),
                                             Masking = true,
                                             EdgeEffect = new EdgeEffectParameters
                                             {
@@ -230,23 +230,33 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         levelUpButton = new InventoryButton("Levelus Uppus")
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.95f, 0.2f),
-                            Position = new Vector2(0, -5),
+                            Size = new Vector2(0.9f, 0.2f),
+                            Position = new Vector2(-5, -5),
                             Scale = new Vector2(0.5f),
-                            Anchor = Anchor.BottomCentre,
-                            Origin = Anchor.BottomCentre
+                            Anchor = Anchor.BottomRight,
+                            Origin = Anchor.BottomRight
                         },
                         experienceBar = new ProgressBar(0, 1)
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.6f, 0.2f),
-                            Anchor = Anchor.CentreRight,
-                            Origin = Anchor.CentreRight,
+                            Size = new Vector2(1f, 0.01f),
+                            Anchor = Anchor.BottomCentre,
+                            Origin = Anchor.BottomCentre,
                             ForegroundColour = Colour4.Aqua
+                        },
+                        inventoryLevelUpBox = new InventoryLevelUpBox
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Size = new Vector2(0.9f, 0.2f),
+                            Position = new Vector2(5, -5),
+                            Scale = new Vector2(0.5f),
+                            Anchor = Anchor.BottomLeft,
+                            Origin = Anchor.BottomLeft
                         }
                     }
                 }
             };
+            Masking = true;
         }
 
         [BackgroundDependencyLoader]
@@ -263,7 +273,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             updateExperienceBar(entity);
             levelUpButton.SetAction(delegate
             {
-                entity.LevelUp();
+                entity.AddXp(inventoryLevelUpBox.GetAmount());
                 updateExperienceBar(entity);
             });
             starRatingContainer.starRating.Value = entity.StarRating.Value;

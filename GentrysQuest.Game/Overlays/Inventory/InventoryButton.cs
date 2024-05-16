@@ -44,6 +44,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void SetAction(Action action) => this.action = action;
 
+        public void SetText(string text) => buttonText.Text = text;
+
         protected override bool OnClick(ClickEvent e)
         {
             action.Invoke();
