@@ -18,7 +18,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
                 if ((amount + actionAmount) >= 0) amount += actionAmount;
                 else amount = 0;
-                SetText(amount.ToString());
+                SetText($"${amount.ToString()}");
             });
         }
 

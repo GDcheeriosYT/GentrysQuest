@@ -108,7 +108,7 @@ namespace GentrysQuest.Game.Entity
 
             value += Experience.Level.Current.Value * 5;
             value += Stats.GetPointTotal() * 2;
-            value += (int)(Weapon.Damage.Current.Value / 4);
+            if (Weapon != null) value += (int)(Weapon.Damage.Current.Value / 4);
 
             return value;
         }
