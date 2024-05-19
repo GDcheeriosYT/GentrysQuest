@@ -16,5 +16,9 @@ namespace GentrysQuest.Game.Entity
 
             averageRating = count / 5f;
         }
+
+        public Artifact Get(int index) => artifacts[index];
+
+        public void Equip(Artifact artifact, int index) => artifacts[index] = artifact;
     }
 }

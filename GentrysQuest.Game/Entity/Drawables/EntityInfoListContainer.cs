@@ -4,7 +4,6 @@ using GentrysQuest.Game.Graphics;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
-using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
@@ -24,11 +23,10 @@ namespace GentrysQuest.Game.Entity.Drawables
             RelativeSizeAxes = Axes.Both;
             Origin = Anchor.TopCentre;
             Anchor = Anchor.TopCentre;
-            Size = new Vector2(0.8f);
             Padding = new MarginPadding(3f);
             Children = new Drawable[]
             {
-                scrollContainer = new BasicScrollContainer()
+                scrollContainer = new BasicScrollContainer
                 {
                     RelativeSizeAxes = Axes.Both
                 },

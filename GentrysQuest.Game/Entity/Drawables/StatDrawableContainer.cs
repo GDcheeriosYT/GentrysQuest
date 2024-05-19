@@ -19,14 +19,21 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Text = "Stats",
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
-                    Font = FontUsage.Default.With(size: 32)
+                    Font = FontUsage.Default.With(size: 36)
                 },
-                statDrawables = new FillFlowContainer<StatDrawable>
+                new BasicScrollContainer
                 {
+                    RelativeSizeAxes = Axes.Both,
                     Position = new Vector2(0, 32),
-                    Direction = FillDirection.Vertical,
-                    AutoSizeAxes = Axes.Y,
-                    RelativeSizeAxes = Axes.X
+                    ClampExtension = 1,
+                    ScrollbarVisible = false,
+                    Child = statDrawables = new FillFlowContainer<StatDrawable>
+                    {
+                        Position = new Vector2(0, 32),
+                        Direction = FillDirection.Vertical,
+                        AutoSizeAxes = Axes.Y,
+                        RelativeSizeAxes = Axes.X
+                    }
                 }
             };
         }
