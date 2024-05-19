@@ -46,6 +46,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void SetText(string text) => buttonText.Text = text;
 
+        public void SetTextColor(Colour4 colour) => buttonText.Colour = colour;
+
         protected override bool OnClick(ClickEvent e)
         {
             action.Invoke();

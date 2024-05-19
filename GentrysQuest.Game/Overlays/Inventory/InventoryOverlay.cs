@@ -216,6 +216,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         break;
                 }
             };
+            GameData.Money.Amount.ValueChanged += delegate { moneyText.Text = $"${GameData.Money.Amount}"; };
             Hide();
         }
 
@@ -276,7 +277,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
         public override void Show()
         {
             isShowing = true;
-            moneyText.Text = $"${GameData.Money.Amount}";
             base.Show();
             topButtons.MoveToY(0, FADE_TIME, Easing.InOutCubic);
             itemContainerBox.FadeIn(FADE_TIME, Easing.InOutCubic);

@@ -28,6 +28,8 @@
             };
         }
 
+        public Stat[] GetStats() => statGrouping;
+
         /// <summary>
         /// Restores all stat values to original value
         /// </summary>

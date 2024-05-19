@@ -27,7 +27,7 @@ namespace GentrysQuest.Game.Entity
         public void LevelUp()
         {
             Experience.Level.AddLevel();
-            Experience.Xp.CalculateRequirment(Experience.Level.Current.Value, StarRating.Value);
+            Experience.Xp.CalculateRequirement(Experience.Level.Current.Value, StarRating.Value);
             Difficulty = Experience.Level.Current.Value / 20;
 
             OnLevelUp?.Invoke();

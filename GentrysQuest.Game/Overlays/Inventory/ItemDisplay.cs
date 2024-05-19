@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Entity.Weapon;
@@ -24,6 +25,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly ProgressBar experienceBar;
         private readonly InventoryLevelUpBox inventoryLevelUpBox;
         private readonly StarRatingContainer starRatingContainer;
+        private readonly StatDrawableContainer statDrawableContainer;
         private readonly Sprite entityDisplay;
         private readonly Container entityAttributeContainer;
         private readonly InventoryButton levelUpButton;
@@ -179,7 +181,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                    RelativePositionAxes = Axes.Both,
                     Size = new Vector2(1, 0.5f),
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
@@ -236,7 +237,11 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                 }
                             }
                         },
-
+                        statDrawableContainer = new StatDrawableContainer
+                        {
+                            Size = new Vector2(1, 0),
+                            Position = new Vector2(0, 60)
+                        },
                         entityAttributeContainer = new Container
                         {
                             Anchor = Anchor.Centre,
@@ -282,21 +287,44 @@ namespace GentrysQuest.Game.Overlays.Inventory
             updateExperienceBar(entity);
             levelUpButton.SetAction(delegate
             {
-                entity.AddXp(inventoryLevelUpBox.GetAmount() * 10);
+                int amount = inventoryLevelUpBox.GetAmount();
+
+                if (GameData.Money.CanAfford(amount))
+                {
+                    entity.AddXp(amount * 10);
+                    GameData.Money.Spend(amount);
+                }
+
                 updateExperienceBar(entity);
             });
             starRatingContainer.starRating.Value = entity.StarRating.Value;
             entityDisplay.Texture = textureStore.Get(entity.TextureMapping.Get("Icon"));
+            statDrawableContainer.Clear();
 
             switch (entity)
             {
-                case Character:
+                case Character character:
+                    foreach (Stat stat in character.Stats.GetStats())
+                    {
+                        statDrawableContainer.AddStat(new StatDrawable(stat.Name, (float)stat.Total(), false));
+                    }
+
                     break;
 
-                case Artifact:
+                case Artifact artifact:
+                    Buff mainAttribute = artifact.MainAttribute;
+                    statDrawableContainer.AddStat(new StatDrawable(mainAttribute.StatType.ToString(), (float)mainAttribute.Value.Value, true));
+
+                    foreach (Buff attribute in artifact.Attributes)
+                    {
+                        statDrawableContainer.AddStat(new StatDrawable(attribute.StatType.ToString(), (float)attribute.Value.Value, false));
+                    }
+
                     break;
 
-                case Weapon:
+                case Weapon weapon:
+                    statDrawableContainer.AddStat(new StatDrawable("Damage", (float)weapon.Damage.Total(), true));
+                    statDrawableContainer.AddStat(new StatDrawable(weapon.Buff.StatType.ToString(), (float)weapon.Buff.Value.Value, false));
                     break;
             }
         }

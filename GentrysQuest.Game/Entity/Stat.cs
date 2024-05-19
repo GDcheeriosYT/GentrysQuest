@@ -6,7 +6,7 @@ namespace GentrysQuest.Game.Entity
 {
     public class Stat
     {
-        protected string Name; // display name for other languages and etc
+        public readonly string Name; // display name for other languages and etc
         protected StatType StatType; // this is how we get what stat we're looking at
         protected readonly bool ResetsOnUpdate;
 

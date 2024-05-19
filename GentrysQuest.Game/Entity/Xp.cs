@@ -21,18 +21,18 @@ namespace GentrysQuest.Game.Entity
                 return true;
             }
 
-            if (Requirement.Value > 0) Progress = Current.Value / Requirement.Value;
+            if (Requirement.Value > 0) Progress = float.Round((float)Current.Value / Requirement.Value * 100);
             else Progress = 100;
             return false;
         }
 
-        public void CalculateRequirment(int level, int starRating)
+        public void CalculateRequirement(int level, int starRating)
         {
             int difficulty = 1 + (level / 20);
             int starRatingExperience = starRating * 25;
             int levelExperience = level * 10;
 
-            Requirement.Value = (difficulty * 100) + levelExperience + starRatingExperience;
+            Requirement.Value = level * (difficulty * 100) + levelExperience + starRatingExperience;
         }
 
         public override string ToString()
