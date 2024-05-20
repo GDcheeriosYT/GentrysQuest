@@ -61,7 +61,7 @@ namespace GentrysQuest.Game.Entity
         public void Die()
         {
             IsDead = true;
-            GameData.currentStats.Deaths.Add();
+            GameData.CurrentStats.Deaths.Add();
             OnDeath?.Invoke();
         }
 
@@ -74,9 +74,9 @@ namespace GentrysQuest.Game.Entity
         {
             Stats.Health.UpdateCurrentValue(-amount);
             if (Stats.Health.Current.Value <= 0) Die();
-            GameData.currentStats.DamageTaken.Add(amount);
-            if (GameData.currentStats.MostDamageTaken.Bigger(amount)) GameData.currentStats.MostDamageTaken.Set(amount);
-            GameData.currentStats.HitsTaken.Add();
+            GameData.CurrentStats.DamageTaken.Add(amount);
+            if (GameData.CurrentStats.MostDamageTaken.Bigger(amount)) GameData.CurrentStats.MostDamageTaken.Set(amount);
+            GameData.CurrentStats.HitsTaken.Add();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }

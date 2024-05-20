@@ -38,6 +38,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
             });
             AddStep("Damage", (() => theGuy.Damage(10)));
             AddStep("Spawn Enemys", () => gameplay.SpawnEntities());
+            AddStep("End", () => gameplay.End());
         }
     }
 }

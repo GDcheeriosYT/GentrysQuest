@@ -27,7 +27,7 @@ namespace GentrysQuest.Game.Database
         /// </summary>
         public static Statistics Statistics { get; private set; }
 
-        public static StatTracker currentStats { get; private set; }
+        public static StatTracker CurrentStats { get; private set; }
 
         // The lists of entities
         public static List<Character> Characters { get; private set; }
@@ -39,17 +39,18 @@ namespace GentrysQuest.Game.Database
             EquipedCharacter = null;
             Money = new Money();
             Statistics = new Statistics();
-            currentStats = new StatTracker();
+            CurrentStats = new StatTracker();
             Characters = new List<Character>();
             Artifacts = new List<Artifact>();
             Weapons = new List<Weapon>();
         }
 
+        public static void StartStatTracker() => CurrentStats = new StatTracker();
+
         public static void WrapUpStats()
         {
-            Statistics.Totals.Merge(currentStats);
-            Statistics.Most = Statistics.Most.GetBest(currentStats);
-            currentStats = new StatTracker();
+            Statistics.Totals.Merge(CurrentStats);
+            Statistics.Most = Statistics.Most.GetBest(CurrentStats);
         }
 
         public static void EquipCharacter(Character character)

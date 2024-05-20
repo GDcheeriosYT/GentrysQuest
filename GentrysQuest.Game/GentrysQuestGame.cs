@@ -51,7 +51,8 @@ namespace GentrysQuest.Game
                 GameData.Characters.Add(character);
                 GameData.EquipCharacter(character);
                 Gameplay gameplayScreen = new Gameplay();
-                screenStack.Push(new Intro(gameplayScreen));
+                // screenStack.Push(new Intro(gameplayScreen));
+                screenStack.Push(gameplayScreen);
             }
             else screenStack.Push(new Intro(new MainMenu()));
         }

@@ -60,6 +60,16 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         private double gameplayTime;
 
+        /// <summary>
+        /// if the gameplay is paused
+        /// </summary>
+        private bool isPaused;
+
+        /// <summary>
+        /// The amount of pause time
+        /// </summary>
+        private double pauseTime;
+
         private const double MAX_TIME_TO_SPAWN = 20000;
 
         private delegate void GameplayEvent();
@@ -96,7 +106,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 },
             };
 
-            inventoryButton.SetAction(inventoryOverlay.ToggleDisplay);
+            inventoryButton.SetAction(delegate
+            {
+                inventoryOverlay.ToggleDisplay();
+                isPaused = !isPaused;
+            });
             scoreFlowContainer.AddText(scoreText = new SpriteText
             {
                 Text = "0",
@@ -163,17 +177,25 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <returns>if it's right to spawn</returns>
         private void spawnEnemyClock()
         {
-            double elapsedTime = Clock.CurrentTime - gameplayTime;
-
-            if (MathBase.RandomInt(1, 10000 / 1 + gameplayDifficulty) < 5)
+            if (!isPaused)
             {
-                if (!atEnemyLimit()) AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetEntityObject().Experience.Level.Current.Value));
+                double elapsedTime = Clock.CurrentTime - (gameplayTime - pauseTime);
+                pauseTime = 0;
+
+                if (MathBase.RandomInt(1, 10000 / 1 + gameplayDifficulty) < 5)
+                {
+                    if (!atEnemyLimit()) AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetEntityObject().Experience.Level.Current.Value));
+                }
+
+                if (elapsedTime > MAX_TIME_TO_SPAWN)
+                {
+                    gameplayTime = Clock.CurrentTime;
+                    SpawnEntities();
+                }
             }
-
-            if (elapsedTime > MAX_TIME_TO_SPAWN)
+            else
             {
-                gameplayTime = Clock.CurrentTime;
-                SpawnEntities();
+                pauseTime = Clock.CurrentTime;
             }
         }
 
@@ -189,8 +211,24 @@ namespace GentrysQuest.Game.Screens.Gameplay
         public void RemoveEnemy(DrawableEnemyEntity enemy)
         {
             enemies.Remove(enemy);
-            RemoveInternal(enemy, true);
+            RemoveInternal(enemy, false);
             playerEntity.SetEntities(enemies);
+        }
+
+        private void removeAllEnemies()
+        {
+            List<DrawableEntity> newEnemyList = new List<DrawableEntity>();
+
+            foreach (var drawableEntity in enemies)
+            {
+                newEnemyList.Add(drawableEntity);
+            }
+
+            foreach (var drawableEntity in newEnemyList)
+            {
+                var enemy = (DrawableEnemyEntity)drawableEntity;
+                RemoveEnemy(enemy);
+            }
         }
 
         /// <summary>
@@ -213,12 +251,14 @@ namespace GentrysQuest.Game.Screens.Gameplay
                         manage_direction(direction, speed, enemyEntity);
                     }
                 };
+                playerEntity.GetEntityObject().OnDeath += End;
             }
 
             gameplayHud.SetEntity(GameData.EquipedCharacter);
             playerEntity.SetupClickContainer();
             gameplayTime = Clock.CurrentTime;
             GameData.EquipedCharacter.Spawn();
+            GameData.StartStatTracker();
         }
 
         /// <summary>
@@ -239,11 +279,52 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
+            Container statContainer = new Container
+            {
+
+            };
+            Container deathContainer = new Container
+            {
+                Alpha = 0,
+                Depth = -4,
+                RelativeSizeAxes = Axes.Both,
+                Children = new Drawable[]
+                {
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = Colour4.Black
+                    },
+                    new SpriteText
+                    {
+                        Text = "You died",
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Colour = Colour4.Red,
+                        Font = FontUsage.Default.With(size: 86)
+                    }
+                }
+            };
+            AddInternal(deathContainer);
+            isPaused = true;
+            removeAllEnemies();
             playerEntity.RemoveClickContainer();
+            GameData.WrapUpStats();
             RemoveInternal(playerEntity, true);
             playerEntity.Dispose();
-            playerEntity = null;
-            GameData.WrapUpStats();
+            inventoryOverlay.Hide();
+            inventoryButton.Hide();
+            gameplayHud.Delay(3000).Then().FadeOut();
+            map.Delay(3000).Then().FadeOut();
+            deathContainer.FadeIn(3000).Then()
+                          .Delay(1000).FadeOut(2000);
+            scoreFlowContainer.FadeOut().Then()
+                              .ScaleTo(3, 6100).Then()
+                              .FadeIn(250).Then()
+                              .Delay(2000).Then()
+                              .MoveToY(-400, 250, Easing.InOutCirc);
+            scoreFlowContainer.Anchor = Anchor.Centre;
+            scoreFlowContainer.Origin = Anchor.Centre;
         }
 
         protected override void Update()
