@@ -394,6 +394,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             topButtons.MoveToY(0, FADE_TIME, Easing.InOutCubic);
             itemContainerBox.FadeIn(FADE_TIME, Easing.InOutCubic);
             displayingSection.Value = InventoryDisplay.Characters;
+            selectionMode = SelectionModes.Single;
         }
 
         public override void Hide()
