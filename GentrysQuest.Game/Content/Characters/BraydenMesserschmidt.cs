@@ -12,7 +12,8 @@ namespace GentrysQuest.Game.Content.Characters
 
             Stats.Speed.point = 1;
             Stats.AttackSpeed.point = 1;
-            Stats.CritRate.point = 2;
+            Stats.CritRate.point = 1;
+            Stats.CritDamage.point = 1;
 
             TextureMapping.Add("Icon", "brayden_idle.png");
             TextureMapping.Add("Idle", "brayden_idle.png");

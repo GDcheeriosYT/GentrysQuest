@@ -19,6 +19,7 @@ namespace GentrysQuest.Game.Entity
         {
             OnLevelUp += UpdateStats;
             OnLevelUp += Stats.Restore;
+            OnSwapWeapon += UpdateStats;
         }
 
         #region Events
@@ -95,10 +96,10 @@ namespace GentrysQuest.Game.Entity
             OnCrit?.Invoke(amount);
         }
 
-        public void SetWeapon(Weapon.Weapon weapon)
+        public void SetWeapon([CanBeNull] Weapon.Weapon weapon)
         {
             Weapon = weapon;
-            weapon.Holder = this;
+            if (weapon != null) weapon.Holder = this;
             OnSwapWeapon?.Invoke();
         }
 

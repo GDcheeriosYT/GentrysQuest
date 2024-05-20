@@ -13,8 +13,8 @@ namespace GentrysQuest.Game.Content.Weapons
             Name = "Brayden's Osu Pen";
             StarRating = new StarRating(5);
             Description = "An osu pen";
-            Damage.SetDefaultValue(50);
-            Buff = new Buff(this, StatType.CritRate);
+            Damage.SetDefaultValue(46);
+            Buff = new Buff(this, StatType.CritDamage);
 
             #region Design
 

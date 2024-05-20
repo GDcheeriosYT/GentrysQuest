@@ -39,6 +39,8 @@ namespace GentrysQuest.Game.Entity
             if (!ResetsOnUpdate) UpdateCurrentValue(difference);
         }
 
+        public void ResetAdditionalValue() => Additional.Value = 0;
+
         public void RestoreValue()
         {
             Current.Value = Total();
@@ -59,7 +61,13 @@ namespace GentrysQuest.Game.Entity
             calculate();
         }
 
-        public void SetAdditionalValue(double value)
+        public void Add(double value)
+        {
+            Additional.Value += value;
+            calculate();
+        }
+
+        public void SetAdditional(double value)
         {
             Additional.Value = value;
             calculate();

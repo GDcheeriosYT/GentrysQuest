@@ -16,6 +16,12 @@ namespace GentrysQuest.Game.Entity.Weapon
         public Weapon()
         {
             Buff = new Buff(this);
+            OnLevelUp += delegate
+            {
+                Damage.SetAdditional(Experience.Level.Current.Value * (Difficulty + 1) * StarRating.Value);
+                Buff.Improve();
+                Holder?.UpdateStats();
+            };
         }
     }
 }

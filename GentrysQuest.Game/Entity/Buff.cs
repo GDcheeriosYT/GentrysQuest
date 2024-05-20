@@ -17,7 +17,7 @@ namespace GentrysQuest.Game.Entity
             ParentEntity = parentEntity;
             StatType = GetRandomStat();
             IsPercent = MathBase.RandomBool();
-            handlePostConstruction();
+            updateStats();
         }
 
         public Buff(EntityBase parentEntity, StatType statType, bool isPercent)
@@ -25,7 +25,7 @@ namespace GentrysQuest.Game.Entity
             ParentEntity = parentEntity;
             StatType = statType;
             IsPercent = isPercent;
-            handlePostConstruction();
+            updateStats();
         }
 
         public Buff(EntityBase parentEntity, StatType statType)
@@ -33,7 +33,7 @@ namespace GentrysQuest.Game.Entity
             ParentEntity = parentEntity;
             StatType = statType;
             IsPercent = MathBase.RandomBool();
-            handlePostConstruction();
+            updateStats();
         }
 
         public Buff(double amount, StatType statType, bool isPercent)
@@ -43,7 +43,7 @@ namespace GentrysQuest.Game.Entity
             IsPercent = isPercent;
         }
 
-        private void handlePostConstruction()
+        private void updateStats()
         {
             double value = 0;
 
@@ -62,12 +62,12 @@ namespace GentrysQuest.Game.Entity
                     break;
 
                 case StatType.CritRate:
-                    value = 2;
+                    value = 1;
                     IsPercent = false;
                     break;
 
                 case StatType.CritDamage:
-                    value = 2.5;
+                    value = 2;
                     IsPercent = false;
                     break;
 
@@ -83,6 +83,14 @@ namespace GentrysQuest.Game.Entity
             }
 
             if (IsPercent) value /= 4;
+
+            switch (ParentEntity)
+            {
+                case Weapon.Weapon _:
+                    value /= 2;
+                    break;
+            }
+
             handleValue(value);
         }
 
@@ -94,6 +102,7 @@ namespace GentrysQuest.Game.Entity
         public void Improve()
         {
             Level++;
+            updateStats();
         }
 
         public static StatType GetRandomStat()

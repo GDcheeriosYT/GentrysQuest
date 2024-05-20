@@ -1,3 +1,4 @@
+using System;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
@@ -11,6 +12,7 @@ using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
@@ -34,6 +36,9 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private EquipIcon artifactIcon4;
         private EquipIcon artifactIcon5;
         private EquipIcon weaponIcon;
+        private Character characterInfo;
+        private Artifact artifactInfo;
+        private Weapon weaponInfo;
         private readonly Sprite entityDisplay;
         private readonly InventoryButton levelUpButton;
         private TextureStore textureStore;
@@ -284,7 +289,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                             weaponIcon = new EquipIcon(null),
                                             new Box
                                             {
-                                                Size = new Vector2(100, 4),
+                                                Size = new Vector2(120, 4),
                                                 Origin = Anchor.Centre,
                                                 Colour = Colour4.DarkGray
                                             },
@@ -300,8 +305,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         },
                         levelUpButton = new InventoryButton("Levelus Uppus")
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.9f, 0.2f),
+                            RelativeSizeAxes = Axes.X,
+                            Size = new Vector2(0.9f, 85),
                             Position = new Vector2(-5, -5),
                             Scale = new Vector2(0.5f),
                             Anchor = Anchor.BottomRight,
@@ -309,8 +314,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         },
                         inventoryLevelUpBox = new InventoryLevelUpBox
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.9f, 0.2f),
+                            RelativeSizeAxes = Axes.X,
+                            Size = new Vector2(0.9f, 85),
                             Position = new Vector2(5, -5),
                             Scale = new Vector2(0.5f),
                             Anchor = Anchor.BottomLeft,
@@ -330,6 +335,9 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void DisplayItem(EntityBase entity)
         {
+            characterInfo = null;
+            artifactInfo = null;
+            weaponInfo = null;
             this.FadeIn(50);
             nameText.Text = entity.Name;
             descriptionText.Text = entity.Description;
@@ -345,26 +353,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     GameData.Money.Spend(amount);
                 }
 
-                if (entity.Experience.Level.Current.Value != currentLevel)
-                {
-                    switch (entity)
-                    {
-                        case Character character:
-                            updateCharacterStatContainer(character);
-                            break;
-
-                        case Artifact artifact:
-                            updateArtifactStatContainer(artifact);
-                            break;
-
-                        case Weapon weapon:
-                            updateWeaponStatContainer(weapon);
-                            break;
-                    }
-                }
-
-                currentLevel = entity.Experience.Level.Current.Value;
-
                 updateExperienceBar(entity);
             });
             starRatingContainer.starRating.Value = entity.StarRating.Value;
@@ -375,6 +363,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             switch (entity)
             {
                 case Character character:
+                    characterInfo = character;
                     characterAttributesContainer.Show();
 
                     foreach (Stat stat in character.Stats.GetStats())
@@ -385,22 +374,41 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     statDrawableContainer.ResizeWidthTo(0.5f);
 
                     weaponIcon.SetEquip(character.Weapon);
-                    weaponIcon.SetAction(delegate { inventoryReference.SetWeapon(); });
+                    weaponIcon.SetAction(delegate { inventoryReference.ClickWeapon(); });
+                    weaponIcon.SetSwapAction(delegate { inventoryReference.SwapWeapon(); });
+                    weaponIcon.SetRemoveAction(delegate { inventoryReference.RemoveWeapon(); });
 
                     artifactIcon1.SetEquip(character.Artifacts.Get(0));
-                    artifactIcon1.SetAction(delegate { inventoryReference.SetArtifact(0); });
-                    artifactIcon2.SetEquip(character.Artifacts.Get(1));
-                    artifactIcon2.SetAction(delegate { inventoryReference.SetArtifact(1); });
-                    artifactIcon3.SetEquip(character.Artifacts.Get(2));
-                    artifactIcon3.SetAction(delegate { inventoryReference.SetArtifact(2); });
-                    artifactIcon4.SetEquip(character.Artifacts.Get(3));
-                    artifactIcon4.SetAction(delegate { inventoryReference.SetArtifact(3); });
-                    artifactIcon5.SetEquip(character.Artifacts.Get(4));
-                    artifactIcon5.SetAction(delegate { inventoryReference.SetArtifact(4); });
+                    artifactIcon1.SetAction(delegate { inventoryReference.ClickArtifact(0); });
+                    artifactIcon1.SetSwapAction(delegate { inventoryReference.SwapArtifact(0); });
+                    artifactIcon1.SetRemoveAction(delegate { inventoryReference.RemoveArtifact(0); });
 
+                    artifactIcon2.SetEquip(character.Artifacts.Get(1));
+                    artifactIcon2.SetAction(delegate { inventoryReference.ClickArtifact(1); });
+                    artifactIcon2.SetSwapAction(delegate { inventoryReference.SwapArtifact(1); });
+                    artifactIcon2.SetRemoveAction(delegate { inventoryReference.RemoveArtifact(1); });
+
+                    artifactIcon3.SetEquip(character.Artifacts.Get(2));
+                    artifactIcon3.SetAction(delegate { inventoryReference.ClickArtifact(2); });
+                    artifactIcon3.SetSwapAction(delegate { inventoryReference.SwapArtifact(2); });
+                    artifactIcon3.SetRemoveAction(delegate { inventoryReference.RemoveArtifact(2); });
+
+                    artifactIcon4.SetEquip(character.Artifacts.Get(3));
+                    artifactIcon4.SetAction(delegate { inventoryReference.ClickArtifact(3); });
+                    artifactIcon4.SetSwapAction(delegate { inventoryReference.SwapArtifact(3); });
+                    artifactIcon4.SetRemoveAction(delegate { inventoryReference.RemoveArtifact(3); });
+
+                    artifactIcon5.SetEquip(character.Artifacts.Get(4));
+                    artifactIcon5.SetAction(delegate { inventoryReference.ClickArtifact(4); });
+                    artifactIcon5.SetSwapAction(delegate { inventoryReference.SwapArtifact(4); });
+                    artifactIcon5.SetRemoveAction(delegate { inventoryReference.RemoveArtifact(4); });
+
+                    characterInfo.OnUpdateStats -= updateCharacterStatContainer;
+                    characterInfo.OnUpdateStats += updateCharacterStatContainer;
                     break;
 
                 case Artifact artifact:
+                    artifactInfo = artifact;
                     Buff mainAttribute = artifact.MainAttribute;
                     statDrawableContainer.AddStat(new StatDrawable(mainAttribute.StatType.ToString(), (float)mainAttribute.Value.Value, true));
 
@@ -410,12 +418,18 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     }
 
                     statDrawableContainer.ResizeWidthTo(1f);
+
+                    artifactInfo.OnLevelUp -= updateArtifactStatContainer;
+                    artifactInfo.OnLevelUp += updateArtifactStatContainer;
                     break;
 
                 case Weapon weapon:
+                    weaponInfo = weapon;
                     statDrawableContainer.AddStat(new StatDrawable("Damage", (float)weapon.Damage.Total(), true));
                     statDrawableContainer.AddStat(new StatDrawable(weapon.Buff.StatType.ToString(), (float)weapon.Buff.Value.Value, false));
                     statDrawableContainer.ResizeWidthTo(1f);
+                    weaponInfo.OnLevelUp -= updateWeaponStatContainer;
+                    weaponInfo.OnLevelUp += updateWeaponStatContainer;
                     break;
             }
         }
@@ -429,29 +443,50 @@ namespace GentrysQuest.Game.Overlays.Inventory
             experienceBar.Max = entity.Experience.Xp.Requirement.Value;
         }
 
-        private void updateCharacterStatContainer(Character character)
+        private void updateCharacterStatContainer()
         {
-            int counter = 0;
-
-            foreach (Stat stat in character.Stats.GetStats())
+            try
             {
-                Scheduler.AddDelayed(() =>
+                int counter = 0;
+
+                foreach (Stat stat in characterInfo.Stats.GetStats())
                 {
-                    statDrawableContainer.GetStatDrawable(stat.Name).UpdateValue((float)stat.Total());
-                }, counter * 65);
-                counter++;
+                    Scheduler.AddDelayed(() =>
+                    {
+                        statDrawableContainer.GetStatDrawable(stat.Name).UpdateValue((float)stat.Total());
+                    }, counter * 65);
+                    counter++;
+                }
+            }
+            catch (Exception)
+            {
+                Logger.Log("Yep, You already know (Character)");
             }
         }
 
-        private void updateArtifactStatContainer(Artifact artifact)
+        private void updateArtifactStatContainer()
         {
-            statDrawableContainer.GetStatDrawable(artifact.MainAttribute.StatType.ToString()).UpdateValue((float)artifact.MainAttribute.Value.Value);
+            try
+            {
+                statDrawableContainer.GetStatDrawable(artifactInfo.MainAttribute.StatType.ToString()).UpdateValue((float)artifactInfo.MainAttribute.Value.Value);
+            }
+            catch (Exception)
+            {
+                Logger.Log("Yep, You already know (Artifact)");
+            }
         }
 
-        private void updateWeaponStatContainer(Weapon weapon)
+        private void updateWeaponStatContainer()
         {
-            statDrawableContainer.GetStatDrawable("Damage").UpdateValue((float)weapon.Damage.Total());
-            statDrawableContainer.GetStatDrawable(weapon.Buff.StatType.ToString()).UpdateValue((float)weapon.Buff.Value.Value);
+            try
+            {
+                statDrawableContainer.GetStatDrawable("Damage").UpdateValue((float)weaponInfo.Damage.Total());
+                statDrawableContainer.GetStatDrawable(weaponInfo.Buff.StatType.ToString()).UpdateValue((float)weaponInfo.Buff.Value.Value);
+            }
+            catch (Exception)
+            {
+                Logger.Log("Yep, You already know (Weapon)");
+            }
         }
     }
 }

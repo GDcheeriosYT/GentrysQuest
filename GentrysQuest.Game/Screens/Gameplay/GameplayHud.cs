@@ -86,8 +86,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         public void SetHealth(Stat health)
         {
-            healthBar.Current = health.Current.Value;
-            healthBar.Max = health.Total();
+            healthBar.Current = (int)health.Current.Value;
+            healthBar.Max = (int)health.Total();
         }
 
         public void SetExperience(Experience experience)

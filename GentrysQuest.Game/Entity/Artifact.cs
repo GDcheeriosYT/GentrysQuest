@@ -12,6 +12,7 @@ namespace GentrysQuest.Game.Entity
         public List<StatType> ValidMainAttributes { get; set; } = new();
         public List<int> ValidStarRatings { get; set; } = new() { 1, 2, 3, 4, 5 };
         public AllowedPercentMethod AllowedPercentMethod { get; set; } = AllowedPercentMethod.Allowed;
+        public Character Holder;
 
         public void SetFamily(Family family)
         {
@@ -43,6 +44,12 @@ namespace GentrysQuest.Game.Entity
             MainAttribute = new Buff(this, stat, isPercent);
 
             initializeAttributes();
+            OnLevelUp += delegate
+            {
+                if (Experience.Level.Current.Value % 4 == 0) addBuff();
+                MainAttribute.Improve();
+                Holder?.UpdateStats();
+            };
         }
 
         private void initializeAttributes()

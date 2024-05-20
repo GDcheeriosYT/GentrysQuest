@@ -184,9 +184,21 @@ namespace GentrysQuest.Game.Overlays.Inventory
             {
                 changeState();
             });
-            charactersButton.SetAction(() => { swapCategory(InventoryDisplay.Characters); });
-            artifactsButton.SetAction(() => { swapCategory(InventoryDisplay.Artifacts); });
-            weaponsButton.SetAction(() => { swapCategory(InventoryDisplay.Weapons); });
+            charactersButton.SetAction(() =>
+            {
+                swapCategory(InventoryDisplay.Characters);
+                unDisplayInfo();
+            });
+            artifactsButton.SetAction(() =>
+            {
+                swapCategory(InventoryDisplay.Artifacts);
+                unDisplayInfo();
+            });
+            weaponsButton.SetAction(() =>
+            {
+                swapCategory(InventoryDisplay.Weapons);
+                unDisplayInfo();
+            });
             sortButton.OnClickEvent += delegate
             {
                 sortButton.Text.Text = HelpMe.GetNextValueFromArray(sortTypes, ref sortIndexCounter);
@@ -250,7 +262,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                 }
 
                                 swapCategory(InventoryDisplay.Characters);
-                                Scheduler.AddDelayed(() => itemInfo.DisplayItem(equippingToCharacter), 1500);
+                                itemInfo.DisplayItem(equippingToCharacter);
                             };
                         }
 
@@ -264,7 +276,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private void changeState()
         {
             itemContainer.ClearList();
-            unDisplayInfo();
 
             switch (displayingSection.Value)
             {
@@ -291,17 +302,59 @@ namespace GentrysQuest.Game.Overlays.Inventory
             selectionMode = SelectionModes.Single;
         }
 
-        public void SetWeapon()
+        public void ClickWeapon()
         {
-            displayingSection.Value = InventoryDisplay.Weapons;
-            selectionMode = SelectionModes.Equipping;
+            Weapon? weaponRef = equippingToCharacter.Weapon;
+            artifactSelectionIndex = null;
+
+            if (weaponRef == null)
+            {
+                displayingSection.Value = InventoryDisplay.Weapons;
+                selectionMode = SelectionModes.Equipping;
+            }
+            else itemInfo.DisplayItem(weaponRef);
         }
 
-        public void SetArtifact(int index)
+        public void SwapWeapon()
+        {
+            artifactSelectionIndex = null;
+            displayingSection.Value = InventoryDisplay.Weapons;
+            selectionMode = SelectionModes.Equipping;
+            itemInfo.DisplayItem(equippingToCharacter);
+        }
+
+        public void RemoveWeapon()
+        {
+            GameData.Weapons.Add(equippingToCharacter.Weapon);
+            equippingToCharacter.SetWeapon(null);
+            itemInfo.DisplayItem(equippingToCharacter);
+        }
+
+        public void ClickArtifact(int index)
+        {
+            Artifact? artifactRef = equippingToCharacter.Artifacts.Get(index);
+
+            if (artifactRef == null)
+            {
+                displayingSection.Value = InventoryDisplay.Artifacts;
+                selectionMode = SelectionModes.Equipping;
+                artifactSelectionIndex = index;
+            }
+            else itemInfo.DisplayItem(artifactRef);
+        }
+
+        public void SwapArtifact(int index)
         {
             displayingSection.Value = InventoryDisplay.Artifacts;
             selectionMode = SelectionModes.Equipping;
             artifactSelectionIndex = index;
+            itemInfo.DisplayItem(equippingToCharacter);
+        }
+
+        public void RemoveArtifact(int index)
+        {
+            equippingToCharacter.Artifacts.Remove(index);
+            itemInfo.DisplayItem(equippingToCharacter);
         }
 
         public void ToggleDisplay()

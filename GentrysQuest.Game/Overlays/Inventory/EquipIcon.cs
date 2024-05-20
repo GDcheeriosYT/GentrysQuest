@@ -21,11 +21,13 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly StarRatingContainer starRatingContainer;
         private Action clickAction;
         private TextureStore textureStore;
+        private RemoveItemButton removeItemButton;
+        private SwapItemButton swapItemButton;
 
         public EquipIcon(EntityBase entity)
         {
             entityReference = entity;
-            Size = new Vector2(64);
+            Size = new Vector2(100);
             Origin = Anchor.TopCentre;
             Margin = new MarginPadding(10);
             InternalChildren = new Drawable[]
@@ -48,7 +50,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 {
                     Anchor = Anchor.TopLeft,
                     Origin = Anchor.TopCentre,
-                    Scale = new Vector2(0.25f)
+                    Scale = new Vector2(0.5f)
                 },
                 new Container
                 {
@@ -62,6 +64,18 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre
                     }
+                },
+                removeItemButton = new RemoveItemButton
+                {
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreRight,
+                    Position = new Vector2(-5, 25)
+                },
+                swapItemButton = new SwapItemButton
+                {
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreRight,
+                    Position = new Vector2(-5, -25)
                 }
             };
 
@@ -72,6 +86,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 name.Text = entityReference.Name;
                 starRatingContainer.starRating.Value = entity.StarRating.Value;
                 backgroundBox.Hide();
+                removeItemButton.Show();
+                swapItemButton.Show();
                 starRatingContainer.Show();
             }
         }
@@ -90,21 +106,26 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 entityReference = entity;
                 icon.Texture = textureStore.Get(entityReference.TextureMapping.Get("Icon"));
                 icon.Show();
+                swapItemButton.Show();
+                removeItemButton.Show();
                 name.Text = entity.Name;
                 starRatingContainer.starRating.Value = entity.StarRating.Value;
                 starRatingContainer.Show();
-                backgroundBox.Alpha = 0;
             }
             else
             {
                 icon.Hide();
                 backgroundBox.Alpha = 0.3f;
+                swapItemButton.Hide();
+                removeItemButton.Hide();
                 starRatingContainer.Hide();
                 name.Text = "Empty";
             }
         }
 
         public void SetAction(Action action) => clickAction = action;
+        public void SetSwapAction(Action action) => swapItemButton.SetClickAction(action);
+        public void SetRemoveAction(Action action) => removeItemButton.SetClickAction(action);
 
         protected override bool OnClick(ClickEvent e)
         {

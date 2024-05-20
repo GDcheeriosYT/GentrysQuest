@@ -22,6 +22,8 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
                 Colour = ColourInfo.GradientVertical(Colour4.Black, Colour4.White)
             });
 
+            GameData.Money.InfiniteMoney = true;
+
             GameData.Characters.Add(new TestCharacter(1));
             GameData.Characters.Add(new TestCharacter(2));
             GameData.Characters.Add(new TestCharacter(3));

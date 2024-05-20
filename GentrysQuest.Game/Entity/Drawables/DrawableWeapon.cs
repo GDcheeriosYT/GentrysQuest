@@ -118,7 +118,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.HitboxSize != null) this.WeaponHitBox.ScaleTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
                     if (pattern.Distance != null) Distance = (float)pattern.Distance;
                     if (pattern.ResetHitBox) DamageQueue.Clear();
-                    Weapon.Damage.SetAdditionalValue(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
+                    Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
                 }, delay);
                 delay += speed;
             }
@@ -178,6 +178,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                     }
                 }
             }
+
+            else Weapon.Damage.SetAdditional(0);
         }
     }
 }
