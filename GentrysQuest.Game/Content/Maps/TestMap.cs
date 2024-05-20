@@ -11,6 +11,7 @@ namespace GentrysQuest.Game.Content.Maps
         public override void Load()
         {
             Name = "Test Map";
+            DifficultyScales = true;
 
             Families.Add(GameData.Content.GetFamily("Test Family"));
             Enemies.Add(GameData.Content.GetEnemy("Test Enemy"));

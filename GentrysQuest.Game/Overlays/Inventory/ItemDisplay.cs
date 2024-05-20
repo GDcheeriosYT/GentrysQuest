@@ -447,15 +447,9 @@ namespace GentrysQuest.Game.Overlays.Inventory
         {
             try
             {
-                int counter = 0;
-
                 foreach (Stat stat in characterInfo.Stats.GetStats())
                 {
-                    Scheduler.AddDelayed(() =>
-                    {
-                        statDrawableContainer.GetStatDrawable(stat.Name).UpdateValue((float)stat.Total());
-                    }, counter * 65);
-                    counter++;
+                    statDrawableContainer.GetStatDrawable(stat.Name).UpdateValue((float)stat.Total());
                 }
             }
             catch (Exception)

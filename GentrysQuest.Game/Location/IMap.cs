@@ -35,5 +35,15 @@ namespace GentrysQuest.Game.Location
         /// </summary>
         /// <returns>The map objects</returns>
         List<IMapObject> GetObjects();
+
+        /// <summary>
+        /// Map difficulty
+        /// </summary>
+        int Difficulty { get; }
+
+        /// <summary>
+        /// If the difficulty scales
+        /// </summary>
+        bool DifficultyScales { get; }
     }
 }

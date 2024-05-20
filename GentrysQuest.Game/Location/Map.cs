@@ -16,5 +16,7 @@ namespace GentrysQuest.Game.Location
         }
 
         public List<IMapObject> GetObjects() => mapObjects;
+        public int Difficulty { get; protected set; } = 0;
+        public bool DifficultyScales { get; protected set; } = false;
     }
 }

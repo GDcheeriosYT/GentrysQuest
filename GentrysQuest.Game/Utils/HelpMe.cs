@@ -16,5 +16,26 @@ namespace GentrysQuest.Game.Utils
             if (currentIndex > array.Length - 1) currentIndex = 0;
             return array[currentIndex];
         }
+
+        /// <summary>
+        /// Function to get scaled levels
+        /// </summary>
+        /// <param name="difficulty">Target difficulty</param>
+        /// <param name="levelRef">Target level</param>
+        /// <returns>Scaled level</returns>
+        public static int GetScaledLevel(int difficulty, int levelRef)
+        {
+            int level = levelRef;
+            int min = difficulty * 20;
+            int max = (difficulty + 1) * 20 - 1;
+
+            levelRef += min;
+            levelRef += MathBase.RandomInt(-3, 3);
+
+            if (levelRef > max) return max;
+            if (levelRef < min) return min;
+
+            return levelRef;
+        }
     }
 }

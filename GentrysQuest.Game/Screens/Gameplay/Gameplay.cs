@@ -40,7 +40,27 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private const int CRIT_SCORE = 20;
         private const int KILL_SCORE = 100;
 
+        /// <summary>
+        /// Maximum enemies allowed to spawn at once
+        /// </summary>
         private int enemySpawnLimit = 4;
+
+        /// <summary>
+        /// How many enemies are allowed on the screen
+        /// </summary>
+        private int enemyLimit = 4;
+
+        /// <summary>
+        /// The gameplay difficulty
+        /// </summary>
+        private int gameplayDifficulty;
+
+        /// <summary>
+        /// The gameplay time tracker
+        /// </summary>
+        private double gameplayTime;
+
+        private const double MAX_TIME_TO_SPAWN = 20000;
 
         private delegate void GameplayEvent();
 
@@ -97,6 +117,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <summary>
         /// Add an enemy to the gameplay scene
         /// </summary>
+        /// <param name="level">Current level of the character</param>
         public void AddEnemy(int level)
         {
             Enemy enemy = new TestEnemy(1);
@@ -115,12 +136,50 @@ namespace GentrysQuest.Game.Screens.Gameplay
             playerEntity.SetEntities(enemies);
         }
 
+        /// <summary>
+        /// Spawns enemies in bulk
+        /// </summary>
         public void SpawnEntities()
         {
-            for (int enemyCounter = 0; enemyCounter < enemySpawnLimit; enemyCounter++)
+            int currentAmount = 0;
+
+            while (enemies.Count < enemyLimit)
             {
-                AddEnemy(playerEntity.GetEntityObject().Experience.Level.Current.Value);
+                AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetEntityObject().Experience.Level.Current.Value));
+                currentAmount++;
+                if (currentAmount > enemySpawnLimit) break;
             }
+        }
+
+        public void SetDifficulty()
+        {
+            gameplayDifficulty = map.MapReference.Difficulty;
+            if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetEntityObject().Difficulty - 1;
+        }
+
+        /// <summary>
+        /// Get the right time to spawn enemies
+        /// </summary>
+        /// <returns>if it's right to spawn</returns>
+        private void spawnEnemyClock()
+        {
+            double elapsedTime = Clock.CurrentTime - gameplayTime;
+
+            if (MathBase.RandomInt(1, 10000 / 1 + gameplayDifficulty) < 5)
+            {
+                if (!atEnemyLimit()) AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetEntityObject().Experience.Level.Current.Value));
+            }
+
+            if (elapsedTime > MAX_TIME_TO_SPAWN)
+            {
+                gameplayTime = Clock.CurrentTime;
+                SpawnEntities();
+            }
+        }
+
+        private bool atEnemyLimit()
+        {
+            return enemies.Count == enemyLimit;
         }
 
         /// <summary>
@@ -144,7 +203,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 AddInternal(playerEntity = new DrawablePlayableEntity(GameData.EquipedCharacter));
                 if (GameData.EquipedCharacter.Weapon != null) GameData.EquipedCharacter.SetWeapon(GameData.EquipedCharacter.Weapon);
-                playerEntity.SetupClickContainer();
+                SetDifficulty();
                 playerEntity.OnMove += delegate(float direction, double speed)
                 {
                     manage_direction(direction, speed, map);
@@ -157,6 +216,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
             }
 
             gameplayHud.SetEntity(GameData.EquipedCharacter);
+            playerEntity.SetupClickContainer();
+            gameplayTime = Clock.CurrentTime;
             GameData.EquipedCharacter.Spawn();
         }
 
@@ -183,6 +244,12 @@ namespace GentrysQuest.Game.Screens.Gameplay
             playerEntity.Dispose();
             playerEntity = null;
             GameData.WrapUpStats();
+        }
+
+        protected override void Update()
+        {
+            spawnEnemyClock();
+            base.Update();
         }
     }
 }
