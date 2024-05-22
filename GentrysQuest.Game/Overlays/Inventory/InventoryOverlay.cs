@@ -48,6 +48,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         private readonly InnerInventoryButton sortButton;
 
+        private readonly InventoryButton selectionBackButton;
+
         private readonly string[] sortTypes = new[] { "Star Rating", "Name", "Level" };
         private int sortIndexCounter = 0;
 
@@ -56,6 +58,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private bool displayingInfo;
         private SelectionModes selectionMode = SelectionModes.Single;
         private Character equippingToCharacter;
+        private Artifact focusedArtifact;
+        private Weapon focusedWeapon;
         private int? artifactSelectionIndex;
 
         public InventoryOverlay()
@@ -82,7 +86,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         FillMode = FillMode.Stretch,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Size = new Vector2(0.2f, 1),
+                        Size = new Vector2(1),
                         Spacing = new Vector2(40),
                         Children = new[]
                         {
@@ -110,6 +114,15 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         {
                             RelativeSizeAxes = Axes.Both,
                             Colour = new Colour4(0, 0, 0, 185)
+                        },
+                        selectionBackButton = new InventoryButton("Back")
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            RelativeSizeAxes = Axes.X,
+                            RelativePositionAxes = Axes.Both,
+                            Size = new Vector2(0.25f, 64),
+                            Position = new Vector2(-0.25f, 0.42f)
                         },
                         new DrawSizePreservingFillContainer
                         {
@@ -211,6 +224,9 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 switch (selectionMode)
                 {
                     case SelectionModes.Single:
+                        selectionBackButton.FadeOut(100);
+                        itemContainer.ResizeHeightTo(1, 100);
+
                         foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
                         {
                             entityInfoDrawable.OnClickEvent += delegate
@@ -235,9 +251,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         break;
 
                     case SelectionModes.Multi:
+                        selectionBackButton.FadeIn(100);
+                        itemContainer.ResizeHeightTo(0.79f, 100);
                         break;
 
                     case SelectionModes.Equipping:
+                        selectionBackButton.FadeIn(100);
+                        itemContainer.ResizeHeightTo(0.79f, 100);
+
                         foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
                         {
                             entityInfoDrawable.OnClickEvent += delegate
@@ -269,6 +290,11 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         break;
                 }
             };
+            selectionBackButton.SetAction(delegate
+            {
+                selectionMode = SelectionModes.Single;
+                displayingSection.Value = InventoryDisplay.Characters;
+            });
             GameData.Money.Amount.ValueChanged += delegate { moneyText.Text = $"${GameData.Money.Amount}"; };
             Hide();
         }
@@ -302,6 +328,34 @@ namespace GentrysQuest.Game.Overlays.Inventory
             selectionMode = SelectionModes.Single;
         }
 
+        private int getItemXp(EntityBase item)
+        {
+            int xp = 0;
+
+            xp += item.Experience.CurrentLevel() * 80;
+            xp += item.StarRating.Value * 2 * 100;
+
+            return xp;
+        }
+
+        public void StartWeaponExchange()
+        {
+            displayingSection.Value = InventoryDisplay.Weapons;
+            selectionMode = SelectionModes.Multi;
+        }
+
+        public void ExchangeWeapons()
+        {
+            foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
+            {
+                if (entityInfoDrawable.IsSelected)
+                {
+                    focusedWeapon.AddXp(getItemXp(entityInfoDrawable.entity));
+                    GameData.Weapons.Remove((Weapon)entityInfoDrawable.entity);
+                }
+            }
+        }
+
         public void ClickWeapon()
         {
             Weapon? weaponRef = equippingToCharacter.Weapon;
@@ -328,6 +382,24 @@ namespace GentrysQuest.Game.Overlays.Inventory
             GameData.Weapons.Add(equippingToCharacter.Weapon);
             equippingToCharacter.SetWeapon(null);
             itemInfo.DisplayItem(equippingToCharacter);
+        }
+
+        public void StartArtifactExchange()
+        {
+            displayingSection.Value = InventoryDisplay.Artifacts;
+            selectionMode = SelectionModes.Multi;
+        }
+
+        public void ExchangeArtifacts()
+        {
+            foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
+            {
+                if (entityInfoDrawable.IsSelected)
+                {
+                    focusedArtifact.AddXp(getItemXp(entityInfoDrawable.entity));
+                    GameData.Artifacts.Remove((Artifact)entityInfoDrawable.entity);
+                }
+            }
         }
 
         public void ClickArtifact(int index)

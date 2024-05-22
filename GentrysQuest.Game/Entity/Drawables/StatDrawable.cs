@@ -6,6 +6,7 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
+    // TODO: Add way to display percentage
     public partial class StatDrawable : CompositeDrawable
     {
         private const int DURATION = 500;

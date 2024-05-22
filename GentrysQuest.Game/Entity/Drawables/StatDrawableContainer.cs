@@ -11,6 +11,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public StatDrawableContainer()
         {
+            Masking = true;
             RelativeSizeAxes = Axes.Both;
             InternalChildren = new Drawable[]
             {

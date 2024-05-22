@@ -1,4 +1,5 @@
 using System;
+using GentrysQuest.Game.Graphics;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -8,7 +9,7 @@ using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
 {
-    public partial class InventoryButton : CompositeDrawable
+    public partial class InventoryButton : GQButton
     {
         private SpriteText buttonText;
         private Action action;
@@ -17,13 +18,12 @@ namespace GentrysQuest.Game.Overlays.Inventory
         {
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
-            RelativeSizeAxes = Axes.X;
             Masking = true;
             CornerExponent = 2;
             CornerRadius = 10;
             BorderColour = Colour4.Black;
-            BorderThickness = 4;
-            Size = new Vector2(1, 142);
+            BorderThickness = 2;
+            Size = new Vector2(200, 100);
             InternalChildren = new Drawable[]
             {
                 new Box
@@ -31,13 +31,18 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     RelativeSizeAxes = Axes.Both,
                     Colour = new Colour4(136, 136, 136, 255)
                 },
-                buttonText = new SpriteText()
+                new Container
                 {
-                    Text = text,
-                    Colour = Colour4.Black,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Font = FontUsage.Default.With(size: 48)
+                    Child = buttonText = new SpriteText()
+                    {
+                        Text = text,
+                        Colour = Colour4.Black,
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Font = FontUsage.Default.With(size: 36)
+                    }
                 }
             };
         }

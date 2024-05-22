@@ -1,9 +1,11 @@
 ﻿using System;
+using GentrysQuest.Game.Graphics;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
@@ -12,7 +14,7 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class EntityInfoDrawable : CompositeDrawable
+    public partial class EntityInfoDrawable : GQButton
     {
         protected EntityIconDrawable icon;
         protected SpriteText name;
@@ -133,12 +135,23 @@ namespace GentrysQuest.Game.Entity.Drawables
         protected override bool OnHover(HoverEvent e)
         {
             this.ScaleTo(new Vector2(1.05f, 1f), 30);
+            name.FadeColour(StarRatingContainer.GetColor(entity.StarRating.Value));
+            name.ScaleTo(1.1f, 30);
+
+            BorderColour = StarRatingContainer.GetColor(entity.StarRating.Value);
             return base.OnHover(e);
         }
 
         protected override void OnHoverLost(HoverLostEvent e)
         {
-            this.ScaleTo(new Vector2(1f, 1f), 30);
+            if (!IsSelected)
+            {
+                BorderColour = Colour4.Black;
+                this.ScaleTo(new Vector2(1f, 1f), 30);
+                name.FadeColour(Colour4.White, 30);
+                name.ScaleTo(1f, 30);
+            }
+
             base.OnHoverLost(e);
         }
 
@@ -164,12 +177,20 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             IsSelected = true;
             BorderColour = StarRatingContainer.GetColor(entity.StarRating.Value);
+            EdgeEffect = new EdgeEffectParameters
+            {
+                Type = EdgeEffectType.Glow,
+                Colour = StarRatingContainer.GetColor(entity.StarRating.Value),
+                Radius = 10,
+                Roundness = 3
+            };
         }
 
         public void Unselect()
         {
             IsSelected = false;
             BorderColour = Colour4.Black;
+            EdgeEffect = new EdgeEffectParameters();
         }
 
         private void updateColorWithStarRating(ValueChangedEvent<int> valueChangedEvent)

@@ -1,6 +1,7 @@
 using System;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Graphics;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -12,7 +13,7 @@ using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
 {
-    public partial class EquipIcon : CompositeComponent
+    public partial class EquipIcon : GQButton
     {
         private readonly Sprite icon;
         private readonly SpriteText name;
@@ -24,6 +25,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private RemoveItemButton removeItemButton;
         private SwapItemButton swapItemButton;
 
+        // TODO: Add indicators for stats
         public EquipIcon(EntityBase entity)
         {
             entityReference = entity;

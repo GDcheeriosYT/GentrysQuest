@@ -27,6 +27,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly SpriteText experienceRequirementText;
         private readonly ProgressBar experienceBar;
         private readonly InventoryLevelUpBox inventoryLevelUpBox;
+        private readonly InventoryButton levelUpButton;
+        private readonly InventoryButton exchangeButton;
         private readonly StarRatingContainer starRatingContainer;
         private readonly StatDrawableContainer statDrawableContainer;
         private readonly Container characterAttributesContainer;
@@ -40,8 +42,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private Artifact artifactInfo;
         private Weapon weaponInfo;
         private readonly Sprite entityDisplay;
-        private readonly InventoryButton levelUpButton;
         private TextureStore textureStore;
+
+        #region DesignProperties
+
+        private const int LEVEL_UP_BUTTON_WIDTH = 420;
+        private const int LEVEL_UP_BUTTON_HEIGHT = 50;
+
+        #endregion
 
         public ItemDisplay(InventoryOverlay inventoryReference)
         {
@@ -252,13 +260,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         },
                         statDrawableContainer = new StatDrawableContainer
                         {
-                            Size = new Vector2(1, 0.6f),
+                            Size = new Vector2(1, 0.65f),
                             Position = new Vector2(0, 60)
                         },
                         characterAttributesContainer = new Container
                         {
+                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.5f, 0.6f),
+                            Size = new Vector2(0.5f, 0.65f),
                             Position = new Vector2(0, 60),
                             Anchor = Anchor.TopRight,
                             Origin = Anchor.TopRight,
@@ -279,7 +288,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     ScrollbarVisible = false,
                                     Child = new FillFlowContainer
                                     {
-                                        Y = 80,
+                                        Y = 0,
                                         Direction = FillDirection.Vertical,
                                         AutoSizeAxes = Axes.Y,
                                         Anchor = Anchor.TopCentre,
@@ -303,23 +312,29 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                 }
                             }
                         },
-                        levelUpButton = new InventoryButton("Levelus Uppus")
+                        new FillFlowContainer
                         {
-                            RelativeSizeAxes = Axes.X,
-                            Size = new Vector2(0.9f, 85),
-                            Position = new Vector2(-5, -5),
-                            Scale = new Vector2(0.5f),
-                            Anchor = Anchor.BottomRight,
-                            Origin = Anchor.BottomRight
-                        },
-                        inventoryLevelUpBox = new InventoryLevelUpBox
-                        {
-                            RelativeSizeAxes = Axes.X,
-                            Size = new Vector2(0.9f, 85),
-                            Position = new Vector2(5, -5),
-                            Scale = new Vector2(0.5f),
-                            Anchor = Anchor.BottomLeft,
-                            Origin = Anchor.BottomLeft
+                            Size = new Vector2(0, 60),
+                            Anchor = Anchor.BottomCentre,
+                            Origin = Anchor.BottomCentre,
+                            Direction = FillDirection.Horizontal,
+                            AutoSizeAxes = Axes.X,
+                            Spacing = new Vector2(20),
+                            Children = new Drawable[]
+                            {
+                                exchangeButton = new InventoryButton("Choose Items")
+                                {
+                                    Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
+                                },
+                                inventoryLevelUpBox = new InventoryLevelUpBox()
+                                {
+                                    Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
+                                },
+                                levelUpButton = new InventoryButton("Upgrade")
+                                {
+                                    Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
+                                },
+                            }
                         }
                     }
                 }
@@ -342,7 +357,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
             nameText.Text = entity.Name;
             descriptionText.Text = entity.Description;
             updateExperienceBar(entity);
-            int currentLevel = entity.Experience.Level.Current.Value;
             levelUpButton.SetAction(delegate
             {
                 int amount = inventoryLevelUpBox.GetAmount();
@@ -365,6 +379,10 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 case Character character:
                     characterInfo = character;
                     characterAttributesContainer.Show();
+
+                    exchangeButton.Hide();
+                    inventoryLevelUpBox.Show();
+                    resizeLevelUpComponents(2);
 
                     foreach (Stat stat in character.Stats.GetStats())
                     {
@@ -410,6 +428,12 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 case Artifact artifact:
                     artifactInfo = artifact;
                     Buff mainAttribute = artifact.MainAttribute;
+                    exchangeButton.SetAction(inventoryReference.StartArtifactExchange);
+
+                    inventoryLevelUpBox.Hide();
+                    exchangeButton.Show();
+                    levelUpButton.SetAction(inventoryReference.ExchangeArtifacts);
+                    resizeLevelUpComponents(2);
                     statDrawableContainer.AddStat(new StatDrawable(mainAttribute.StatType.ToString(), (float)mainAttribute.Value.Value, true));
 
                     foreach (Buff attribute in artifact.Attributes)
@@ -425,6 +449,19 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
                 case Weapon weapon:
                     weaponInfo = weapon;
+
+                    exchangeButton.SetAction(inventoryReference.StartWeaponExchange);
+                    exchangeButton.Show();
+                    inventoryLevelUpBox.Show();
+                    levelUpButton.SetAction(delegate
+                    {
+                        if (GameData.Money.CanAfford(inventoryLevelUpBox.GetAmount()))
+                        {
+                            entity.AddXp(inventoryLevelUpBox.GetAmount());
+                            GameData.Money.Spend(inventoryLevelUpBox.GetAmount());
+                        }
+                    });
+                    resizeLevelUpComponents(3);
                     statDrawableContainer.AddStat(new StatDrawable("Damage", (float)weapon.Damage.Total(), true));
                     statDrawableContainer.AddStat(new StatDrawable(weapon.Buff.StatType.ToString(), (float)weapon.Buff.Value.Value, false));
                     statDrawableContainer.ResizeWidthTo(1f);
@@ -432,6 +469,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     weaponInfo.OnLevelUp += updateWeaponStatContainer;
                     break;
             }
+        }
+
+        private void resizeLevelUpComponents(int amount)
+        {
+            if (amount < 2) amount = 2;
+            exchangeButton.ResizeTo(new Vector2(LEVEL_UP_BUTTON_WIDTH / amount, LEVEL_UP_BUTTON_HEIGHT));
+            inventoryLevelUpBox.ResizeTo(new Vector2(LEVEL_UP_BUTTON_WIDTH / amount, LEVEL_UP_BUTTON_HEIGHT));
+            levelUpButton.ResizeTo(new Vector2(LEVEL_UP_BUTTON_WIDTH / amount, LEVEL_UP_BUTTON_HEIGHT));
         }
 
         private void updateExperienceBar(EntityBase entity)

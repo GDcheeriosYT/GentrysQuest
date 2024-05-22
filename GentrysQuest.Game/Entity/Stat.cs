@@ -1,5 +1,4 @@
-﻿using System;
-using GentrysQuest.Game.Utils;
+﻿using GentrysQuest.Game.Utils;
 using osu.Framework.Bindables;
 
 namespace GentrysQuest.Game.Entity
@@ -75,7 +74,7 @@ namespace GentrysQuest.Game.Entity
 
         protected Stat()
         {
-            throw new NotImplementedException();
+            // TODO: Make this do something?
         }
 
         public double GetPercentFromDefault(float percent) => MathBase.GetPercent(Default.Value, percent);
