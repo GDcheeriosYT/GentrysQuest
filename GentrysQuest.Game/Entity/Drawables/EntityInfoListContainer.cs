@@ -4,6 +4,7 @@ using GentrysQuest.Game.Graphics;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
@@ -28,7 +29,8 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 scrollContainer = new BasicScrollContainer
                 {
-                    RelativeSizeAxes = Axes.Both
+                    RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(1, 0.9f)
                 },
                 noItemsDisclaimer = new SpriteText
                 {

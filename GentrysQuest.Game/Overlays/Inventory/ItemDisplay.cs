@@ -283,6 +283,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                 new BasicScrollContainer
                                 {
                                     RelativeSizeAxes = Axes.Both,
+                                    Size = new Vector2(1, 0.8f),
                                     Position = new Vector2(0, 32),
                                     ClampExtension = 1,
                                     ScrollbarVisible = false,
@@ -426,13 +427,18 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     break;
 
                 case Artifact artifact:
+                    inventoryReference.FocusedArtifact = artifact;
                     artifactInfo = artifact;
                     Buff mainAttribute = artifact.MainAttribute;
                     exchangeButton.SetAction(inventoryReference.StartArtifactExchange);
 
                     inventoryLevelUpBox.Hide();
                     exchangeButton.Show();
-                    levelUpButton.SetAction(inventoryReference.ExchangeArtifacts);
+                    levelUpButton.SetAction(delegate
+                    {
+                        inventoryReference.ExchangeArtifacts();
+                        updateExperienceBar(entity);
+                    });
                     resizeLevelUpComponents(2);
                     statDrawableContainer.AddStat(new StatDrawable(mainAttribute.StatType.ToString(), (float)mainAttribute.Value.Value, true));
 
@@ -448,6 +454,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     break;
 
                 case Weapon weapon:
+                    inventoryReference.FocusedWeapon = weapon;
                     weaponInfo = weapon;
 
                     exchangeButton.SetAction(inventoryReference.StartWeaponExchange);
@@ -457,9 +464,13 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     {
                         if (GameData.Money.CanAfford(inventoryLevelUpBox.GetAmount()))
                         {
-                            entity.AddXp(inventoryLevelUpBox.GetAmount());
+                            entity.AddXp(inventoryLevelUpBox.GetAmount() * 10);
                             GameData.Money.Spend(inventoryLevelUpBox.GetAmount());
                         }
+
+                        inventoryReference.ExchangeWeapons();
+
+                        updateExperienceBar(entity);
                     });
                     resizeLevelUpComponents(3);
                     statDrawableContainer.AddStat(new StatDrawable("Damage", (float)weapon.Damage.Total(), true));

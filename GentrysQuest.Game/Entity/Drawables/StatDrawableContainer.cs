@@ -25,12 +25,13 @@ namespace GentrysQuest.Game.Entity.Drawables
                 new BasicScrollContainer
                 {
                     RelativeSizeAxes = Axes.Both,
+                    Size = new Vector2(1, 0.8f),
                     Position = new Vector2(0, 32),
                     ClampExtension = 1,
                     ScrollbarVisible = false,
                     Child = statDrawables = new FillFlowContainer<StatDrawable>
                     {
-                        Position = new Vector2(0, 32),
+                        Position = new Vector2(0, 0),
                         Direction = FillDirection.Vertical,
                         AutoSizeAxes = Axes.Y,
                         RelativeSizeAxes = Axes.X
