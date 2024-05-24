@@ -41,14 +41,13 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         private readonly FillFlowContainer inventoryTop;
 
-        private readonly SpriteText moneyText;
-
         private readonly EntityInfoListContainer itemContainer;
 
         private readonly InventoryReverseButton reverseButton;
 
+        private readonly SpriteText moneyText;
+        private readonly SpriteText categoryText;
         private readonly InnerInventoryButton sortButton;
-
         private readonly InventoryButton selectionBackButton;
 
         private readonly string[] sortTypes = new[] { "Star Rating", "Name", "Level" };
@@ -136,6 +135,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     Text = "$0",
                                     Font = FontUsage.Default.With(size: 56),
                                     Margin = new MarginPadding { Top = 20, Left = 50 }
+                                },
+                                categoryText = new SpriteText
+                                {
+                                    Text = "",
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre,
+                                    Font = FontUsage.Default.With(size: 36),
+                                    Margin = new MarginPadding { Top = 10 }
                                 },
                                 new FillFlowContainer
                                 {
@@ -310,6 +317,29 @@ namespace GentrysQuest.Game.Overlays.Inventory
             Hide();
         }
 
+        private void setStatus()
+        {
+            string category;
+
+            switch (selectionMode)
+            {
+                case SelectionModes.Equipping:
+                    category = "Equipping ";
+                    break;
+
+                case SelectionModes.Multi:
+                    category = "Select ";
+                    break;
+
+                default:
+                    category = "";
+                    break;
+            }
+
+            category += displayingSection.Value;
+            categoryText.Text = category;
+        }
+
         private void changeState()
         {
             itemContainer.ClearList();
@@ -333,10 +363,19 @@ namespace GentrysQuest.Game.Overlays.Inventory
             }
         }
 
+        private void clearSelections()
+        {
+            foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
+            {
+                entityInfoDrawable.Unselect();
+            }
+        }
+
         private void swapCategory(InventoryDisplay inventoryDisplay)
         {
             displayingSection.Value = inventoryDisplay;
             selectionMode = SelectionModes.Single;
+            setStatus();
         }
 
         private int getItemXp(EntityBase item)
@@ -354,6 +393,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             displayingSection.Value = InventoryDisplay.Weapons;
             selectionMode = SelectionModes.Multi;
             changeState();
+            setStatus();
         }
 
         public void ExchangeWeapons()
@@ -372,6 +412,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void ClickWeapon()
         {
+            clearSelections();
             Weapon? weaponRef = equippingToCharacter.Weapon;
             artifactSelectionIndex = null;
 
@@ -381,6 +422,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 selectionMode = SelectionModes.Equipping;
             }
             else itemInfo.DisplayItem(weaponRef);
+
+            setStatus();
         }
 
         public void SwapWeapon()
@@ -389,6 +432,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             displayingSection.Value = InventoryDisplay.Weapons;
             selectionMode = SelectionModes.Equipping;
             itemInfo.DisplayItem(equippingToCharacter);
+            setStatus();
         }
 
         public void RemoveWeapon()
@@ -403,6 +447,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             displayingSection.Value = InventoryDisplay.Artifacts;
             selectionMode = SelectionModes.Multi;
             changeState();
+            setStatus();
         }
 
         public void ExchangeArtifacts()
@@ -421,6 +466,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void ClickArtifact(int index)
         {
+            clearSelections();
             Artifact? artifactRef = equippingToCharacter.Artifacts.Get(index);
 
             if (artifactRef == null)
@@ -430,6 +476,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 artifactSelectionIndex = index;
             }
             else itemInfo.DisplayItem(artifactRef);
+
+            setStatus();
         }
 
         public void SwapArtifact(int index)
@@ -484,6 +532,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             itemContainerBox.FadeIn(FADE_TIME, Easing.InOutCubic);
             displayingSection.Value = InventoryDisplay.Characters;
             selectionMode = SelectionModes.Single;
+            setStatus();
         }
 
         public override void Hide()
@@ -498,6 +547,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             {
                 base.Hide();
             }, FADE_TIME);
+            setStatus();
         }
     }
 }

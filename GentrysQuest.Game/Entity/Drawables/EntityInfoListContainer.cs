@@ -69,16 +69,16 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             switch (entity)
             {
-                case Character:
-                    entityInfoDrawable = new EntityInfoDrawable(entity);
+                case Character character:
+                    entityInfoDrawable = new CharacterInfoDrawable(character);
                     break;
 
-                case Artifact:
-                    entityInfoDrawable = new ArtifactInfoDrawable((Artifact)entity);
+                case Artifact artifact:
+                    entityInfoDrawable = new ArtifactInfoDrawable(artifact);
                     break;
 
-                case Weapon.Weapon:
-                    entityInfoDrawable = new WeaponInfoDrawable((Weapon.Weapon)entity);
+                case Weapon.Weapon weapon:
+                    entityInfoDrawable = new WeaponInfoDrawable(weapon);
                     break;
 
                 default:

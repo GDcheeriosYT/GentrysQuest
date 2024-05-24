@@ -323,7 +323,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             Spacing = new Vector2(20),
                             Children = new Drawable[]
                             {
-                                exchangeButton = new InventoryButton("Choose Items")
+                                exchangeButton = new InventoryButton("Infuse")
                                 {
                                     Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
                                 },
@@ -519,6 +519,13 @@ namespace GentrysQuest.Game.Overlays.Inventory
             try
             {
                 statDrawableContainer.GetStatDrawable(artifactInfo.MainAttribute.StatType.ToString()).UpdateValue((float)artifactInfo.MainAttribute.Value.Value);
+
+                foreach (Buff buff in artifactInfo.Attributes)
+                {
+                    StatDrawable statDrawable = statDrawableContainer.GetStatDrawable(buff.StatType.ToString());
+                    if (statDrawable != null) statDrawable.UpdateValue((float)buff.Value.Value);
+                    else statDrawableContainer.AddStat(new StatDrawable(buff.StatType.ToString(), (float)buff.Value.Value, false));
+                }
             }
             catch (Exception)
             {
