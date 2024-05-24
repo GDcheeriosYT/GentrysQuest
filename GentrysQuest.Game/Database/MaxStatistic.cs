@@ -2,8 +2,8 @@ namespace GentrysQuest.Game.Database
 {
     public class MaxStatistic : Statistic
     {
-        public MaxStatistic()
-            : base()
+        public MaxStatistic(StatTypes statType, short scoreReward = 0)
+            : base(statType, scoreReward)
         {
             IsConsecutive = true;
         }

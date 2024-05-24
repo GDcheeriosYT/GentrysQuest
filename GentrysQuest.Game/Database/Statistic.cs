@@ -2,14 +2,16 @@ namespace GentrysQuest.Game.Database
 {
     public class Statistic : IStatistic
     {
-        public int Value { get; protected set; }
-        public int ScoreValue { get; }
-        public bool IsConsecutive { get; protected set; } = false;
-
-        public Statistic()
+        public Statistic(StatTypes statType, short scoreReward = 0)
         {
-            Value = 0;
+            ScoreReward = scoreReward;
         }
+
+        public string Name { get; }
+        public StatTypes StatType { get; }
+        public int Value { get; protected set; } = 0;
+        public short ScoreReward { get; }
+        public bool IsConsecutive { get; protected set; } = false;
 
         public void Add() => Value++;
         public void Add(int amount) => Value += amount;

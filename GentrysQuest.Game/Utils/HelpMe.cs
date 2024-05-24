@@ -25,7 +25,6 @@ namespace GentrysQuest.Game.Utils
         /// <returns>Scaled level</returns>
         public static int GetScaledLevel(int difficulty, int levelRef)
         {
-            int level = levelRef;
             int min = difficulty * 20;
             int max = (difficulty + 1) * 20 - 1;
 

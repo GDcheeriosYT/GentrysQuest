@@ -35,11 +35,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         private bool showingInventory = false;
 
-        // Scoring
-        private const int HIT_SCORE = 10;
-        private const int CRIT_SCORE = 20;
-        private const int KILL_SCORE = 100;
-
         /// <summary>
         /// Maximum enemies allowed to spawn at once
         /// </summary>
@@ -142,9 +137,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             enemies.Add(newEnemy);
             enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
-            newEnemy.GetEntityObject().OnDeath += delegate { score.Value += KILL_SCORE; };
-            newEnemy.GetEntityObject().OnDamage += delegate { score.Value += HIT_SCORE; };
-            newEnemy.GetEntityObject().OnCrit += delegate { score.Value += CRIT_SCORE; };
             newEnemy.GetEntityObject().OnDeath += delegate { GameData.Artifacts.Add(new OsuTablet()); };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);
@@ -252,6 +244,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     }
                 };
                 playerEntity.GetEntityObject().OnDeath += End;
+                playerEntity.GetEntityObject().OnLevelUp += SetDifficulty;
             }
 
             gameplayHud.SetEntity(GameData.EquipedCharacter);
@@ -281,7 +274,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             Container statContainer = new Container
             {
-
             };
             Container deathContainer = new Container
             {

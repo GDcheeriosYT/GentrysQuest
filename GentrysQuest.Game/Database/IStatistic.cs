@@ -3,9 +3,21 @@ namespace GentrysQuest.Game.Database
     public interface IStatistic
     {
         /// <summary>
+        /// Name of the stat
+        /// </summary>
+        string Name { get; }
+
+        StatTypes StatType { get; }
+
+        /// <summary>
         /// The stat value
         /// </summary>
         int Value { get; }
+
+        /// <summary>
+        /// How much score the stat rewards
+        /// </summary>
+        short ScoreReward { get; }
 
         /// <summary>
         /// If the value should only count the best

@@ -8,6 +8,8 @@ public class Character : Entity, ICharacter
     {
         Artifacts = new ArtifactManager(this);
         Artifacts.OnChangeArtifact += UpdateStats;
+
+        // TODO: Add stats here
     }
 
     public override void UpdateStats()
