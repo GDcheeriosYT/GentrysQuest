@@ -191,6 +191,9 @@ namespace GentrysQuest.Game.Entity.Drawables
             IsSelected = false;
             BorderColour = Colour4.Black;
             EdgeEffect = new EdgeEffectParameters();
+            this.ScaleTo(new Vector2(1f, 1f), 30);
+            name.FadeColour(Colour4.White, 30);
+            name.ScaleTo(1f, 30);
         }
 
         private void updateColorWithStarRating(ValueChangedEvent<int> valueChangedEvent)
