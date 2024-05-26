@@ -1,5 +1,4 @@
-﻿using GentrysQuest.Game.Database;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -58,37 +57,34 @@ namespace GentrysQuest.Game.Entity
             OnSpawn?.Invoke();
         }
 
-        public void Die()
+        public virtual void Die()
         {
             IsDead = true;
-            GameData.CurrentStats.Deaths.Add();
             OnDeath?.Invoke();
         }
 
-        public void Attack()
+        public virtual void Attack()
         {
             OnAttack?.Invoke();
         }
 
-        public void Damage(int amount)
+        public virtual void Damage(int amount)
         {
+            if (amount < 0) amount = 0;
             Stats.Health.UpdateCurrentValue(-amount);
             if (Stats.Health.Current.Value <= 0) Die();
-            GameData.CurrentStats.DamageTaken.Add(amount);
-            if (GameData.CurrentStats.MostDamageTaken.Bigger(amount)) GameData.CurrentStats.MostDamageTaken.Set(amount);
-            GameData.CurrentStats.HitsTaken.Add();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }
 
-        public void Heal(int amount)
+        public virtual void Heal(int amount)
         {
             Stats.Health.UpdateCurrentValue(amount);
             OnHealthEvent?.Invoke();
             OnHeal?.Invoke(amount);
         }
 
-        public void Crit(int amount)
+        public virtual void Crit(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
             if (Stats.Health.Current.Value <= 0) Die();

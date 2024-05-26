@@ -1,3 +1,6 @@
+using GentrysQuest.Game.Database;
+using osu.Framework.Logging;
+
 namespace GentrysQuest.Game.Entity;
 
 public class Character : Entity, ICharacter
@@ -8,8 +11,32 @@ public class Character : Entity, ICharacter
     {
         Artifacts = new ArtifactManager(this);
         Artifacts.OnChangeArtifact += UpdateStats;
+    }
 
-        // TODO: Add stats here
+    public override void Attack()
+    {
+        base.Attack();
+        // TODO: Figure out handling hit stat tracking
+    }
+
+    public override void Damage(int amount)
+    {
+        base.Damage(amount);
+        GameData.CurrentStats.GetStat(StatTypes.DamageTaken).Add(amount);
+        GameData.CurrentStats.GetStat(StatTypes.MostDamageTaken).Add(amount);
+    }
+
+    public override void Heal(int amount)
+    {
+        base.Heal(amount);
+        GameData.CurrentStats.GetStat(StatTypes.HealthGained).Add(amount);
+        GameData.CurrentStats.GetStat(StatTypes.HealthGainedOnce).Add(amount);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        GameData.CurrentStats.Log();
     }
 
     public override void UpdateStats()

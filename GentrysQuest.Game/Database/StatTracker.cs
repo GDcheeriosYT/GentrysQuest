@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GentrysQuest.Game.Database
 {
     public class StatTracker
     {
-        private List<IStatistic> stats = new();
+        private readonly List<IStatistic> stats = new();
 
         public StatTracker()
         {
@@ -30,16 +32,8 @@ namespace GentrysQuest.Game.Database
 
         public StatTracker(List<IStatistic> stats) => this.stats = stats;
         public IStatistic GetStat(int index) => stats[index];
-
-        public IStatistic GetStat(string name)
-        {
-            for (int statIndex = 0; statIndex < stats.Count; statIndex++)
-            {
-                if (stats[statIndex].Name == name) return stats[statIndex];
-            }
-
-            return null;
-        }
+        public IStatistic GetStat(string name) => stats.FirstOrDefault(t => t.Name == name);
+        public IStatistic GetStat(StatTypes type) => stats.FirstOrDefault(t => t.StatType == type);
 
         /// <summary>
         /// Merge two StatTrackers together to combine values
@@ -73,6 +67,17 @@ namespace GentrysQuest.Game.Database
         private static IStatistic compare(IStatistic stat1, IStatistic stat2)
         {
             return (stat1.Value > stat2.Value) ? stat1 : stat2;
+        }
+
+        /// <summary>
+        /// Logs stat summary to the console
+        /// </summary>
+        public void Log()
+        {
+            for (int statIndex = 0; statIndex < stats.Count; statIndex++)
+            {
+                Console.WriteLine(stats[statIndex].Summary());
+            }
         }
     }
 }

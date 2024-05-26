@@ -8,6 +8,9 @@ namespace GentrysQuest.Game.Database
             IsConsecutive = true;
         }
 
-        public void Set(int amount) => Value = amount;
+        public override void Add(int amount)
+        {
+            if (amount > Value) Value = amount;
+        }
     }
 }

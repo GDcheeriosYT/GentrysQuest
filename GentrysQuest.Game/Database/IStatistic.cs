@@ -22,7 +22,17 @@ namespace GentrysQuest.Game.Database
         /// <summary>
         /// If the value should only count the best
         /// </summary>
-        public bool IsConsecutive { get; }
+        bool IsConsecutive { get; }
+
+        /// <summary>
+        /// Controls how adding to the stat works
+        /// </summary>
+        void Add(int amount = 1);
+
+        /// <summary>
+        /// Returns the summary of the stat
+        /// </summary>
+        string Summary();
 
         /// <summary>
         /// sets the value based on two stats
