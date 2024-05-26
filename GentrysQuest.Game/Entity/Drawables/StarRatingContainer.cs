@@ -7,7 +7,7 @@ using osu.Framework.Graphics.Containers;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public class StarRatingContainer : CompositeDrawable
+    public partial class StarRatingContainer : CompositeDrawable
     {
         public readonly Bindable<int> starRating = new Bindable<int>();
         private StarRatingDrawable starRatingDrawable1 = new StarRatingDrawable(1);
@@ -21,27 +21,20 @@ namespace GentrysQuest.Game.Entity.Drawables
             this.starRating.Value = 1;
             this.starRating.BindValueChanged(setStarRating, true);
             this.starRating.Value = starRating;
-            Origin = Anchor.BottomLeft;
-            RelativeSizeAxes = Axes.Both;
-            Anchor = Anchor.CentreLeft;
-            RelativePositionAxes = Axes.Both;
 
-            InternalChild = new GridContainer
+            InternalChild = new FillFlowContainer()
             {
-                RelativeSizeAxes = Axes.Both,
-                RelativePositionAxes = Axes.Both,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Content = new[]
+                Direction = FillDirection.Horizontal,
+                AutoSizeAxes = Axes.Both,
+                Anchor = Anchor.CentreLeft,
+                Origin = Anchor.CentreLeft,
+                Children = new[]
                 {
-                    new[]
-                    {
-                        starRatingDrawable1,
-                        starRatingDrawable2,
-                        starRatingDrawable3,
-                        starRatingDrawable4,
-                        starRatingDrawable5
-                    }
+                    starRatingDrawable1,
+                    starRatingDrawable2,
+                    starRatingDrawable3,
+                    starRatingDrawable4,
+                    starRatingDrawable5
                 }
             };
         }
@@ -54,7 +47,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             List<int> delayList = Enumerable.Range(0, 5).Select(i => (i + 1) * 50).ToList();
             if (oldVal > newVal) delayList.Reverse();
 
-            ColourInfo color = getColor(newVal);
+            ColourInfo color = GetColorGradient(newVal);
             starRatingDrawable1.updateColour(color, newVal, delayList[0]);
             starRatingDrawable2.updateColour(color, newVal, delayList[1]);
             starRatingDrawable3.updateColour(color, newVal, delayList[2]);
@@ -62,7 +55,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             starRatingDrawable5.updateColour(color, newVal, delayList[4]);
         }
 
-        private ColourInfo getColor(int starRating)
+        public static ColourInfo GetColorGradient(int starRating)
         {
             switch (starRating)
             {
@@ -80,6 +73,29 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 case 5:
                     return ColourInfo.GradientVertical(Colour4.Yellow, Colour4.DarkGoldenrod);
+            }
+
+            return ColourInfo.SingleColour(Colour4.Black);
+        }
+
+        public static Colour4 GetColor(int starRating)
+        {
+            switch (starRating)
+            {
+                case 1:
+                    return Colour4.White;
+
+                case 2:
+                    return Colour4.LimeGreen;
+
+                case 3:
+                    return Colour4.Aqua;
+
+                case 4:
+                    return Colour4.DeepPink;
+
+                case 5:
+                    return Colour4.Gold;
             }
 
             return ColourInfo.SingleColour(Colour4.Black);

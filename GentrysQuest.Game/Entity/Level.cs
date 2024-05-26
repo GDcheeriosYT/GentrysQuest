@@ -1,25 +1,32 @@
-﻿namespace GentrysQuest.Game.Entity
+﻿using osu.Framework.Bindables;
+
+namespace GentrysQuest.Game.Entity
 {
     public class Level
     {
-        public int current { get; private set; }
-        public int limit { get; }
+        public Bindable<int> Current { get; private set; } = new Bindable<int>(0);
+        public Bindable<int> Limit { get; } = new Bindable<int>(0);
 
-        public Level(int current)
+        public Level(int current = 1)
         {
-            this.current = current;
-            limit = 0;
+            Current.Value = current;
+            Limit.Value = 0;
         }
 
         public Level(int current, int limit)
         {
-            this.current = current;
-            this.limit = limit;
+            Current.Value = current;
+            Limit.Value = limit;
         }
 
         public void AddLevel()
         {
-            if (current != limit) current++;
+            if (Current != Limit) Current.Value++;
+        }
+
+        public override string ToString()
+        {
+            return $"Level {Current.Value}{(Limit.Value > 0 ? $"/{Limit.Value}" : "")}";
         }
     }
 }

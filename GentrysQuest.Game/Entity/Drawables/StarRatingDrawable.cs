@@ -7,7 +7,7 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public class StarRatingDrawable : SpriteIcon
+    public partial class StarRatingDrawable : SpriteIcon
     {
         public Bindable<bool> isEnabled = new Bindable<bool>();
         private LimitedInt indicator;
@@ -18,12 +18,11 @@ namespace GentrysQuest.Game.Entity.Drawables
             this.indicator.Value = indicator;
 
             Icon = FontAwesome.Solid.Star;
-            RelativeSizeAxes = Axes.Both;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
             Colour = ColourInfo.GradientVertical(Colour4.DarkGray, Colour4.LightGray);
             Alpha = 0.5f;
-            Size = new Vector2(1f);
+            Size = new Vector2(40);
 
             isEnabled.BindValueChanged(whenChanged, true);
         }

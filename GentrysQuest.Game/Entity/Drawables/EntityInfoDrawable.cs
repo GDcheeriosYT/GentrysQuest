@@ -1,8 +1,11 @@
-﻿using osu.Framework.Allocation;
+﻿using System;
+using GentrysQuest.Game.Graphics;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
@@ -11,19 +14,20 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class EntityInfoDrawable : CompositeDrawable
+    public partial class EntityInfoDrawable : GQButton
     {
-        private EntityIconDrawable icon;
-        private SpriteText name;
+        protected EntityIconDrawable icon;
+        protected SpriteText name;
+        protected SpriteText level;
+        protected TextFlowContainer mainInfoContainer;
         public StarRatingContainer starRatingContainer;
-        public Entity entity;
-        private Colour4 firstColor = Colour4.Gray;
-        private Colour4 secondColor = Colour4.Gray;
+        public EntityBase entity;
+        protected Container BuffContainer;
+        protected Box ColourBox;
+        public bool IsSelected { get; private set; }
+        public event EventHandler OnClickEvent;
 
-        // [Resolved]
-        // private TextureStore textures { get; }
-
-        public EntityInfoDrawable(Entity entity)
+        public EntityInfoDrawable(EntityBase entity)
         {
             this.entity = entity;
 
@@ -43,57 +47,153 @@ namespace GentrysQuest.Game.Entity.Drawables
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = ColourInfo.GradientHorizontal(firstColor, secondColor),
+                    Colour = Colour4.Gray
                 },
-                name = new SpriteText
+                new FillFlowContainer
                 {
-                    Text = entity.Name,
-                    Anchor = Anchor.CentreLeft,
-                    Origin = Anchor.TopLeft,
-                    RelativePositionAxes = Axes.Both,
+                    Direction = FillDirection.Horizontal,
+                    AutoSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        icon = new EntityIconDrawable
+                        {
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Margin = new MarginPadding(35),
+                            Size = new Vector2(250)
+                        },
+                        new FillFlowContainer
+                        {
+                            Direction = FillDirection.Vertical,
+                            AutoSizeAxes = Axes.Both,
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Padding = new MarginPadding { Left = 5, Right = 20 },
+                            Children = new Drawable[]
+                            {
+                                name = new SpriteText
+                                {
+                                    Text = entity.Name,
+                                    Size = new Vector2(200, 35),
+                                    Font = FontUsage.Default.With(size: 28),
+                                    Truncate = true,
+                                    AllowMultiline = false
+                                },
+                                starRatingContainer = new StarRatingContainer(entity.StarRating.Value)
+                                {
+                                    Size = new Vector2(200, 40)
+                                }
+                            }
+                        },
+                        level = new SpriteText
+                        {
+                            Text = entity.Experience.Level.ToString(),
+                            Size = new Vector2(120, 35),
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft,
+                            Font = FontUsage.Default.With(size: 24),
+                            AllowMultiline = false
+                        }
+                    }
+                },
+                ColourBox = new Box
+                {
                     RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(0.2f),
-                    Scale = new Vector2(2.5f),
-                    AllowMultiline = false,
-                    Truncate = true,
-                    X = 0.2f,
-                    Y = -0.5f
+                    RelativePositionAxes = Axes.Both,
+                    Size = new Vector2(0.5f, 1),
+                    Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.White),
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
                 },
-                icon = new EntityIconDrawable
+                new Container
                 {
-                    Origin = Anchor.CentreLeft,
-                    Anchor = Anchor.CentreLeft,
-                    X = 0.05f
+                    Masking = true,
+                    CornerExponent = 2,
+                    CornerRadius = 15,
+                    Child = new Box
+                    {
+                    }
                 },
-                starRatingContainer = new StarRatingContainer(this.entity.StarRating.Value)
+                BuffContainer = new Container
                 {
-                    Size = new Vector2(0.27f, 1f),
-                    Y = 0.7f,
-                    X = 0.2f
-                },
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
+                    Position = new Vector2(-100, 5),
+                    Size = new Vector2(100, 80)
+                }
             };
-
             starRatingContainer.starRating.BindValueChanged(updateColorWithStarRating, true);
+            entity.Experience.Level.Current.ValueChanged += delegate { level.Text = entity.Experience.Level.ToString(); };
         }
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            icon.Texture = textures.Get(entity.TextureMapping.Get("Idle"));
+            icon.Texture = textures.Get(entity.TextureMapping.Get("Icon"));
         }
 
         protected override bool OnHover(HoverEvent e)
         {
-            this.ScaleTo(new Vector2(1.2f, 1f), 30);
-            this.FadeColour(ColourInfo.SingleColour(firstColor), 200);
+            this.ScaleTo(new Vector2(1.05f, 1f), 30);
+            name.FadeColour(StarRatingContainer.GetColor(entity.StarRating.Value));
+            name.ScaleTo(1.1f, 30);
+
+            BorderColour = StarRatingContainer.GetColor(entity.StarRating.Value);
             return base.OnHover(e);
         }
 
         protected override void OnHoverLost(HoverLostEvent e)
         {
-            this.ScaleTo(new Vector2(1f, 1f), 30);
-            setColor();
+            if (!IsSelected)
+            {
+                BorderColour = Colour4.Black;
+                this.ScaleTo(new Vector2(1f, 1f), 30);
+                name.FadeColour(Colour4.White, 30);
+                name.ScaleTo(1f, 30);
+            }
+
             base.OnHoverLost(e);
+        }
+
+        protected override bool OnClick(ClickEvent e)
+        {
+            switch (IsSelected)
+            {
+                case true:
+                    Unselect();
+                    break;
+
+                case false:
+                    Select();
+                    break;
+            }
+
+            OnClickEvent?.Invoke(this, null);
+
+            return base.OnClick(e);
+        }
+
+        public void Select()
+        {
+            IsSelected = true;
+            BorderColour = StarRatingContainer.GetColor(entity.StarRating.Value);
+            EdgeEffect = new EdgeEffectParameters
+            {
+                Type = EdgeEffectType.Glow,
+                Colour = StarRatingContainer.GetColor(entity.StarRating.Value),
+                Radius = 10,
+                Roundness = 3
+            };
+        }
+
+        public void Unselect()
+        {
+            IsSelected = false;
+            BorderColour = Colour4.Black;
+            EdgeEffect = new EdgeEffectParameters();
+            this.ScaleTo(new Vector2(1f, 1f), 30);
+            name.FadeColour(Colour4.White, 30);
+            name.ScaleTo(1f, 30);
         }
 
         private void updateColorWithStarRating(ValueChangedEvent<int> valueChangedEvent)
@@ -101,34 +201,30 @@ namespace GentrysQuest.Game.Entity.Drawables
             switch (valueChangedEvent.NewValue)
             {
                 case 1:
-                    firstColor = Colour4.LightGray;
-                    secondColor = Colour4.Gray;
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.White, Colour4.White);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.Gray);
                     break;
 
                 case 2:
-                    firstColor = Colour4.WhiteSmoke;
-                    secondColor = Colour4.White;
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.White, Colour4.LimeGreen);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.LimeGreen);
                     break;
 
                 case 3:
-                    firstColor = Colour4.WhiteSmoke;
-                    secondColor = Colour4.Aquamarine;
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.White, Colour4.Aqua);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.Aqua);
                     break;
 
                 case 4:
-                    firstColor = Colour4.FromHex("#FDBAF4");
-                    secondColor = Colour4.FromHex("#ECA5E2");
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.DeepPink, Colour4.White);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.DeepPink);
                     break;
 
                 case 5:
-                    firstColor = Colour4.FromHex("#FDF9BA");
-                    secondColor = Colour4.FromHex("#F5EE77");
+                    // Colour = ColourInfo.GradientHorizontal(Colour4.Gold, Colour4.White);
+                    ColourBox.Colour = ColourInfo.GradientHorizontal(new Colour4(0, 0, 0, 0), Colour4.Gold);
                     break;
             }
-
-            setColor();
         }
-
-        private void setColor() { this.FadeColour(ColourInfo.GradientVertical(firstColor, secondColor), 200); }
     }
 }

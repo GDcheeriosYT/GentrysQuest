@@ -1,5 +1,6 @@
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Weapons;
+using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Screens.Gameplay;
@@ -18,21 +19,14 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
 
         public TestSceneGameplay()
         {
+            theGuy = new BraydenMesserschmidt();
+            testWeapon = new BraydensOsuPen();
+            GameData.EquipCharacter(theGuy);
+            GameData.Characters.Add(theGuy);
+            GameData.Characters.Add(new TestCharacter(1));
+            theGuy.SetWeapon(testWeapon);
             Add(screens = new ScreenStack());
             screens.Push(gameplay = new Gameplay());
-        }
-
-        [Test]
-        public virtual void Start()
-        {
-            AddStep("start", () =>
-            {
-                theGuy = new BraydenMesserschmidt();
-                testWeapon = new BraydensOsuPen();
-                theGuy.SetWeapon(testWeapon);
-                gameplay.SetUp(theGuy);
-            });
-            AddStep("End", () => gameplay.End());
         }
 
         [Test]
@@ -40,10 +34,11 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         {
             AddStep("AddEnemy", () =>
             {
-                gameplay.AddEnemy(theGuy.Experience.Level.current);
+                gameplay.AddEnemy(theGuy.Experience.Level.Current.Value);
             });
             AddStep("Damage", (() => theGuy.Damage(10)));
             AddStep("Spawn Enemys", () => gameplay.SpawnEntities());
+            AddStep("End", () => gameplay.End());
         }
     }
 }

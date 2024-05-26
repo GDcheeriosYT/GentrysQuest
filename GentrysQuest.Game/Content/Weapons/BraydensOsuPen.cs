@@ -12,8 +12,9 @@ namespace GentrysQuest.Game.Content.Weapons
         {
             Name = "Brayden's Osu Pen";
             StarRating = new StarRating(5);
-            Description = "A osu pen";
-            Damage.SetDefaultValue(50);
+            Description = "An osu pen";
+            Damage.SetDefaultValue(46);
+            Buff = new Buff(this, StatType.CritDamage);
 
             #region Design
 
@@ -46,6 +47,7 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region TextureMapping
 
+            TextureMapping.Add("Icon", "brayden_osu_pen_base.png");
             TextureMapping.Add("Base", "brayden_osu_pen_base.png");
 
             #endregion

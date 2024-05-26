@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
@@ -94,6 +95,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             enable(100);
             Weapon.AttackAmount += 1;
             AttackPatternCaseHolder caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
+            Weapon.Holder.Attack(); // Call the holder base method to handle events.
             List<AttackPatternEvent> patterns;
 
             if (caseHolder == null)
@@ -107,7 +109,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             foreach (AttackPatternEvent pattern in patterns)
             {
-                double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.CurrentValue;
+                double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
                 Scheduler.AddDelayed(() =>
                 {
                     if (pattern.Direction != null) this.RotateTo((float)pattern.Direction + direction, duration: speed, pattern.Transition);
@@ -116,7 +118,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.HitboxSize != null) this.WeaponHitBox.ScaleTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
                     if (pattern.Distance != null) Distance = (float)pattern.Distance;
                     if (pattern.ResetHitBox) DamageQueue.Clear();
-                    Weapon.Damage.SetAdditionalValue(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
+                    Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
                 }, delay);
                 delay += speed;
             }
@@ -145,6 +147,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (!DamageQueue.Check(hitbox))
                     {
                         Entity entity;
+                        bool isCrit = false;
 
                         try
                         {
@@ -155,25 +158,67 @@ namespace GentrysQuest.Game.Entity.Drawables
                             entity = new Entity();
                         }
 
-                        int damage = Weapon.Damage.CurrentValue + Weapon.Holder.Stats.Attack.CurrentValue;
-                        damage -= entity.Stats.Defense.CurrentValue;
+                        int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
+                        damage -= (int)entity.Stats.Defense.Current.Value;
 
-                        if (Weapon.Holder.Stats.CritRate.CurrentValue > MathBase.RandomInt(0, 100))
+                        if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {
+                            isCrit = true;
                             damage += (int)MathBase.GetPercent(
-                                Weapon.Holder.Stats.Attack.CurrentValue,
-                                Weapon.Holder.Stats.CritDamage.CurrentValue
+                                Weapon.Holder.Stats.Attack.Current.Value,
+                                Weapon.Holder.Stats.CritDamage.Current.Value
                             );
                             entity.Crit(damage);
                         }
                         else entity.Damage(damage);
 
-                        if (entity.isDead) Weapon.Holder.AddXp(entity.GetXpReward());
+                        if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
+
+                        bool isWeapon = true; // weapon hitboxes are tracked...
+
+                        switch (entity)
+                        {
+                            case Character character:
+                                GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
+                                if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.CritsTaken);
+                                isWeapon = false;
+                                break;
+
+                            case Enemy enemy:
+                                isWeapon = false;
+                                break;
+                        }
+
+                        switch (Weapon.Holder)
+                        {
+                            case Character character:
+                                if (entity.IsDead)
+                                {
+                                    int money = entity.GetMoneyReward();
+                                    GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
+                                    GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
+                                    GameData.Money.Hand(money);
+                                    GameData.Weapons.Add(entity.GetWeaponReward());
+                                    GameData.CurrentStats.AddToStat(StatTypes.Kills);
+                                }
+
+                                if (!isWeapon)
+                                {
+                                    GameData.CurrentStats.AddToStat(StatTypes.Hits);
+                                    if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.Crits);
+                                    GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
+                                    GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
+                                }
+
+                                break;
+                        }
 
                         DamageQueue.Add(hitbox);
                     }
                 }
             }
+
+            else Weapon.Damage.SetAdditional(0);
         }
     }
 }

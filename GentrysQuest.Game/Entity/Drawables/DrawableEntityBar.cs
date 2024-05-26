@@ -11,6 +11,7 @@ public partial class DrawableEntityBar : CompositeDrawable
     // objects
     private readonly ProgressBar healthProgressBar;
     private SpriteText entityName;
+    private SpriteText entityLevel;
 
     public DrawableEntityBar(Entity entity)
     {
@@ -29,15 +30,40 @@ public partial class DrawableEntityBar : CompositeDrawable
                 Origin = Anchor.BottomCentre,
                 Font = FontUsage.Default.With(size: 50)
             },
-            healthProgressBar = new ProgressBar(0, entity.Stats.Health.Total())
+            new Container
+            {
+                RelativeSizeAxes = Axes.Both,
+                Children = new Drawable[]
+                {
+                    new Container
+                    {
+                        Anchor = Anchor.CentreLeft,
+                        Origin = Anchor.CentreLeft,
+                        Child = entityLevel = new SpriteText
+                        {
+                            Text = entity.Experience.Level.Current.Value.ToString(),
+                            Anchor = Anchor.CentreRight,
+                            Origin = Anchor.CentreRight
+                        }
+                    },
+                    healthProgressBar = new ProgressBar(0, entity.Stats.Health.Total())
+                    {
+                        RelativeSizeAxes = Axes.X,
+                        Anchor = Anchor.CentreRight,
+                        Origin = Anchor.CentreRight,
+                        Size = new Vector2(0.98f, 10)
+                    }
+                }
+            }
         };
         healthProgressBar.ForegroundColour = Colour4.Lime;
         healthProgressBar.BackgroundColour = Colour4.Red;
 
-        entity.OnHealthEvent += delegate { healthProgressBar.Current = entity.Stats.Health.CurrentValue; };
+        entity.OnHealthEvent += delegate { healthProgressBar.Current = entity.Stats.Health.Current.Value; };
         entity.OnUpdateStats += delegate
         {
-            healthProgressBar.Current = entity.Stats.Health.CurrentValue;
+            entityLevel.Text = entity.Experience.Level.Current.Value.ToString();
+            healthProgressBar.Current = entity.Stats.Health.Current.Value;
             healthProgressBar.Max = entity.Stats.Health.Total();
         };
     }

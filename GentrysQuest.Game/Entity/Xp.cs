@@ -1,41 +1,43 @@
-﻿namespace GentrysQuest.Game.Entity
+﻿using osu.Framework.Bindables;
+
+namespace GentrysQuest.Game.Entity
 {
     /// <summary>
     /// Xp management class
     /// </summary>
-    public class Xp
+    public class Xp(int current = 0)
     {
-        public int Current { get; private set; }
-        public int Requirement;
+        public Bindable<int> Current { get; private set; } = new Bindable<int>(current);
+        public Bindable<int> Requirement = new();
         public double Progress { get; private set; }
-
-        public Xp(int current)
-        {
-            this.Current = current;
-        }
 
         public bool add_xp(int amount)
         {
-            Current += amount;
+            Current.Value += amount;
 
-            if (Current >= Requirement)
+            if (Current.Value >= Requirement.Value)
             {
-                Current -= Requirement;
-                Progress = Current / Requirement;
+                Current.Value -= Requirement.Value;
                 return true;
             }
 
-            Progress = Current / Requirement;
+            if (Requirement.Value > 0) Progress = float.Round((float)Current.Value / Requirement.Value * 100);
+            else Progress = 100;
             return false;
         }
 
-        public void CalculateRequirment(int level, int starRating)
+        public void CalculateRequirement(int level, int starRating)
         {
             int difficulty = 1 + (level / 20);
             int starRatingExperience = starRating * 25;
             int levelExperience = level * 10;
 
-            Requirement = (difficulty * 100) + levelExperience + starRatingExperience;
+            Requirement.Value = level * difficulty * difficulty * 100 + levelExperience + starRatingExperience;
+        }
+
+        public override string ToString()
+        {
+            return $"{Current.Value}/{Requirement.Value} ({Progress}%)";
         }
     }
 }

@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Location;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
@@ -10,6 +11,10 @@ namespace GentrysQuest.Game.Content.Maps
         public override void Load()
         {
             Name = "Test Map";
+            DifficultyScales = true;
+
+            Families.Add(GameData.Content.GetFamily("Test Family"));
+            Enemies.Add(GameData.Content.GetEnemy("Test Enemy"));
 
             for (int i = 0; i < 200; i++)
             {

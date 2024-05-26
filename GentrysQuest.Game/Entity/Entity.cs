@@ -5,14 +5,10 @@ namespace GentrysQuest.Game.Entity
     public class Entity : EntityBase
     {
         // info
-        public bool isDead;
+        public bool IsDead;
 
         // stats
-        public Stats Stats = new Stats();
-
-        // experience
-        public Experience Experience;
-        protected int difficulty;
+        public Stats Stats = new();
 
         // equips
         [CanBeNull]
@@ -20,14 +16,12 @@ namespace GentrysQuest.Game.Entity
 
         public Entity()
         {
-            Experience = new Experience(new Xp(0), new Level(1));
-            Experience.Xp.CalculateRequirment(1, StarRating.Value);
-            UpdateStats();
+            OnLevelUp += UpdateStats;
+            OnLevelUp += Stats.Restore;
+            OnSwapWeapon += UpdateStats;
         }
 
         #region Events
-
-        public delegate void EntityEvent();
 
         public delegate void EntitySpawnEvent();
 
@@ -47,10 +41,6 @@ namespace GentrysQuest.Game.Entity
         public event EntityEvent OnSwapWeapon;
         public event EntityEvent OnSwapArtifact;
 
-        // Experience events
-        public event EntityEvent OnGainXp;
-        public event EntityEvent OnLevelUp;
-
         // Other Events
         public event EntityEvent OnAttack;
         public event EntityEvent OnUpdateStats;
@@ -61,62 +51,51 @@ namespace GentrysQuest.Game.Entity
 
         public void Spawn()
         {
-            isDead = false;
+            IsDead = false;
             UpdateStats();
             Stats.Restore();
             OnSpawn?.Invoke();
         }
 
-        public void Die()
+        public virtual void Die()
         {
-            isDead = true;
+            IsDead = true;
             OnDeath?.Invoke();
         }
 
-        public void Damage(int amount)
+        public virtual void Attack()
         {
+            OnAttack?.Invoke();
+        }
+
+        public virtual void Damage(int amount)
+        {
+            if (amount < 0) amount = 0;
             Stats.Health.UpdateCurrentValue(-amount);
-            if (Stats.Health.CurrentValue <= 0) Die();
+            if (Stats.Health.Current.Value <= 0) Die();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }
 
-        public void Heal(int amount)
+        public virtual void Heal(int amount)
         {
             Stats.Health.UpdateCurrentValue(amount);
             OnHealthEvent?.Invoke();
             OnHeal?.Invoke(amount);
         }
 
-        public void Crit(int amount)
+        public virtual void Crit(int amount)
         {
             Stats.Health.UpdateCurrentValue(-amount);
-            if (Stats.Health.CurrentValue <= 0) Die();
+            if (Stats.Health.Current.Value <= 0) Die();
             OnHealthEvent?.Invoke();
             OnCrit?.Invoke(amount);
         }
 
-        public void AddXp(int amount)
-        {
-            while (Experience.Xp.add_xp(amount)) LevelUp();
-            OnGainXp?.Invoke();
-        }
-
-        public void LevelUp()
-        {
-            Experience.Level.AddLevel();
-            Experience.Xp.CalculateRequirment(Experience.Level.current, StarRating.Value);
-
-            UpdateStats();
-            Stats.Restore();
-
-            OnLevelUp?.Invoke();
-        }
-
-        public void SetWeapon(Weapon.Weapon weapon)
+        public void SetWeapon([CanBeNull] Weapon.Weapon weapon)
         {
             Weapon = weapon;
-            weapon.Holder = this;
+            if (weapon != null) weapon.Holder = this;
             OnSwapWeapon?.Invoke();
         }
 
@@ -124,11 +103,26 @@ namespace GentrysQuest.Game.Entity
         {
             int value = 0;
 
-            value += Experience.Level.current * 5;
+            value += Experience.Level.Current.Value * 5;
             value += Stats.GetPointTotal() * 2;
-            value += Weapon.Damage.CurrentValue / 4;
+            if (Weapon != null) value += (int)(Weapon.Damage.Current.Value / 4);
 
             return value;
+        }
+
+        public int GetMoneyReward()
+        {
+            int value = 0;
+
+            value += Experience.Level.Current.Value;
+            value += Stats.GetPointTotal();
+
+            return value;
+        }
+
+        public virtual Weapon.Weapon GetWeaponReward()
+        {
+            return Weapon;
         }
 
         public virtual void UpdateStats()

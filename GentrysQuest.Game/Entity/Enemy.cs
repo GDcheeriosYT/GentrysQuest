@@ -15,31 +15,30 @@ public class Enemy : Entity
 
     public override void UpdateStats()
     {
-        int level = Experience.Level.current;
+        int level = Experience.Level.Current.Value;
         int starRating = StarRating.Value;
-        difficulty = 1 + level / 20;
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(difficulty * 200, Stats.Health.point, 500) +
+            CalculatePointBenefit(Difficulty * 2000, Stats.Health.point, 500) +
             CalculatePointBenefit(level * 100, Stats.Health.point, 10) +
-            CalculatePointBenefit(starRating * 100, Stats.Health.point, 50)
+            CalculatePointBenefit(starRating, Stats.Health.point, 50)
         );
 
         Stats.Attack.SetDefaultValue(
-            CalculatePointBenefit(difficulty * 8, Stats.Attack.point, 5) +
-            CalculatePointBenefit(level * 2, Stats.Attack.point, 4) +
-            CalculatePointBenefit(starRating * 5, Stats.Attack.point, 3)
+            CalculatePointBenefit(Difficulty * 50, Stats.Attack.point, 20) +
+            CalculatePointBenefit(level * 5, Stats.Attack.point, 5) +
+            CalculatePointBenefit(starRating, Stats.Attack.point, 3)
         );
 
         Stats.Defense.SetDefaultValue(
-            CalculatePointBenefit(difficulty * 10, Stats.Defense.point, 4) +
-            CalculatePointBenefit(level * 2, Stats.Defense.point, 2) +
-            CalculatePointBenefit(starRating * 3, Stats.Defense.point, 3)
+            CalculatePointBenefit(Difficulty * 20, Stats.Defense.point, 10) +
+            CalculatePointBenefit(level * 2, Stats.Defense.point, 5) +
+            CalculatePointBenefit(starRating, Stats.Defense.point, 3)
         );
 
         Stats.CritRate.SetDefaultValue(20);
 
-        Stats.CritDamage.SetDefaultValue(100);
+        Stats.CritDamage.SetDefaultValue(20);
 
         Stats.Speed.SetDefaultValue(
             CalculatePointBenefit(0, Stats.Speed.point, 0.2)

@@ -1,0 +1,42 @@
+using GentrysQuest.Game.Audio;
+using osu.Framework.Allocation;
+using osu.Framework.Audio.Sample;
+using osu.Framework.Graphics.Audio;
+using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
+
+namespace GentrysQuest.Game.Graphics
+{
+    public partial class GQButton : Button
+    {
+        public AudioMapping Sounds = new();
+        private ISampleStore samples;
+
+        public GQButton()
+        {
+            Sounds.Add("Default_Hover", "sounds_menu_dHover.mp3");
+            Sounds.Add("Default_Click", "sounds_menu_dClick.mp3");
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ISampleStore sampleStore) => samples = sampleStore;
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            string sound = "Default_Hover";
+            if (hasSound("Hover")) sound = "Hover";
+            AudioManager.PlaySound(new DrawableSample(samples.Get(Sounds.Get(sound))));
+            return base.OnHover(e);
+        }
+
+        protected override bool OnClick(ClickEvent e)
+        {
+            string sound = "Default_Click";
+            if (hasSound("Click")) sound = "Click";
+            AudioManager.PlaySound(new DrawableSample(samples.Get(Sounds.Get(sound))));
+            return base.OnClick(e);
+        }
+
+        private bool hasSound(string value) => Sounds.Get(value) != "Death.mp3";
+    }
+}

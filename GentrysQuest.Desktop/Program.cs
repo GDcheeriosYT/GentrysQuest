@@ -1,6 +1,5 @@
-﻿using osu.Framework.Platform;
-using osu.Framework;
-using GentrysQuest.Game;
+﻿using osu.Framework;
+using osu.Framework.Platform;
 
 namespace GentrysQuest.Desktop
 {
@@ -9,7 +8,7 @@ namespace GentrysQuest.Desktop
         public static void Main()
         {
             using (GameHost host = Host.GetSuitableDesktopHost(@"Gentry's Quest"))
-            using (osu.Framework.Game game = new GentrysQuestGame(false))
+            using (osu.Framework.Game game = new GentrysQuestDesktop(true))
                 host.Run(game);
         }
     }

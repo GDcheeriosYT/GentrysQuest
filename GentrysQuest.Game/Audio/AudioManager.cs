@@ -45,6 +45,7 @@ namespace GentrysQuest.Game.Audio
 
         public static void PlaySound(DrawableSample sample)
         {
+            Logger.Log("playing sound");
             sample.VolumeTo(soundVolume.Amount);
             sample.Play();
         }

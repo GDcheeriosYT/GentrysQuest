@@ -178,11 +178,14 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private void setDrawableWeapon()
         {
-            if (weapon != null) RemoveInternal(weapon, false);
+            if (weapon != null) RemoveInternal(weapon, true);
 
-            weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
-            weapon.Affiliation = Affiliation;
-            AddInternal(weapon);
+            if (Entity.Weapon != null)
+            {
+                weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
+                weapon.Affiliation = Affiliation;
+                AddInternal(weapon);
+            }
         }
 
         /// <summary>
@@ -207,7 +210,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <returns></returns>
         public double GetSpeed()
         {
-            return SPEED_MAIN * Entity.Stats.Speed.CurrentValue;
+            return SPEED_MAIN * Entity.Stats.Speed.Current.Value;
         }
 
         protected override void Update()
