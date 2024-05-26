@@ -7,16 +7,18 @@ namespace GentrysQuest.Game.Database
     public class StatTracker
     {
         private readonly List<IStatistic> stats = new();
+        public readonly ScoreStatistic ScoreStatistic;
 
         public StatTracker()
         {
-            stats.Add(new Statistic(StatTypes.Score));
+            ScoreStatistic = new ScoreStatistic();
+            stats.Add(ScoreStatistic);
             stats.Add(new Statistic(StatTypes.Hits, 10));
             stats.Add(new Statistic(StatTypes.Damage));
             stats.Add(new MaxStatistic(StatTypes.MostDamage));
-            stats.Add(new Statistic(StatTypes.Crits, 50));
+            stats.Add(new Statistic(StatTypes.Crits, 20));
             stats.Add(new Statistic(StatTypes.Kills, 100));
-            stats.Add(new MaxStatistic(StatTypes.DamageTaken));
+            stats.Add(new Statistic(StatTypes.DamageTaken));
             stats.Add(new MaxStatistic(StatTypes.MostDamageTaken));
             stats.Add(new Statistic(StatTypes.HitsTaken, 2));
             stats.Add(new MaxStatistic(StatTypes.ConsecutiveCrits));
@@ -30,10 +32,23 @@ namespace GentrysQuest.Game.Database
             stats.Add(new MaxStatistic(StatTypes.HealthGainedOnce));
         }
 
+        private void addToStatPattern(IStatistic statistic, int amount)
+        {
+            ScoreStatistic.Add(statistic.ScoreReward);
+            statistic.Add(amount);
+        }
+
+        private void addToStatPattern(IStatistic statistic)
+        {
+            ScoreStatistic.Add(statistic.ScoreReward);
+            statistic.Add();
+        }
+
         public StatTracker(List<IStatistic> stats) => this.stats = stats;
         public IStatistic GetStat(int index) => stats[index];
-        public IStatistic GetStat(string name) => stats.FirstOrDefault(t => t.Name == name);
         public IStatistic GetStat(StatTypes type) => stats.FirstOrDefault(t => t.StatType == type);
+        public void AddToStat(StatTypes type, int amount) => addToStatPattern(GetStat(type), amount);
+        public void AddToStat(StatTypes type) => addToStatPattern(GetStat(type));
 
         /// <summary>
         /// Merge two StatTrackers together to combine values
@@ -68,6 +83,8 @@ namespace GentrysQuest.Game.Database
         {
             return (stat1.Value > stat2.Value) ? stat1 : stat2;
         }
+
+        public List<IStatistic> GetStats() => stats;
 
         /// <summary>
         /// Logs stat summary to the console

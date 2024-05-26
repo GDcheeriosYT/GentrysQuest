@@ -13,6 +13,8 @@ namespace GentrysQuest.Game.Database
         public void Spend(int amount)
         {
             if (!InfiniteMoney) Amount.Value -= amount;
+            GameData.CurrentStats.AddToStat(StatTypes.MoneySpent, amount);
+            GameData.CurrentStats.AddToStat(StatTypes.MoneySpentOnce, amount);
         }
 
         public void Hand(int amount) => Amount.Value += amount;

@@ -1,5 +1,4 @@
 using GentrysQuest.Game.Database;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity;
 
@@ -13,29 +12,24 @@ public class Character : Entity, ICharacter
         Artifacts.OnChangeArtifact += UpdateStats;
     }
 
-    public override void Attack()
-    {
-        base.Attack();
-        // TODO: Figure out handling hit stat tracking
-    }
-
     public override void Damage(int amount)
     {
         base.Damage(amount);
-        GameData.CurrentStats.GetStat(StatTypes.DamageTaken).Add(amount);
-        GameData.CurrentStats.GetStat(StatTypes.MostDamageTaken).Add(amount);
+        GameData.CurrentStats.AddToStat(StatTypes.DamageTaken, amount);
+        GameData.CurrentStats.AddToStat(StatTypes.MostDamageTaken, amount);
     }
 
     public override void Heal(int amount)
     {
         base.Heal(amount);
-        GameData.CurrentStats.GetStat(StatTypes.HealthGained).Add(amount);
-        GameData.CurrentStats.GetStat(StatTypes.HealthGainedOnce).Add(amount);
+        GameData.CurrentStats.AddToStat(StatTypes.HealthGained, amount);
+        GameData.CurrentStats.AddToStat(StatTypes.HealthGainedOnce, amount);
     }
 
     public override void Die()
     {
         base.Die();
+        GameData.CurrentStats.AddToStat(StatTypes.Deaths);
         GameData.CurrentStats.Log();
     }
 
@@ -44,7 +38,7 @@ public class Character : Entity, ICharacter
         Stats.ResetAdditionalValues();
         int level = Experience.Level.Current.Value;
         int starRating = StarRating.Value;
-        Difficulty = 1 + level / 20;
+        Difficulty = (byte)(1 + level / 20);
 
         Stats.Health.SetDefaultValue(
             CalculatePointBenefit(Difficulty * 100, Stats.Health.point, 100) +

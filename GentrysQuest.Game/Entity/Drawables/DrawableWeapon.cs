@@ -147,6 +147,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (!DamageQueue.Check(hitbox))
                     {
                         Entity entity;
+                        bool isCrit = false;
 
                         try
                         {
@@ -162,6 +163,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                         if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {
+                            isCrit = true;
                             damage += (int)MathBase.GetPercent(
                                 Weapon.Holder.Stats.Attack.Current.Value,
                                 Weapon.Holder.Stats.CritDamage.Current.Value
@@ -171,8 +173,45 @@ namespace GentrysQuest.Game.Entity.Drawables
                         else entity.Damage(damage);
 
                         if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
-                        if (entity.IsDead) GameData.Money.Hand(entity.GetMoneyReward());
-                        if (entity.IsDead) GameData.Weapons.Add(entity.GetWeaponReward());
+
+                        bool isWeapon = true; // weapon hitboxes are tracked...
+
+                        switch (entity)
+                        {
+                            case Character character:
+                                GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
+                                if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.CritsTaken);
+                                isWeapon = false;
+                                break;
+
+                            case Enemy enemy:
+                                isWeapon = false;
+                                break;
+                        }
+
+                        switch (Weapon.Holder)
+                        {
+                            case Character character:
+                                if (entity.IsDead)
+                                {
+                                    int money = entity.GetMoneyReward();
+                                    GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
+                                    GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
+                                    GameData.Money.Hand(money);
+                                    GameData.Weapons.Add(entity.GetWeaponReward());
+                                    GameData.CurrentStats.AddToStat(StatTypes.Kills);
+                                }
+
+                                if (!isWeapon)
+                                {
+                                    GameData.CurrentStats.AddToStat(StatTypes.Hits);
+                                    if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.Crits);
+                                    GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
+                                    GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
+                                }
+
+                                break;
+                        }
 
                         DamageQueue.Add(hitbox);
                     }

@@ -10,7 +10,7 @@ namespace GentrysQuest.Game.Entity
         public Experience Experience { get; protected set; } = new();
         public TextureMapping TextureMapping { get; protected set; } = new();
         public AudioMapping AudioMapping { get; protected set; } = new();
-        public int Difficulty { get; protected set; } = 1;
+        public byte Difficulty { get; protected set; } = 1;
 
         public delegate void EntityEvent();
 
@@ -28,7 +28,7 @@ namespace GentrysQuest.Game.Entity
         {
             Experience.Level.AddLevel();
             Experience.Xp.CalculateRequirement(Experience.Level.Current.Value, StarRating.Value);
-            Difficulty = Experience.Level.Current.Value / 20;
+            Difficulty = (byte)(Experience.Level.Current.Value / 20);
 
             OnLevelUp?.Invoke();
         }

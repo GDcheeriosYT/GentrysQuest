@@ -252,6 +252,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             gameplayTime = Clock.CurrentTime;
             GameData.EquipedCharacter.Spawn();
             GameData.StartStatTracker();
+            GameData.CurrentStats.ScoreStatistic.OnScoreChange += delegate { score.Value = GameData.CurrentStats.ScoreStatistic.Value; };
         }
 
         /// <summary>
@@ -301,7 +302,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             isPaused = true;
             removeAllEnemies();
             playerEntity.RemoveClickContainer();
-            GameData.WrapUpStats();
             RemoveInternal(playerEntity, true);
             playerEntity.Dispose();
             inventoryOverlay.Hide();
@@ -311,12 +311,25 @@ namespace GentrysQuest.Game.Screens.Gameplay
             deathContainer.FadeIn(3000).Then()
                           .Delay(1000).FadeOut(2000);
             scoreFlowContainer.FadeOut().Then()
-                              .ScaleTo(3, 6100).Then()
+                              .ScaleTo(5, 6100).Then()
                               .FadeIn(250).Then()
                               .Delay(2000).Then()
-                              .MoveToY(-400, 250, Easing.InOutCirc);
+                              .MoveToY(-400, 250, Easing.InOutCirc)
+                              .ScaleTo(3, 250, Easing.InOutCirc);
             scoreFlowContainer.Anchor = Anchor.Centre;
             scoreFlowContainer.Origin = Anchor.Centre;
+            EndStatContainer endStatContainer = new EndStatContainer
+            {
+                Size = new Vector2(1, 0.83f),
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.BottomCentre
+            };
+            AddInternal(endStatContainer);
+            Scheduler.AddDelayed(() =>
+            {
+                endStatContainer.PopulateStats(GameData.CurrentStats);
+                GameData.WrapUpStats();
+            }, 9000);
         }
 
         protected override void Update()
