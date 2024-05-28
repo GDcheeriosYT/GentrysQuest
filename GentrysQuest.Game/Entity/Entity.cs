@@ -14,6 +14,12 @@ namespace GentrysQuest.Game.Entity
         [CanBeNull]
         public Weapon.Weapon Weapon;
 
+        // Stat Modifiers
+        // Used for quick use cases like if dodging or blah blah blah
+        public float SpeedModifier = 1;
+        public bool IsDodging = false;
+        public bool CanDodge = true;
+
         public Entity()
         {
             OnLevelUp += UpdateStats;
@@ -70,11 +76,20 @@ namespace GentrysQuest.Game.Entity
 
         public virtual void Damage(int amount)
         {
-            if (amount < 0) amount = 0;
+            if (amount <= 0) amount = 1;
+            if (IsDodging) amount = 0;
             Stats.Health.UpdateCurrentValue(-amount);
             if (Stats.Health.Current.Value <= 0) Die();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
+        }
+
+        public virtual void Crit(int amount)
+        {
+            if (amount <= 0) amount = 1;
+            if (IsDodging) amount = 0;
+            Damage(amount);
+            OnCrit?.Invoke(amount);
         }
 
         public virtual void Heal(int amount)
@@ -82,14 +97,6 @@ namespace GentrysQuest.Game.Entity
             Stats.Health.UpdateCurrentValue(amount);
             OnHealthEvent?.Invoke();
             OnHeal?.Invoke(amount);
-        }
-
-        public virtual void Crit(int amount)
-        {
-            Stats.Health.UpdateCurrentValue(-amount);
-            if (Stats.Health.Current.Value <= 0) Die();
-            OnHealthEvent?.Invoke();
-            OnCrit?.Invoke(amount);
         }
 
         public void SetWeapon([CanBeNull] Weapon.Weapon weapon)

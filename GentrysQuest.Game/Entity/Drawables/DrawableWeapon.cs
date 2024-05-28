@@ -119,6 +119,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.Distance != null) Distance = (float)pattern.Distance;
                     if (pattern.ResetHitBox) DamageQueue.Clear();
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
+                    if (pattern.MovementSpeed != null) Weapon.Holder.SpeedModifier = (float)pattern.MovementSpeed;
                 }, delay);
                 delay += speed;
             }
@@ -218,7 +219,11 @@ namespace GentrysQuest.Game.Entity.Drawables
                 }
             }
 
-            else Weapon.Damage.SetAdditional(0);
+            else
+            {
+                Weapon.Damage.SetAdditional(0);
+                Weapon.Holder.SpeedModifier = 1;
+            }
         }
     }
 }

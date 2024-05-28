@@ -66,7 +66,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <summary>
         /// When doing some math you might need this
         /// </summary>
-        public static readonly float SLOWING_FACTOR = 0.01f;
+        public const float SLOWING_FACTOR = 0.01f;
 
         // Movement events
         public delegate void Movement(float direction, double speed);
@@ -149,6 +149,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         private void addIndicator(int amount, DamageType type)
         {
             Colour4 colour = default;
+            byte size = 50;
 
             switch (type)
             {
@@ -162,18 +163,34 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 case DamageType.Crit:
                     colour = Colour4.Red;
+                    size = 52;
                     break;
             }
 
             Indicator indicatorReference;
             AddInternal(indicatorReference = new Indicator(amount)
             {
-                Colour = colour
+                Colour = colour,
+                Font = FontUsage.Default.With(size: size),
+                Shadow = true
             });
             Scheduler.AddDelayed(() =>
             {
                 RemoveInternal(indicatorReference, false);
             }, indicatorReference.FadeOut());
+        }
+
+        protected void Dodge()
+        {
+            if (Entity.CanDodge)
+            {
+                Entity.CanDodge = false;
+                Entity.IsDodging = true;
+                Entity.SpeedModifier = 3;
+                Scheduler.AddDelayed(() => { Entity.SpeedModifier = 1; }, 100);
+                Scheduler.AddDelayed(() => { Entity.IsDodging = false; }, 100);
+                Scheduler.AddDelayed(() => { Entity.CanDodge = true; }, 1000);
+            }
         }
 
         private void setDrawableWeapon()
@@ -210,7 +227,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <returns></returns>
         public double GetSpeed()
         {
-            return SPEED_MAIN * Entity.Stats.Speed.Current.Value;
+            // return 1;
+            return SPEED_MAIN * Entity.Stats.Speed.Current.Value * Entity.SpeedModifier;
         }
 
         protected override void Update()

@@ -4,7 +4,7 @@ using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
 {
-    public class Artifact : EntityBase, IArtifact
+    public class Artifact : EntityBase
     {
         public Family Family { get; private set; } = null;
         public Buff MainAttribute { get; set; }

@@ -5,6 +5,7 @@ using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Screens.Gameplay;
 using NUnit.Framework;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
 
 namespace GentrysQuest.Game.Tests.Visual.Screens
@@ -30,12 +31,14 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         }
 
         [Test]
-        public void Management()
+        public void Gameplay()
         {
+            AddStep("Ready", () => Logger.Log("Gameplay ready"));
             AddStep("AddEnemy", () =>
             {
                 gameplay.AddEnemy(theGuy.Experience.Level.Current.Value);
             });
+            AddSliderStep("Difficulty", 0, 10, 0, i => gameplay.SetDifficulty(i));
             AddStep("Damage", (() => theGuy.Damage(10)));
             AddStep("Spawn Enemys", () => gameplay.SpawnEntities());
             AddStep("End", () => gameplay.End());

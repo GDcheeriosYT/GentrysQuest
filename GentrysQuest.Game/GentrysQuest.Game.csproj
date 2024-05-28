@@ -6,6 +6,7 @@
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\Effects\" />
     <Folder Include="Player\" />
     <Folder Include="User\" />
   </ItemGroup>

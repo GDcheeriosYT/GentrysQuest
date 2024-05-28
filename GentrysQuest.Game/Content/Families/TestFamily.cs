@@ -12,7 +12,7 @@ namespace GentrysQuest.Game.Content.Families
         }
     }
 
-    public class TestArtifact : Artifact, IArtifact
+    public class TestArtifact : Artifact
     {
         public TestArtifact()
             : base()

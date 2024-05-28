@@ -3,7 +3,7 @@ using GentrysQuest.Game.Entity;
 
 namespace GentrysQuest.Game.Content.Families.BraydenMesserschmidt
 {
-    public class OsuTablet : Artifact, IArtifact
+    public class OsuTablet : Artifact
     {
         public new List<StatType> ValidMainAttributes { get; set; } = new() { StatType.CritRate };
 

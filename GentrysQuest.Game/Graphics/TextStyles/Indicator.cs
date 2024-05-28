@@ -10,7 +10,7 @@ public partial class Indicator : SpriteText
         Text = $"{damage}";
         Anchor = Anchor.TopCentre;
         Origin = Anchor.BottomCentre;
-        Font = FontUsage.Default.With(size: 50);
+        AllowMultiline = false;
     }
 
     /// <summary>

@@ -35,7 +35,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 // bad coding
             }
 
-            if (GetEntityObject().Weapon != null)
+            if (GetEntityObject().Weapon != null && MathBase.GetDistance(Position, followEntity.Position) < GetEntityObject().Weapon!.Distance)
             {
                 Attack(followEntity.Position);
             }

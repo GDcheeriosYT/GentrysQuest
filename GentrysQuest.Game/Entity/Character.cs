@@ -2,7 +2,7 @@ using GentrysQuest.Game.Database;
 
 namespace GentrysQuest.Game.Entity;
 
-public class Character : Entity, ICharacter
+public class Character : Entity
 {
     public ArtifactManager Artifacts { get; }
 

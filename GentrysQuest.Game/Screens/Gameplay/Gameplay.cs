@@ -157,6 +157,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
             }
         }
 
+        public void SetDifficulty(int difficulty) => gameplayDifficulty = difficulty;
+
         public void SetDifficulty()
         {
             gameplayDifficulty = map.MapReference.Difficulty;

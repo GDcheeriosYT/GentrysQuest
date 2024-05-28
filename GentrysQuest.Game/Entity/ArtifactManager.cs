@@ -8,7 +8,6 @@ namespace GentrysQuest.Game.Entity
         private Artifact[] artifacts { get; } = new Artifact[5];
         private float averageRating;
         public Action OnChangeArtifact;
-        private Character parent = parent;
 
         private void findAverageRating()
         {

@@ -36,24 +36,10 @@ public partial class DrawablePlayableEntity : DrawableEntity
     {
         base.Update();
 
-        if (Keyboard.GetState().IsKeyDown(Key.A))
-        {
-            Move(180, GetSpeed());
-        }
-
-        if (Keyboard.GetState().IsKeyDown(Key.D))
-        {
-            Move(0, GetSpeed());
-        }
-
-        if (Keyboard.GetState().IsKeyDown(Key.W))
-        {
-            Move(270, GetSpeed());
-        }
-
-        if (Keyboard.GetState().IsKeyDown(Key.S))
-        {
-            Move(90, GetSpeed());
-        }
+        if (Keyboard.GetState().IsKeyDown(Key.A)) Move(180, GetSpeed());
+        if (Keyboard.GetState().IsKeyDown(Key.D)) Move(0, GetSpeed());
+        if (Keyboard.GetState().IsKeyDown(Key.W)) Move(270, GetSpeed());
+        if (Keyboard.GetState().IsKeyDown(Key.S)) Move(90, GetSpeed());
+        if (Keyboard.GetState().IsKeyDown(Key.ShiftLeft)) Dodge();
     }
 }

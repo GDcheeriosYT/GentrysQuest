@@ -14,6 +14,7 @@ namespace GentrysQuest.Game.Content.Weapons
             StarRating = new StarRating(1);
             Description = "Just a knife...";
             Damage.SetDefaultValue(16);
+            Distance = 150;
 
             #region Design
 

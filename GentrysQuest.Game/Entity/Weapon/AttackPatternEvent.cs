@@ -12,6 +12,7 @@ namespace GentrysQuest.Game.Entity.Weapon
         public Vector2? HitboxSize = new Vector2(1);
         public float? Distance = 0;
         public int DamagePercent = 0;
+        public float? MovementSpeed = 1;
         public Easing Transition = Easing.None;
         public bool ResetHitBox = false;
 
