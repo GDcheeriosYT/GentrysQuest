@@ -12,6 +12,7 @@ namespace GentrysQuest.Game.Graphics.TextStyles
             Font = FontUsage.Default.With(size: 45);
             Text = version;
             Colour = Colour4.Black;
+            Margin = new MarginPadding(6);
         }
     }
 }
