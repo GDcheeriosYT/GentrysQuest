@@ -23,14 +23,11 @@ namespace GentrysQuest.Game.Screens.Intro
         private TextFlowContainer framework;
         private DrawableTrack theme;
         private List<ITextPart> osuText = new List<ITextPart>();
-        private Screen nextScreen;
-
-        public Intro(Screen nextScreen = null) { this.nextScreen = nextScreen; }
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures, ITrackStore tracks)
         {
-            theme = new DrawableTrack(tracks.Get("GentrysTheme.mp3"));
+            theme = new DrawableTrack(tracks.Get("Gentry_Quest_Intro.mp3"));
             InternalChildren = new Drawable[]
             {
                 new Box
@@ -63,7 +60,7 @@ namespace GentrysQuest.Game.Screens.Intro
         {
             AudioManager.ChangeMusic(theme);
             logo.Delay(1000).Then()
-                .FadeInFromZero(1200, Easing.InOutBounce);
+                .FadeInFromZero(2600, Easing.InOutBounce);
 
             osuText.Add(framework.AddText("osu!", t =>
             {
@@ -82,18 +79,18 @@ namespace GentrysQuest.Game.Screens.Intro
 
             Schedule(() => osuText.SelectMany(t => t.Drawables).ForEach(t =>
             {
-                t.Delay(6575).Then()
+                t.Delay(5000).Then()
                  .FadeIn(100)
                  .ScaleTo(new Vector2(1, 1), 100, Easing.OutQuart);
                 t.Colour = Color4.LightPink;
             }));
 
-            this.Delay(9500)
+            this.Delay(13000)
                 .Then()
-                .FadeOut(3600, Easing.Out)
+                .FadeOut(3000, Easing.Out)
                 .Finally(_ =>
                 {
-                    if (nextScreen != null) this.Push(nextScreen);
+                    this.Push(new MainMenu.MainMenu());
                 });
         }
 

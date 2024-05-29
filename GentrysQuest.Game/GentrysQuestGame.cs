@@ -1,13 +1,6 @@
-﻿using GentrysQuest.Game.Content.Characters;
-using GentrysQuest.Game.Content.Weapons;
-using GentrysQuest.Game.Database;
-using GentrysQuest.Game.Entity;
-using GentrysQuest.Game.Entity.Weapon;
-using GentrysQuest.Game.Graphics.TextStyles;
+﻿using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Overlays.Notifications;
-using GentrysQuest.Game.Screens.Gameplay;
-using GentrysQuest.Game.Screens.Intro;
-using GentrysQuest.Game.Screens.MainMenu;
+using GentrysQuest.Game.Screens.LoadingScreen;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
@@ -15,17 +8,11 @@ using osu.Framework.Screens;
 
 namespace GentrysQuest.Game
 {
-    public partial class GentrysQuestGame : GentrysQuestGameBase
+    public partial class GentrysQuestGame(bool arcadeMode) : GentrysQuestGameBase
     {
         private ScreenStack screenStack;
         private readonly VersionText versionText = new VersionText("Super Dooper Beta");
         private readonly NotificationContainer notificationContainer = new NotificationContainer();
-        private readonly bool arcadeMode;
-
-        public GentrysQuestGame(bool arcadeMode)
-        {
-            this.arcadeMode = arcadeMode;
-        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -41,20 +28,7 @@ namespace GentrysQuest.Game
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
-            if (arcadeMode)
-            {
-                Character character = new BraydenMesserschmidt();
-                Weapon weapon = new BraydensOsuPen();
-                character.SetWeapon(weapon);
-                GameData.Reset();
-                GameData.Characters.Add(character);
-                GameData.EquipCharacter(character);
-                Gameplay gameplayScreen = new Gameplay();
-                // screenStack.Push(new Intro(gameplayScreen));
-                screenStack.Push(gameplayScreen);
-            }
-            else screenStack.Push(new Intro(new MainMenu()));
+            screenStack.Push(new LoadingScreen());
         }
     }
 }
