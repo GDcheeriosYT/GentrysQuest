@@ -1,59 +1,95 @@
-﻿namespace GentrysQuest.Game.Entity
+﻿using System;
+using GentrysQuest.Game.Utils;
+using osu.Framework.Bindables;
+
+namespace GentrysQuest.Game.Entity
 {
     public class Stat
     {
-        protected string name; // display name for other languages and etc
-        protected StatTypes statType; // this is how we get what stat we're looking at
-        protected int point; // this determines bonus stat value for entity
-        protected double defaultValue { get; private set; }
-        private double oldTotal;
-        protected double minimumValue { get; }
-        protected double currentValue { get; private set; }
-        protected double additionalValue { get; private set; }
+        public readonly string Name; // display name for other languages and etc
+        protected StatType StatType; // this is how we get what stat we're looking at
+        protected readonly bool ResetsOnUpdate;
 
-        public Stat(string name, StatTypes statType, double minimumValue)
+        /// <summary>
+        /// This is the bonus stat calculation variable.
+        /// Use this in entities UpdateStats method to determine its effect on the calculation.
+        /// </summary>
+        public int point;
+
+        public Bindable<double> Default { get; private set; } = new();
+        public Bindable<double> Minimum { get; } = new();
+        public Bindable<double> Current { get; private set; } = new();
+        public Bindable<double> Additional { get; private set; } = new();
+
+        public Stat(string name, StatType statType, double minimumValue, bool resetsOnUpdate = true)
         {
-            this.name = name;
-            this.statType = statType;
-            this.minimumValue = minimumValue;
+            Name = name;
+            StatType = statType;
+            Minimum.Value = minimumValue;
+            Current.Value = Total();
+            ResetsOnUpdate = resetsOnUpdate;
+            calculate();
         }
 
-        private void Calculate()
+        private void calculate()
         {
-            UpdateCurrentValue(oldTotal - Total());
+            double difference = Current.Value;
+            Current.Value = Total();
+            difference -= Current.Value;
+            if (!ResetsOnUpdate) UpdateCurrentValue(difference);
+        }
+
+        public void ResetAdditionalValue() => Additional.Value = 0;
+
+        public void RestoreValue()
+        {
+            Current.Value = Total();
         }
 
         public void UpdateCurrentValue(double updateDifference)
         {
-            currentValue += updateDifference;
+            var potentialChange = Current.Value + updateDifference;
+
+            if (potentialChange > Total()) { Current.Value = Total(); }
+            else if (potentialChange < 0) { Current.Value = 0; }
+            else Current.Value = potentialChange;
         }
 
         public void SetDefaultValue(double value)
         {
-            oldTotal = Total();
-            this.defaultValue = value;
-            Calculate();
+            Default.Value = value;
+            calculate();
         }
 
-        public void SetAdditionalValue(double value)
+        public void Add(double value)
         {
-            oldTotal = Total();
-            this.additionalValue = value;
+            Additional.Value += value;
+            calculate();
+        }
+
+        public void SetAdditional(double value)
+        {
+            Additional.Value = value;
+            calculate();
         }
 
         protected Stat()
         {
-            throw new System.NotImplementedException();
+            // TODO: Make this do something?
         }
 
-        public double Total()
+        public double GetPercentFromDefault(float percent) => MathBase.GetPercent(Default.Value, percent);
+        public double GetPercentFromAdditional(float percent) => MathBase.GetPercent(Additional.Value, percent);
+        public double GetPercentFromTotal(float percent) => MathBase.GetPercent(Total(), percent);
+
+        public virtual double Total()
         {
-            return minimumValue + defaultValue + additionalValue;
+            return Math.Round(Minimum.Value + Default.Value + Additional.Value, 2);
         }
 
-        public double Difference()
+        public override string ToString()
         {
-            return Total() - currentValue;
+            return $"{Name}: {Minimum.Value + Default.Value} + {Additional.Value} ({Total()})";
         }
     }
 }

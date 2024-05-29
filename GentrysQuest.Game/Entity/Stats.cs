@@ -1,27 +1,87 @@
 ﻿namespace GentrysQuest.Game.Entity
 {
+    /// <summary>
+    /// Stat management class /// </summary>
     public class Stats
     {
-        private IntStat health = new IntStat("Health", StatTypes.Health, 1000);
-        private IntStat attack = new IntStat("Attack", StatTypes.Attack, 30);
-        private IntStat defense = new IntStat("Defense", StatTypes.Defense, 30);
-        private Stat critRate = new Stat("CritRate", StatTypes.CritRate, 1);
-        private Stat critDamage = new Stat("CritDamage", StatTypes.CritDamage, 100);
-        private Stat speed = new Stat("Speed", StatTypes.Speed, 1);
-        private Stat attackSpeed = new Stat("AttackSpeed", StatTypes.AttackSpeed, 1);
+        public readonly Stat Health = new IntStat("Health", StatType.Health, 100, false);
+        public readonly Stat Attack = new IntStat("Attack", StatType.Attack, 10);
+        public readonly Stat Defense = new IntStat("Defense", StatType.Defense, 6);
+        public readonly Stat CritRate = new IntStat("CritRate", StatType.CritRate, 1);
+        public readonly Stat CritDamage = new IntStat("CritDamage", StatType.CritDamage, 20);
+        public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);
+        public readonly Stat AttackSpeed = new Stat("AttackSpeed", StatType.AttackSpeed, 1);
+        private readonly Stat[] statGrouping;
 
-        public IntStat Health => health;
+        public Stats()
+        {
+            statGrouping = new Stat[]
+            {
+                Health,
+                Attack,
+                Defense,
+                CritRate,
+                CritDamage,
+                Speed,
+                AttackSpeed
+            };
+        }
 
-        public IntStat Attack => attack;
+        public Stat GetStat(string name)
+        {
+            foreach (Stat stat in statGrouping)
+            {
+                if (name == stat.Name) return stat;
+            }
 
-        public IntStat Defense => defense;
+            return null;
+        }
 
-        public Stat CritRate => critRate;
+        public Stat[] GetStats() => statGrouping;
 
-        public Stat CritDamage => critDamage;
+        /// <summary>
+        /// Restores all stat values to original value
+        /// </summary>
+        public void Restore()
+        {
+            foreach (Stat stat in statGrouping)
+            {
+                stat.RestoreValue();
+            }
+        }
 
-        public Stat Speed => speed;
+        /// <summary>
+        /// Resets all additional values
+        /// </summary>
+        public void ResetAdditionalValues()
+        {
+            foreach (Stat stat in statGrouping)
+            {
+                stat.ResetAdditionalValue();
+            }
+        }
 
-        public Stat AttackSpeed => attackSpeed;
+        public int GetPointTotal()
+        {
+            int points = 1;
+
+            foreach (Stat stat in statGrouping)
+            {
+                points += stat.point;
+            }
+
+            return points;
+        }
+
+        public override string ToString()
+        {
+            return $"{Health}\n"
+                   + $"{Attack}\n"
+                   + $"{Defense}\n"
+                   + $"{CritRate}\n"
+                   + $"{CritDamage}\n"
+                   + $"{Speed}\n"
+                   + $"{AttackSpeed}";
+        }
     }
 }

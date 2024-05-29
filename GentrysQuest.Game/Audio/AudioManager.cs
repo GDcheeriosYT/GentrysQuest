@@ -8,14 +8,14 @@ namespace GentrysQuest.Game.Audio
 {
     public static class AudioManager
     {
-        private static Volume gameVolume = new Volume(1);
-        private static Volume musicVolume = new Volume(1);
-        private static Volume soundVolume = new Volume(1);
+        private static readonly Volume gameVolume = new Volume(0.5);
+        private static readonly Volume musicVolume = new Volume(0.25);
+        private static readonly Volume soundVolume = new Volume(0.25);
 
         [CanBeNull]
         private static DrawableTrack gameMusic;
 
-        private static int fadeTime = 5000;
+        private const int FADE_TIME = 5000;
 
         public static void ChangeMusic(DrawableTrack track)
         {
@@ -25,7 +25,7 @@ namespace GentrysQuest.Game.Audio
             {
                 gameMusic = track;
                 gameMusic.Start();
-                gameMusic.VolumeTo(musicVolume.Amount, fadeTime);
+                gameMusic.VolumeTo(musicVolume.Amount, FADE_TIME);
             };
 
             Logger.Log($"music volume is {musicVolume.Amount}");
@@ -35,12 +35,19 @@ namespace GentrysQuest.Game.Audio
                 gameMusic = track;
                 gameMusic.VolumeTo(0);
                 gameMusic.Start();
-                gameMusic.VolumeTo(musicVolume.Amount, fadeTime);
+                gameMusic.VolumeTo(musicVolume.Amount, FADE_TIME);
             }
             else
             {
-                gameMusic.VolumeTo(0, fadeTime).Then().Finally(_ => modifyTrack());
+                gameMusic.VolumeTo(0, FADE_TIME).Then().Finally(_ => modifyTrack());
             }
+        }
+
+        public static void PlaySound(DrawableSample sample)
+        {
+            Logger.Log("playing sound");
+            sample.VolumeTo(soundVolume.Amount);
+            sample.Play();
         }
 
         public static void ChangeMusicVolume(int percent) { musicVolume.Amount = (double)percent / 100 / gameVolume.Amount; }

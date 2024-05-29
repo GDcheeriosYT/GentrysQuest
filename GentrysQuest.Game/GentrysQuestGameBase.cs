@@ -20,7 +20,7 @@ namespace GentrysQuest.Game
             base.Content.Add(Content = new DrawSizePreservingFillContainer
             {
                 // You may want to change TargetDrawSize to your "default" resolution, which will decide how things scale and position when using absolute coordinates.
-                TargetDrawSize = new Vector2(1366, 768)
+                TargetDrawSize = new Vector2(1000, 1000)
             });
         }
 

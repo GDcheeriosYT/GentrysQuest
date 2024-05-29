@@ -1,15 +1,22 @@
 ﻿namespace GentrysQuest.Game.Entity
 {
-    public class Experience
+    public class Experience(Xp xp, Level level)
     {
-        public Xp xp { get; }
-        public Level level { get; }
+        public Xp Xp { get; } = xp;
+        public Level Level { get; } = level;
 
-        public Experience(Xp xp, Level level)
+        public Experience()
+            : this(new Xp(), new Level())
         {
-            this.xp = xp;
-            this.level = level;
+        }
+
+        public int CurrentLevel() => Level.Current.Value;
+
+        public int CurrentXp() => Xp.Current.Value;
+
+        public override string ToString()
+        {
+            return $"{Level} {Xp}";
         }
     }
 }
-
