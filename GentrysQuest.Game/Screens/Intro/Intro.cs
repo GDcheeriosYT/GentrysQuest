@@ -75,13 +75,13 @@ namespace GentrysQuest.Game.Screens.Intro
             });
 
             framework.Delay(3000).Then()
-                     .FadeInFromZero(400, Easing.InExpo);
+                     .FadeInFromZero(1000, Easing.InExpo);
 
             Schedule(() => osuText.SelectMany(t => t.Drawables).ForEach(t =>
             {
                 t.Delay(5000).Then()
-                 .FadeIn(100)
-                 .ScaleTo(new Vector2(1, 1), 100, Easing.OutQuart);
+                 .FadeIn(300)
+                 .ScaleTo(new Vector2(1, 1), 300, Easing.OutQuart);
                 t.Colour = Color4.LightPink;
             }));
 
