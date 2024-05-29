@@ -1,4 +1,5 @@
-﻿using GentrysQuest.Game.Utils;
+﻿using System;
+using GentrysQuest.Game.Utils;
 using osu.Framework.Bindables;
 
 namespace GentrysQuest.Game.Entity
@@ -81,9 +82,9 @@ namespace GentrysQuest.Game.Entity
         public double GetPercentFromAdditional(float percent) => MathBase.GetPercent(Additional.Value, percent);
         public double GetPercentFromTotal(float percent) => MathBase.GetPercent(Total(), percent);
 
-        public double Total()
+        public virtual double Total()
         {
-            return Minimum.Value + Default.Value + Additional.Value;
+            return Math.Round(Minimum.Value + Default.Value + Additional.Value, 2);
         }
 
         public override string ToString()

@@ -4,11 +4,11 @@
     /// Stat management class /// </summary>
     public class Stats
     {
-        public readonly Stat Health = new Stat("Health", StatType.Health, 500, false);
-        public readonly Stat Attack = new Stat("Attack", StatType.Attack, 10);
-        public readonly Stat Defense = new Stat("Defense", StatType.Defense, 6);
-        public readonly Stat CritRate = new Stat("CritRate", StatType.CritRate, 1);
-        public readonly Stat CritDamage = new Stat("CritDamage", StatType.CritDamage, 20);
+        public readonly Stat Health = new IntStat("Health", StatType.Health, 100, false);
+        public readonly Stat Attack = new IntStat("Attack", StatType.Attack, 10);
+        public readonly Stat Defense = new IntStat("Defense", StatType.Defense, 6);
+        public readonly Stat CritRate = new IntStat("CritRate", StatType.CritRate, 1);
+        public readonly Stat CritDamage = new IntStat("CritDamage", StatType.CritDamage, 20);
         public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);
         public readonly Stat AttackSpeed = new Stat("AttackSpeed", StatType.AttackSpeed, 1);
         private readonly Stat[] statGrouping;

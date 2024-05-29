@@ -84,19 +84,21 @@ namespace GentrysQuest.Game.Entity
 
             if (IsPercent) value /= 4;
 
-            switch (ParentEntity)
-            {
-                case Weapon.Weapon _:
-                    value /= 2;
-                    break;
-            }
-
             handleValue(value);
         }
 
         private void handleValue(double value)
         {
-            Value.Value = (ParentEntity.StarRating.Value * 0.8f) * Level * value;
+            switch (ParentEntity)
+            {
+                case Weapon.Weapon weapon:
+                    Value.Value = Level * (weapon.Difficulty + 1);
+                    break;
+
+                default:
+                    Value.Value = (ParentEntity.StarRating.Value * 0.8f) * Level * value;
+                    break;
+            }
         }
 
         public void Improve()

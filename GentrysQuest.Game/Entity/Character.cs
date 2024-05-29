@@ -41,7 +41,7 @@ public class Character : Entity
         Difficulty = (byte)(1 + level / 20);
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 100, Stats.Health.point, 100) +
+            CalculatePointBenefit(Difficulty * 500, Stats.Health.point, 250) +
             CalculatePointBenefit(level * 50, Stats.Health.point, 25) +
             CalculatePointBenefit(starRating * 15, Stats.Health.point, 25)
         );

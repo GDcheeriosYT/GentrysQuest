@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GentrysQuest.Game.Content.Enemies;
-using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
 using GentrysQuest.Game.Content.Maps;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
@@ -137,7 +136,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             enemies.Add(newEnemy);
             enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
-            newEnemy.GetEntityObject().OnDeath += delegate { GameData.Artifacts.Add(new OsuTablet()); };
+            // newEnemy.GetEntityObject().OnDeath += delegate { GameData.Artifacts.Add(map.MapReference.Families[MathBase.R]); };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);
         }

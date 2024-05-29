@@ -36,9 +36,9 @@ public class Enemy : Entity
             CalculatePointBenefit(starRating, Stats.Defense.point, 3)
         );
 
-        Stats.CritRate.SetDefaultValue(100);
+        Stats.CritRate.SetDefaultValue(5);
 
-        Stats.CritDamage.SetDefaultValue(20);
+        Stats.CritDamage.SetDefaultValue(Difficulty * 20);
 
         Stats.Speed.SetDefaultValue(
             CalculatePointBenefit(0, Stats.Speed.point, 0.2)
