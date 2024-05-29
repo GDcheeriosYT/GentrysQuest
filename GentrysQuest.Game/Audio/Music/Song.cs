@@ -1,15 +1,14 @@
-using osu.Framework.Graphics.Audio;
-
 namespace GentrysQuest.Game.Audio.Music
 {
-    public class Song
+    public class Song : ISong
     {
-        private DrawableTrack song;
-        private TimingPointsHandler timingPointsHandler;
+        public string Name { get; } = "Song";
+        public string ArtistName { get; } = "Artist";
+        public TimingPointsHandler TimingPoints { get; } = new();
     }
 }
 
-// These are quotes my fellow co workers made on this file.
+// These are quotes my fellow co-workers made on this file.
 
 // "benis benis bines" - Payton Schutz
 // "my meat is super big= 1v2" - Vitalijs Cameron

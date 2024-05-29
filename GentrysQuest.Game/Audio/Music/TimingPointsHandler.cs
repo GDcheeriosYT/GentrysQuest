@@ -4,11 +4,8 @@ namespace GentrysQuest.Game.Audio.Music
 {
     public class TimingPointsHandler
     {
-        private List<float> timingPoints;
+        private readonly List<TimingPoint> timingPoints = [];
 
-        public TimingPointsHandler(List<float> timingPoints)
-        {
-            this.timingPoints = timingPoints;
-        }
+        public void AddPoint(TimingPoint newPoint) => timingPoints.Add(newPoint);
     }
 }

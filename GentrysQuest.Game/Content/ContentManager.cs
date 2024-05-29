@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GentrysQuest.Game.Audio.Music;
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Content.Families;
@@ -18,6 +19,7 @@ public class ContentManager
     public readonly List<Enemy> Enemies = new();
     public readonly List<Character> Characters = new();
     public readonly List<Weapon> Weapons = new();
+    public readonly List<Song> Songs = new();
 
     public ContentManager()
     {
@@ -50,6 +52,12 @@ public class ContentManager
 
         Weapons.Add(new Knife());
         Weapons.Add(new BraydensOsuPen());
+
+        #endregion
+
+        #region Songs
+
+
 
         #endregion
     }
