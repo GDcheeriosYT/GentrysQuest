@@ -109,6 +109,8 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnDeath += delegate { Sprite.FadeOut(100); };
             entity.OnSpawn += delegate { Sprite.FadeIn(100); };
             entity.OnSpawn += delegate { lastRegenTime = Clock.CurrentTime; };
+            entity.UpdateStats();
+            entity.Stats.Restore();
         }
 
         [BackgroundDependencyLoader]
@@ -133,6 +135,8 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected virtual void Move(float direction, double speed)
         {
+            if (!Entity.CanMove) return;
+
             float value = (float)(Clock.ElapsedFrameTime * speed);
             colliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
 
@@ -145,6 +149,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <param name="position">Location of the attack</param>
         public void Attack(Vector2 position)
         {
+            if (!Entity.CanAttack) return;
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(Position + center, position);
             if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle + 90);

@@ -193,22 +193,20 @@ namespace GentrysQuest.Game.Entity.Drawables
                         switch (Weapon.Holder)
                         {
                             case Character character:
+                                if (isWeapon) return;
+
                                 if (entity.IsDead)
                                 {
+                                    GameData.CurrentStats.AddToStat(StatTypes.Hits);
+                                    if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.Crits);
+                                    GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
+                                    GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
                                     int money = entity.GetMoneyReward();
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
                                     GameData.Money.Hand(money);
                                     GameData.Weapons.Add(entity.GetWeaponReward());
                                     GameData.CurrentStats.AddToStat(StatTypes.Kills);
-                                }
-
-                                if (!isWeapon)
-                                {
-                                    GameData.CurrentStats.AddToStat(StatTypes.Hits);
-                                    if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.Crits);
-                                    GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
-                                    GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
                                 }
 
                                 break;

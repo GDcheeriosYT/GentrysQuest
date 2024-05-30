@@ -77,7 +77,6 @@ public class Character : Entity
 
         Stats.RegenSpeed.SetDefaultValue(
             1 +
-            CalculatePointBenefit(Difficulty * 1, Stats.RegenSpeed.point, 1) +
             CalculatePointBenefit(0, Stats.RegenSpeed.point, 1)
         );
 

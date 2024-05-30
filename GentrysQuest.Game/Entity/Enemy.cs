@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GentrysQuest.Game.Utils;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity;
 
@@ -16,11 +15,10 @@ public class Enemy : Entity
     public override void UpdateStats()
     {
         int level = Experience.Level.Current.Value;
-        int starRating = StarRating.Value;
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 2000, Stats.Health.point, 500) +
-            CalculatePointBenefit(level * 100, Stats.Health.point, 15)
+            CalculatePointBenefit(Difficulty * 2000, Stats.Health.point, 1000) +
+            CalculatePointBenefit(level * 45, Stats.Health.point, 100)
         );
 
         Stats.Attack.SetDefaultValue(
@@ -50,8 +48,6 @@ public class Enemy : Entity
 
     public void SetWeapon()
     {
-        Logger.Log(WeaponChoices.Count.ToString());
         SetWeapon(WeaponChoices[MathBase.RandomInt(0, WeaponChoices.Count)]);
-        Logger.Log(Weapon?.ToString());
     }
 }

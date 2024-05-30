@@ -1,25 +1,22 @@
 using System;
+using System.Linq;
 using GentrysQuest.Game.Database;
 
 namespace GentrysQuest.Game.Entity
 {
     public class ArtifactManager(Character parent)
     {
-        private Artifact[] artifacts { get; } = new Artifact[5];
+        private Artifact[] artifacts = new Artifact[5];
         private float averageRating;
         public Action OnChangeArtifact;
 
         private void findAverageRating()
         {
-            int count = 0;
-
-            foreach (Artifact artifact in artifacts)
-            {
-                count += artifact.StarRating.Value;
-            }
-
-            averageRating = count / 5f;
+            int count = artifacts.Where(artifact => artifact != null).Sum(artifact => artifact.StarRating.Value);
+            averageRating = count / GetArtifactCount();
         }
+
+        public int GetArtifactCount() => artifacts.Count(artifact => artifact != null);
 
         public Artifact Get(int index) => artifacts[index];
 
@@ -29,8 +26,11 @@ namespace GentrysQuest.Game.Entity
         {
             artifacts[index] = artifact;
             artifact.Holder = parent;
+            findAverageRating();
             OnChangeArtifact?.Invoke();
         }
+
+        public void Clear() => artifacts = new Artifact[5];
 
         public void Remove(int index)
         {

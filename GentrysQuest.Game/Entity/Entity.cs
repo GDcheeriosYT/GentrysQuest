@@ -19,6 +19,8 @@ namespace GentrysQuest.Game.Entity
         public float SpeedModifier = 1;
         public bool IsDodging = false;
         public bool CanDodge = true;
+        public bool CanAttack = true;
+        public bool CanMove = true;
 
         public Entity()
         {
@@ -57,14 +59,16 @@ namespace GentrysQuest.Game.Entity
 
         public void Spawn()
         {
+            CanMove = true;
+            CanAttack = true;
             IsDead = false;
-            UpdateStats();
-            Stats.Restore();
             OnSpawn?.Invoke();
         }
 
         public virtual void Die()
         {
+            CanMove = false;
+            CanAttack = false;
             IsDead = true;
             OnDeath?.Invoke();
         }

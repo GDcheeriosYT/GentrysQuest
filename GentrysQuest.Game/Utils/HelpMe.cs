@@ -27,6 +27,7 @@ namespace GentrysQuest.Game.Utils
         {
             int min = difficulty * 20;
             int max = (difficulty + 1) * 20 - 1;
+            if (min == 0) min++;
 
             levelRef += min;
             levelRef += MathBase.RandomInt(-3, 3);

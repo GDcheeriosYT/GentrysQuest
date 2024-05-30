@@ -2,6 +2,7 @@
 using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
 using GentrysQuest.Game.Content.Maps;
+using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
@@ -130,7 +131,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         public void AddEnemy(int level)
         {
             Enemy enemy = new TestEnemy(1);
-            while (enemy.Experience.Level.Current.Value < level) enemy.LevelUp();
+            enemy.Experience.Level.Current.Value = level;
+            enemy.UpdateStats();
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);
             newEnemy.Position = new Vector2(MathBase.RandomInt(-500, 500), MathBase.RandomInt(-500, 500));
             AddInternal(newEnemy);
@@ -162,7 +164,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         public void SetDifficulty()
         {
             gameplayDifficulty = map.MapReference.Difficulty;
-            if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetEntityObject().Difficulty - 1;
+            if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetEntityObject().Difficulty;
         }
 
         /// <summary>
@@ -275,9 +277,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
-            Container statContainer = new Container
-            {
-            };
             Container deathContainer = new Container
             {
                 Alpha = 0,
@@ -303,9 +302,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             AddInternal(deathContainer);
             isPaused = true;
             removeAllEnemies();
-            playerEntity.RemoveClickContainer();
-            RemoveInternal(playerEntity, true);
-            playerEntity.Dispose();
             inventoryOverlay.Hide();
             inventoryButton.Hide();
             gameplayHud.Delay(3000).Then().FadeOut();
@@ -320,17 +316,49 @@ namespace GentrysQuest.Game.Screens.Gameplay
                               .ScaleTo(3, 250, Easing.InOutCirc);
             scoreFlowContainer.Anchor = Anchor.Centre;
             scoreFlowContainer.Origin = Anchor.Centre;
+            InventoryButton retryButton = new InventoryButton("Retry")
+            {
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.BottomCentre,
+                Size = new Vector2(250, 100),
+                Margin = new MarginPadding { Bottom = 5 }
+            };
             EndStatContainer endStatContainer = new EndStatContainer
             {
-                Size = new Vector2(1, 0.83f),
-                Anchor = Anchor.BottomCentre,
-                Origin = Anchor.BottomCentre
+                Size = new Vector2(1, 0.65f),
+                RelativePositionAxes = Axes.Y,
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre
             };
+            retryButton.SetAction(delegate
+            {
+                RemoveInternal(retryButton, true);
+                RemoveInternal(deathContainer, true);
+                RemoveInternal(endStatContainer, true);
+                isPaused = false;
+                scoreFlowContainer.Anchor = Anchor.TopRight;
+                scoreFlowContainer.Origin = Anchor.TopRight;
+                scoreFlowContainer.Scale = new Vector2(1);
+                scoreFlowContainer.Position = new Vector2(0);
+                GameData.Artifacts.Clear();
+                GameData.Weapons.Clear();
+                GameData.EquipedCharacter.Weapon = new BraydensOsuPen();
+                GameData.EquipedCharacter.Artifacts.Clear();
+                GameData.EquipedCharacter.UpdateStats();
+                GameData.EquipedCharacter.Stats.Restore();
+                map.FadeIn();
+                gameplayHud.FadeIn();
+                SetUp();
+            });
             AddInternal(endStatContainer);
             Scheduler.AddDelayed(() =>
             {
                 endStatContainer.PopulateStats(GameData.CurrentStats);
                 GameData.WrapUpStats();
+            }, 9000);
+            Scheduler.AddDelayed(() =>
+            {
+                AddInternal(retryButton);
             }, 9000);
         }
 
