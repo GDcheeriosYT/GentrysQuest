@@ -28,7 +28,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 Position = new Vector2(12, 0),
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreLeft,
-                Font = FontUsage.Default.With(size: 36)
+                Font = FontUsage.Default.With(size: 32)
             });
             AddInternal(name = new SpriteText
             {

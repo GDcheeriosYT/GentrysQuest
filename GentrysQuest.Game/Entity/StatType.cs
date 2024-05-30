@@ -8,6 +8,8 @@
         CritRate = 4,
         CritDamage = 5,
         Speed = 6,
-        AttackSpeed = 7
+        AttackSpeed = 7,
+        RegenSpeed = 8,
+        RegenStrength = 9
     }
 }

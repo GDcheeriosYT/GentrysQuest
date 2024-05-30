@@ -4,7 +4,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.Events;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
@@ -47,16 +46,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
             };
         }
 
-        public void SetAction(Action action) => this.action = action;
-
         public void SetText(string text) => buttonText.Text = text;
 
         public void SetTextColor(Colour4 colour) => buttonText.Colour = colour;
-
-        protected override bool OnClick(ClickEvent e)
-        {
-            action.Invoke();
-            return base.OnClick(e);
-        }
     }
 }

@@ -20,20 +20,17 @@ public class Enemy : Entity
 
         Stats.Health.SetDefaultValue(
             CalculatePointBenefit(Difficulty * 2000, Stats.Health.point, 500) +
-            CalculatePointBenefit(level * 100, Stats.Health.point, 10) +
-            CalculatePointBenefit(starRating, Stats.Health.point, 50)
+            CalculatePointBenefit(level * 100, Stats.Health.point, 15)
         );
 
         Stats.Attack.SetDefaultValue(
             CalculatePointBenefit(Difficulty * 50, Stats.Attack.point, 20) +
-            CalculatePointBenefit(level * 5, Stats.Attack.point, 5) +
-            CalculatePointBenefit(starRating, Stats.Attack.point, 3)
+            CalculatePointBenefit(level * 5, Stats.Attack.point, 5)
         );
 
         Stats.Defense.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 20, Stats.Defense.point, 10) +
-            CalculatePointBenefit(level * 2, Stats.Defense.point, 5) +
-            CalculatePointBenefit(starRating, Stats.Defense.point, 3)
+            CalculatePointBenefit(Difficulty * 20, Stats.Defense.point, 18) +
+            CalculatePointBenefit(level * 4, Stats.Defense.point, 2)
         );
 
         Stats.CritRate.SetDefaultValue(5);

@@ -68,6 +68,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// </summary>
         public const float SLOWING_FACTOR = 0.01f;
 
+        private double lastRegenTime;
+
         // Movement events
         public delegate void Movement(float direction, double speed);
 
@@ -106,6 +108,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
             entity.OnDeath += delegate { Sprite.FadeOut(100); };
             entity.OnSpawn += delegate { Sprite.FadeIn(100); };
+            entity.OnSpawn += delegate { lastRegenTime = Clock.CurrentTime; };
         }
 
         [BackgroundDependencyLoader]
@@ -120,6 +123,12 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.OnDamage += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Damage")))); };
             Entity.OnLevelUp += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Levelup")))); };
             Entity.OnDeath += delegate { AudioManager.PlaySound(new DrawableSample(samples.Get(Entity.AudioMapping.Get("Death")))); };
+        }
+
+        private void regen()
+        {
+            lastRegenTime = Clock.CurrentTime;
+            Entity.Heal((int)Entity.Stats.RegenStrength.Current.Value);
         }
 
         protected virtual void Move(float direction, double speed)
@@ -233,9 +242,11 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override void Update()
         {
-            colliderBox.Position = new Vector2(0);
-
             base.Update();
+            colliderBox.Position = new Vector2(0);
+            double elapsedRegenTime = Clock.CurrentTime - lastRegenTime;
+            if (Entity.Stats.RegenSpeed.Current.Value == 0) return;
+            if (elapsedRegenTime * Entity.Stats.RegenSpeed.Current.Value >= 1000) regen();
         }
     }
 }

@@ -1,4 +1,9 @@
 using GentrysQuest.Game.Audio;
+using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Content.Weapons;
+using GentrysQuest.Game.Database;
+using GentrysQuest.Game.Entity;
+using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Overlays.UserMenu;
 using osu.Framework.Allocation;
@@ -8,6 +13,7 @@ using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
+using osuTK;
 using osuTK.Graphics;
 
 namespace GentrysQuest.Game.Screens.MainMenu
@@ -18,6 +24,7 @@ namespace GentrysQuest.Game.Screens.MainMenu
         private TitleText title;
         private UserMenu userMenu;
         private DrawableTrack menuTheme;
+        private MainMenuButton mainMenuButton;
 
         [BackgroundDependencyLoader]
         private void load(ITrackStore trackStore)
@@ -34,8 +41,22 @@ namespace GentrysQuest.Game.Screens.MainMenu
                 {
                     Alpha = 0
                 },
-                userMenu = new UserMenu()
+                mainMenuButton = new MainMenuButton("Play")
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(300, 150)
+                }
             };
+            mainMenuButton.SetAction(delegate
+            {
+                Character character = new TestCharacter(1);
+                Weapon weapon = new BraydensOsuPen();
+                character.Weapon = weapon;
+                GameData.Characters.Add(character);
+                GameData.EquipCharacter(character);
+                this.Push(new Gameplay.Gameplay());
+            });
         }
 
         public void press_play()
@@ -47,7 +68,6 @@ namespace GentrysQuest.Game.Screens.MainMenu
         public override void OnEntering(ScreenTransitionEvent e)
         {
             base.OnEntering(e);
-            userMenu.ToggleOff();
             background.FadeColour(ColourInfo.GradientVertical(Color4.DarkGray, Color4.White), 120, Easing.In);
             title.Delay(120).Then().FadeIn(120);
         }

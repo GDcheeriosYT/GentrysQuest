@@ -11,6 +11,8 @@
         public readonly Stat CritDamage = new IntStat("CritDamage", StatType.CritDamage, 20);
         public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);
         public readonly Stat AttackSpeed = new Stat("AttackSpeed", StatType.AttackSpeed, 1);
+        public readonly Stat RegenSpeed = new Stat("RegenSpeed", StatType.RegenSpeed, 0);
+        public readonly Stat RegenStrength = new IntStat("RegenStrength", StatType.RegenStrength, 1);
         private readonly Stat[] statGrouping;
 
         public Stats()
@@ -23,7 +25,9 @@
                 CritRate,
                 CritDamage,
                 Speed,
-                AttackSpeed
+                AttackSpeed,
+                RegenSpeed,
+                RegenStrength
             };
         }
 

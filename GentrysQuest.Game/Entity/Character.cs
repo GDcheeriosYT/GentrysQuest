@@ -38,10 +38,9 @@ public class Character : Entity
         Stats.ResetAdditionalValues();
         int level = Experience.Level.Current.Value;
         int starRating = StarRating.Value;
-        Difficulty = (byte)(1 + level / 20);
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 500, Stats.Health.point, 250) +
+            CalculatePointBenefit(Difficulty * 1000, Stats.Health.point, 250) +
             CalculatePointBenefit(level * 50, Stats.Health.point, 25) +
             CalculatePointBenefit(starRating * 15, Stats.Health.point, 25)
         );
@@ -76,6 +75,16 @@ public class Character : Entity
             CalculatePointBenefit(0, Stats.AttackSpeed.point, 0.3)
         );
 
+        Stats.RegenSpeed.SetDefaultValue(
+            1 +
+            CalculatePointBenefit(Difficulty * 1, Stats.RegenSpeed.point, 1) +
+            CalculatePointBenefit(0, Stats.RegenSpeed.point, 1)
+        );
+
+        Stats.RegenStrength.SetDefaultValue(
+            CalculatePointBenefit(Difficulty * 1, Stats.RegenStrength.point, 1)
+        );
+
         if (Weapon != null) addToStat(Weapon.Buff);
 
         foreach (Artifact artifact in Artifacts.Get())
@@ -90,6 +99,8 @@ public class Character : Entity
                 }
             }
         }
+
+        if (Stats.CritRate.Total() > 100) Stats.CritDamage.Add(100 - Stats.CritRate.Total());
 
         base.UpdateStats();
     }

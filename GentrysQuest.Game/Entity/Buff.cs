@@ -46,59 +46,97 @@ namespace GentrysQuest.Game.Entity
         private void updateStats()
         {
             double value = 0;
+            double starRating = 0;
+            double level = 0;
+            double percentDiffer = 1;
 
             switch (StatType)
             {
                 case StatType.Health:
-                    value = 25;
+                    value = 40;
+                    starRating = 25;
+                    level = 20;
+                    percentDiffer = 8;
                     break;
 
                 case StatType.Attack:
-                    value = 10;
+                    value = 5;
+                    starRating = 15;
+                    level = 2;
+                    percentDiffer = 1.5;
                     break;
 
                 case StatType.Defense:
-                    value = 12;
+                    value = 2;
+                    starRating = 4;
+                    level = 2;
+                    percentDiffer = 1.2;
                     break;
 
                 case StatType.CritRate:
                     value = 1;
+                    starRating = 0.5;
+                    level = 0.25;
                     IsPercent = false;
                     break;
 
                 case StatType.CritDamage:
                     value = 2;
+                    starRating = 5;
+                    level = 1;
                     IsPercent = false;
                     break;
 
                 case StatType.Speed:
-                    value = 8;
-                    IsPercent = true;
+                    value = 0.05;
+                    starRating = 0.025;
+                    level = 0.06;
+                    IsPercent = false;
                     break;
 
                 case StatType.AttackSpeed:
-                    value = 8;
-                    IsPercent = true;
+                    value = 0.05;
+                    starRating = 0.025;
+                    level = 0.06;
+                    IsPercent = false;
+                    break;
+
+                case StatType.RegenSpeed:
+                    value = 0.25;
+                    starRating = 0.25;
+                    level = 0.25;
+                    IsPercent = false;
+                    break;
+
+                case StatType.RegenStrength:
+                    value = 0;
+                    starRating = 1;
+                    level = 1;
+                    IsPercent = false;
                     break;
             }
 
-            if (IsPercent) value /= 4;
-
-            handleValue(value);
+            if (!IsPercent) percentDiffer = 1;
+            handleValue(value, starRating, level, percentDiffer);
         }
 
-        private void handleValue(double value)
+        private void handleValue(double value, double starRating, double level, double percentDiffer)
         {
             switch (ParentEntity)
             {
                 case Weapon.Weapon weapon:
-                    Value.Value = Level * (weapon.Difficulty + 1);
+                    setValue(Level * (weapon.Difficulty + 1));
                     break;
 
                 default:
-                    Value.Value = (ParentEntity.StarRating.Value * 0.8f) * Level * value;
+                    setValue(((ParentEntity.StarRating.Value * starRating) + (Level * level) + value) / percentDiffer);
                     break;
             }
+        }
+
+        private void setValue(double value)
+        {
+            Value.Value = Math.Round(value, 2);
         }
 
         public void Improve()

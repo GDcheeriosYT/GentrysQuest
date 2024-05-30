@@ -10,7 +10,7 @@ namespace GentrysQuest.Game.Entity
         public Experience Experience { get; protected set; } = new();
         public TextureMapping TextureMapping { get; protected set; } = new();
         public AudioMapping AudioMapping { get; protected set; } = new();
-        public byte Difficulty { get; protected set; } = 1;
+        public byte Difficulty { get; protected set; } = 0;
 
         public delegate void EntityEvent();
 

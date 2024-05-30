@@ -1,3 +1,4 @@
+using System;
 using GentrysQuest.Game.Audio;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Sample;
@@ -11,6 +12,7 @@ namespace GentrysQuest.Game.Graphics
     {
         public AudioMapping Sounds = new();
         private ISampleStore samples;
+        private Action action;
 
         public GQButton()
         {
@@ -20,6 +22,8 @@ namespace GentrysQuest.Game.Graphics
 
         [BackgroundDependencyLoader]
         private void load(ISampleStore sampleStore) => samples = sampleStore;
+
+        public void SetAction(Action action) => this.action = action;
 
         protected override bool OnHover(HoverEvent e)
         {
@@ -34,6 +38,7 @@ namespace GentrysQuest.Game.Graphics
             string sound = "Default_Click";
             if (hasSound("Click")) sound = "Click";
             AudioManager.PlaySound(new DrawableSample(samples.Get(Sounds.Get(sound))));
+            action?.Invoke();
             return base.OnClick(e);
         }
 
