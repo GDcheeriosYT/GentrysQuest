@@ -20,17 +20,19 @@ namespace GentrysQuest.Game.Entity
 
         public void AddXp(int amount)
         {
-            while (Experience.Xp.add_xp(amount)) LevelUp();
+            while (Experience.Xp.add_xp(ref amount)) LevelUp();
             OnGainXp?.Invoke();
         }
 
         public void LevelUp()
         {
             Experience.Level.AddLevel();
-            Experience.Xp.CalculateRequirement(Experience.Level.Current.Value, StarRating.Value);
+            CalculateXpRequirement();
             Difficulty = (byte)(Experience.Level.Current.Value / 20);
 
             OnLevelUp?.Invoke();
         }
+
+        public void CalculateXpRequirement() => Experience.Xp.CalculateRequirement(Experience.Level.Current.Value, StarRating.Value);
     }
 }

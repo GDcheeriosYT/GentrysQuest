@@ -27,6 +27,7 @@ namespace GentrysQuest.Game.Entity
             OnLevelUp += UpdateStats;
             OnLevelUp += Stats.Restore;
             OnSwapWeapon += UpdateStats;
+            CalculateXpRequirement();
         }
 
         #region Events

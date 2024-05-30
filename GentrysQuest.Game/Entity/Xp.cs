@@ -1,4 +1,5 @@
-﻿using osu.Framework.Bindables;
+﻿using System;
+using osu.Framework.Bindables;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -11,17 +12,18 @@ namespace GentrysQuest.Game.Entity
         public Bindable<int> Requirement = new();
         public double Progress { get; private set; }
 
-        public bool add_xp(int amount)
+        public bool add_xp(ref int amount)
         {
-            Current.Value += amount;
-
-            if (Current.Value >= Requirement.Value)
+            if (Current.Value + amount >= Requirement.Value)
             {
-                Current.Value -= Requirement.Value;
+                amount -= (Requirement.Value - Current.Value);
+                Current.Value = 0;
                 return true;
             }
 
-            if (Requirement.Value > 0) Progress = float.Round((float)Current.Value / Requirement.Value * 100);
+            Current.Value += amount;
+
+            if (Requirement.Value > 0) Progress = MathF.Round((float)Current.Value / Requirement.Value * 100);
             else Progress = 100;
             return false;
         }
