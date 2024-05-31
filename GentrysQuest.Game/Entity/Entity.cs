@@ -36,6 +36,8 @@ namespace GentrysQuest.Game.Entity
 
         public delegate void EntityHealthEvent(int amount);
 
+        public delegate void EntityHitEvent(DamageDetails details);
+
         // Spawn / Death events
         public event EntitySpawnEvent OnSpawn;
         public event EntitySpawnEvent OnDeath;
@@ -50,8 +52,12 @@ namespace GentrysQuest.Game.Entity
         public event EntityEvent OnSwapWeapon;
         public event EntityEvent OnSwapArtifact;
 
-        // Other Events
+        // Combat events
         public event EntityEvent OnAttack;
+        public event EntityHitEvent OnHitEntity;
+        public event EntityHitEvent OnGetHit;
+
+        // Other Events
         public event EntityEvent OnUpdateStats;
 
         #endregion
@@ -88,6 +94,9 @@ namespace GentrysQuest.Game.Entity
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }
+
+        public void HitEntity(DamageDetails details) => OnHitEntity?.Invoke(details);
+        public void OnHit(DamageDetails details) => OnGetHit?.Invoke(details);
 
         public virtual void Crit(int amount)
         {

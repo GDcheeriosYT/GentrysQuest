@@ -20,6 +20,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         protected readonly DamageQueue DamageQueue = new();
         public AffiliationType Affiliation;
         protected float Distance;
+        private OnHitEffect onHitEffect;
 
         public DrawableWeapon(Weapon.Weapon weapon, AffiliationType affiliation)
         {
@@ -120,6 +121,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.ResetHitBox) DamageQueue.Clear();
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
                     if (pattern.MovementSpeed != null) Weapon.Holder.SpeedModifier = (float)pattern.MovementSpeed;
+                    if (pattern.OnHitEffect != null) onHitEffect = pattern.OnHitEffect;
                 }, delay);
                 delay += speed;
             }
@@ -147,6 +149,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 {
                     if (!DamageQueue.Check(hitbox))
                     {
+                        DamageDetails details = new DamageDetails();
                         Entity entity;
                         bool isCrit = false;
 
@@ -169,9 +172,20 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 Weapon.Holder.Stats.Attack.Current.Value,
                                 Weapon.Holder.Stats.CritDamage.Current.Value
                             );
+                            details.IsCrit = true;
                             entity.Crit(damage);
                         }
-                        else entity.Damage(damage);
+                        else
+                        {
+                            entity.Damage(damage);
+                        }
+
+                        details.Damage = damage;
+                        details.Receiver = entity;
+                        details.Sender = Weapon.Holder;
+
+                        entity.OnHit(details);
+                        Weapon.HitEntity(details);
 
                         if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
 

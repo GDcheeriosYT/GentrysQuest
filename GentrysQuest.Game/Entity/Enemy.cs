@@ -48,6 +48,6 @@ public class Enemy : Entity
 
     public void SetWeapon()
     {
-        SetWeapon(WeaponChoices[MathBase.RandomInt(0, WeaponChoices.Count)]);
+        SetWeapon(WeaponChoices[MathBase.RandomChoice(WeaponChoices.Count)]);
     }
 }

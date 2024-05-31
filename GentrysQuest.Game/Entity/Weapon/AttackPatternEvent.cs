@@ -15,6 +15,7 @@ namespace GentrysQuest.Game.Entity.Weapon
         public float? MovementSpeed = 1;
         public Easing Transition = Easing.None;
         public bool ResetHitBox = false;
+        public OnHitEffect OnHitEffect = null;
 
         public AttackPatternEvent()
             : this(0)
