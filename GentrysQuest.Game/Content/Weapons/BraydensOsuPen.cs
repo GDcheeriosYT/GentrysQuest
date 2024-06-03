@@ -45,7 +45,7 @@ namespace GentrysQuest.Game.Content.Weapons
             AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
                 { Direction = 360, Distance = distance, Transition = Easing.OutSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, ResetHitBox = true, MovementSpeed = movementSpeed });
 
-            #endregion
+            #endregion=
 
             #region TextureMapping
 

@@ -11,7 +11,7 @@ namespace GentrysQuest.Game.Entity.Weapon
         /// <summary>
         /// The effect
         /// </summary>
-        public IEffect Effect;
+        public StatusEffect Effect;
 
         /// <summary>
         /// If the effects will apply
