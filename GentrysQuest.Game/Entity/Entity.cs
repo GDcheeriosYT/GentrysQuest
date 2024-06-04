@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
@@ -155,6 +156,7 @@ namespace GentrysQuest.Game.Entity
         public void AddEffect(StatusEffect statusEffect)
         {
             bool inList = false;
+            statusEffect.SetEffector(this);
 
             foreach (var effect in Effects)
             {
@@ -166,6 +168,26 @@ namespace GentrysQuest.Game.Entity
             }
 
             if (!inList) Effects.Add(statusEffect);
+            OnEffect?.Invoke();
+        }
+
+        public void Affect(double time)
+        {
+            foreach (StatusEffect effect in Effects.ToList())
+            {
+                effect.SetTime(time);
+                effect.Handle();
+
+                if (!(time - effect.StartTime > effect.Duration)) continue;
+
+                if (effect.Stack == 1)
+                {
+                    Effects.Remove(effect);
+                    UpdateStats();
+                }
+                else effect.Stack--;
+            }
+
             OnEffect?.Invoke();
         }
 

@@ -1,10 +1,19 @@
+using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 
 namespace GentrysQuest.Game.Entity;
 
-public abstract class StatusEffect(int stack = 1)
+public abstract class StatusEffect
 {
+    protected StatusEffect(int duration = 1, int stack = 1)
+    {
+        Duration = new Second(duration);
+        Stack = stack;
+    }
+
+    protected StatusEffect(int duration) => Duration = new Second(duration);
+
     /// <summary>
     /// The name of the Effect duh
     /// </summary>
@@ -43,17 +52,45 @@ public abstract class StatusEffect(int stack = 1)
     /// <summary>
     /// The time between effect
     /// </summary>
-    public abstract double Interval { get; protected set; }
+    public virtual double Interval { get; protected set; } = new Second(1);
 
     /// <summary>
     /// How long the effect lasts
     /// </summary>
-    public abstract int Duration { get; protected set; }
+    public virtual int Duration { get; protected set; }
+
+    /// <summary>
+    /// This is how we tell where we are in the effect lifetime
+    /// </summary>
+    public double Time { get; private set; }
 
     /// <summary>
     /// How much of this effect is applied
     /// </summary>
-    public int Stack = stack;
+    public int Stack;
+
+    /// <summary>
+    /// The current step
+    /// </summary>
+    public int CurrentStep = 1;
+
+    /// <summary>
+    /// Set the effector
+    /// </summary>
+    /// <param name="entity">the entity</param>
+    public void SetEffector(Entity entity) => Effector = entity;
+
+    /// <summary>
+    /// Set the time!
+    /// </summary>
+    /// <param name="time">time</param>
+    public void SetTime(double time) => Time = time;
+
+    /// <summary>
+    /// The elapsed time
+    /// </summary>
+    /// <returns>elapsed time</returns>
+    public double? ElapsedTime() => Time - StartTime;
 
     /// <summary>
     /// How this Effect will affect!
