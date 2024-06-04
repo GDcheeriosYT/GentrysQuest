@@ -185,6 +185,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Sender = Weapon.Holder;
 
                         entity.OnHit(details);
+                        if (onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
                         Weapon.HitEntity(details);
                         bool isWeapon = true; // weapon hitboxes are tracked...
 
