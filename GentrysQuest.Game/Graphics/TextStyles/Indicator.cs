@@ -22,6 +22,9 @@ public partial class Indicator : SpriteText
         const int time = 500;
         this.MoveToX(X + 100, time, Easing.In);
         this.MoveToY(Y - 100, time, Easing.Out);
+        this.Delay(time * 0.4f)
+            .RotateTo(20, time)
+            .ScaleTo(0.1f, time);
         this.FadeOut(time * 0.9);
         return time;
     }

@@ -109,6 +109,13 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnDeath += delegate { Sprite.FadeOut(100); };
             entity.OnSpawn += delegate { Sprite.FadeIn(100); };
             entity.OnSpawn += delegate { lastRegenTime = Clock.CurrentTime; };
+            entity.OnEffect += delegate
+            {
+                foreach (StatusEffect effect in Entity.Effects)
+                {
+                    effect.StartTime ??= Clock.CurrentTime;
+                }
+            };
             entity.UpdateStats();
             entity.Stats.Restore();
         }
@@ -247,8 +254,16 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override void Update()
         {
+            // Main update
             base.Update();
+
+            // Reset collider box
             colliderBox.Position = new Vector2(0);
+
+            // Effects logic
+            Entity.Affect(Clock.CurrentTime);
+
+            // Regen should always be at the bottom
             double elapsedRegenTime = Clock.CurrentTime - lastRegenTime;
             if (Entity.Stats.RegenSpeed.Current.Value == 0) return;
             if (elapsedRegenTime * Entity.Stats.RegenSpeed.Current.Value >= 1000) regen();

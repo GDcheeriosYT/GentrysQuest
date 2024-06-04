@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Graphics;
 using NUnit.Framework;
@@ -68,6 +69,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             AddStep("Damage", () => entity.Damage(amount));
             AddStep("Crit", () => entity.Crit((int)(amount * 1.5)));
             AddStep("Heal", () => entity.Heal(amount));
+            AddStep("Burn", () => entity.AddEffect(new Burn()));
             AddStep("LevelUp", () => entity.LevelUp());
             AddStep("AddXp", () => entity.AddXp(amount));
         }

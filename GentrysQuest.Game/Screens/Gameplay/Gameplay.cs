@@ -348,6 +348,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 GameData.EquipedCharacter.Stats.Restore();
                 map.FadeIn();
                 gameplayHud.FadeIn();
+                inventoryButton.FadeIn();
                 SetUp();
             });
             AddInternal(endStatContainer);

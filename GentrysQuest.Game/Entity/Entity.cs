@@ -1,4 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -13,6 +16,9 @@ namespace GentrysQuest.Game.Entity
         // equips
         [CanBeNull]
         public Weapon.Weapon Weapon;
+
+        // effects
+        public List<StatusEffect> Effects = new();
 
         // Stat Modifiers
         // Used for quick use cases like if dodging or blah blah blah
@@ -59,6 +65,7 @@ namespace GentrysQuest.Game.Entity
 
         // Other Events
         public event EntityEvent OnUpdateStats;
+        public event Action OnEffect;
 
         #endregion
 
@@ -144,6 +151,44 @@ namespace GentrysQuest.Game.Entity
         public virtual Weapon.Weapon GetWeaponReward()
         {
             return Weapon;
+        }
+
+        public void AddEffect(StatusEffect statusEffect)
+        {
+            bool inList = false;
+            statusEffect.SetEffector(this);
+
+            foreach (var effect in Effects)
+            {
+                if (effect.GetType() == statusEffect.GetType())
+                {
+                    effect.Stack++;
+                    inList = true;
+                }
+            }
+
+            if (!inList) Effects.Add(statusEffect);
+            OnEffect?.Invoke();
+        }
+
+        public void Affect(double time)
+        {
+            foreach (StatusEffect effect in Effects.ToList())
+            {
+                effect.SetTime(time);
+                effect.Handle();
+
+                if (!(time - effect.StartTime > effect.Duration)) continue;
+
+                if (effect.Stack == 1)
+                {
+                    Effects.Remove(effect);
+                    UpdateStats();
+                }
+                else effect.Stack--;
+            }
+
+            OnEffect?.Invoke();
         }
 
         public virtual void UpdateStats()

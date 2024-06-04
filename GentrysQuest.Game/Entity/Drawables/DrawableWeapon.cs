@@ -185,10 +185,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Sender = Weapon.Holder;
 
                         entity.OnHit(details);
+                        if (onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
                         Weapon.HitEntity(details);
-
-                        if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
-
                         bool isWeapon = true; // weapon hitboxes are tracked...
 
                         switch (entity)
@@ -218,6 +216,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                                     int money = entity.GetMoneyReward();
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
+                                    Weapon.Holder.AddXp(entity.GetXpReward());
                                     GameData.Money.Hand(money);
                                     GameData.Weapons.Add(entity.GetWeaponReward());
                                     GameData.CurrentStats.AddToStat(StatTypes.Kills);
