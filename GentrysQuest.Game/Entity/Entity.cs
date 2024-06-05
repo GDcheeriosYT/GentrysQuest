@@ -9,6 +9,7 @@ namespace GentrysQuest.Game.Entity
     {
         // info
         public bool IsDead;
+        public bool IsFullHealth;
 
         // stats
         public Stats Stats = new();
@@ -97,7 +98,7 @@ namespace GentrysQuest.Game.Entity
             if (amount <= 0) amount = 1;
             if (IsDodging) amount = 0;
             Stats.Health.UpdateCurrentValue(-amount);
-            if (Stats.Health.Current.Value <= 0) Die();
+            if (Stats.Health.Current.Value <= 0 && !IsDead) Die();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
         }
@@ -116,6 +117,7 @@ namespace GentrysQuest.Game.Entity
         public virtual void Heal(int amount)
         {
             Stats.Health.UpdateCurrentValue(amount);
+            IsFullHealth = Stats.Health.Current.Value == Stats.Health.Total();
             OnHealthEvent?.Invoke();
             OnHeal?.Invoke(amount);
         }
@@ -158,16 +160,32 @@ namespace GentrysQuest.Game.Entity
             bool inList = false;
             statusEffect.SetEffector(this);
 
-            foreach (var effect in Effects)
+            foreach (var effect in Effects.Where(effect => effect.GetType() == statusEffect.GetType()))
             {
-                if (effect.GetType() == statusEffect.GetType())
-                {
-                    effect.Stack++;
-                    inList = true;
-                }
+                effect.Stack++;
+                inList = true;
             }
 
             if (!inList) Effects.Add(statusEffect);
+            OnEffect?.Invoke();
+        }
+
+        public void RemoveEffect(string name)
+        {
+            for (var index = 0; index < Effects.Count; index++)
+            {
+                var effect = Effects[index];
+
+                if (effect.Name != name) continue;
+
+                Effects.Remove(effect);
+                int health = (int)Stats.Health.Current.Value;
+                UpdateStats();
+
+                // because the stats get reset we set health to normal
+                Stats.Health.Current.Value = health;
+            }
+
             OnEffect?.Invoke();
         }
 
@@ -178,23 +196,20 @@ namespace GentrysQuest.Game.Entity
                 effect.SetTime(time);
                 effect.Handle();
 
-                if (!(time - effect.StartTime > effect.Duration)) continue;
-
-                if (effect.Stack == 1)
+                if (time - effect.StartTime > effect.Duration)
                 {
-                    Effects.Remove(effect);
-                    UpdateStats();
+                    if (effect.Stack == 1) RemoveEffect(effect.Name);
+                    else effect.Stack--;
                 }
-                else effect.Stack--;
             }
 
             OnEffect?.Invoke();
         }
 
-        public virtual void UpdateStats()
-        {
-            OnUpdateStats?.Invoke();
-        }
+        /// <summary>
+        /// Defines how stats will update
+        /// </summary>
+        public virtual void UpdateStats() => OnUpdateStats?.Invoke();
 
         #endregion
 

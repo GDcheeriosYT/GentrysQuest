@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Audio;
 using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Utils;
@@ -111,7 +112,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnSpawn += delegate { lastRegenTime = Clock.CurrentTime; };
             entity.OnEffect += delegate
             {
-                foreach (StatusEffect effect in Entity.Effects)
+                foreach (var effect in Entity.Effects.Where(effect => !effect.IsInfinite))
                 {
                     effect.StartTime ??= Clock.CurrentTime;
                 }
@@ -264,8 +265,11 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.Affect(Clock.CurrentTime);
 
             // Regen should always be at the bottom
+            if (Entity.IsDead || Entity.IsFullHealth) return;
+
             double elapsedRegenTime = Clock.CurrentTime - lastRegenTime;
             if (Entity.Stats.RegenSpeed.Current.Value == 0) return;
+
             if (elapsedRegenTime * Entity.Stats.RegenSpeed.Current.Value >= 1000) regen();
         }
     }

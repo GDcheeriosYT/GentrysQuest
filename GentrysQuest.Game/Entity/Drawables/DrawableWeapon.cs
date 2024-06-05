@@ -121,7 +121,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     if (pattern.ResetHitBox) DamageQueue.Clear();
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
                     if (pattern.MovementSpeed != null) Weapon.Holder.SpeedModifier = (float)pattern.MovementSpeed;
-                    if (pattern.OnHitEffect != null) onHitEffect = pattern.OnHitEffect;
+                    onHitEffect = pattern.OnHitEffect;
                 }, delay);
                 delay += speed;
             }
@@ -151,6 +151,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     {
                         DamageDetails details = new DamageDetails();
                         Entity entity;
+                        bool isValid = true;
                         bool isCrit = false;
 
                         try
@@ -159,9 +160,11 @@ namespace GentrysQuest.Game.Entity.Drawables
                         }
                         catch (Exception e)
                         {
+                            isValid = false;
                             entity = new Entity();
                         }
 
+                        if (!isValid) continue;
                         int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
                         damage -= (int)entity.Stats.Defense.Current.Value;
 
@@ -185,28 +188,24 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Sender = Weapon.Holder;
 
                         entity.OnHit(details);
-                        if (onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
+                        if (onHitEffect != null && onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
                         Weapon.HitEntity(details);
-                        bool isWeapon = true; // weapon hitboxes are tracked...
 
                         switch (entity)
                         {
                             case Character character:
                                 GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
                                 if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.CritsTaken);
-                                isWeapon = false;
                                 break;
 
-                            case Enemy enemy:
-                                isWeapon = false;
+                            case Entity:
+                                GameData.CurrentStats.AddToStat(StatTypes.Hits);
                                 break;
                         }
 
                         switch (Weapon.Holder)
                         {
                             case Character character:
-                                if (isWeapon) return;
-
                                 if (entity.IsDead)
                                 {
                                     GameData.CurrentStats.AddToStat(StatTypes.Hits);

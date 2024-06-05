@@ -70,6 +70,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             AddStep("Crit", () => entity.Crit((int)(amount * 1.5)));
             AddStep("Heal", () => entity.Heal(amount));
             AddStep("Burn", () => entity.AddEffect(new Burn()));
+            AddStep("Bleed", () => entity.AddEffect(new Bleed()));
             AddStep("LevelUp", () => entity.LevelUp());
             AddStep("AddXp", () => entity.AddXp(amount));
         }

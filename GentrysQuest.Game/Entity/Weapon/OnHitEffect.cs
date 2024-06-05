@@ -14,9 +14,19 @@ namespace GentrysQuest.Game.Entity.Weapon
         public StatusEffect Effect;
 
         /// <summary>
+        /// Chance of succession;
+        /// </summary>
+        public float Chance = chance;
+
+        /// <summary>
         /// If the effects will apply
+        /// Resets the effect beforehand
         /// </summary>
         /// <returns>boolean</returns>
-        public bool Applies() => MathBase.IsChanceSuccessful(chance);
+        public bool Applies()
+        {
+            Effect.Reset();
+            return MathBase.IsChanceSuccessful(Chance);
+        }
     }
 }

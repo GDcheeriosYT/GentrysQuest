@@ -344,11 +344,14 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 GameData.Weapons.Clear();
                 GameData.EquipedCharacter.Weapon = new BraydensOsuPen();
                 GameData.EquipedCharacter.Artifacts.Clear();
+                GameData.EquipedCharacter.Experience.Level.Current.Value = 0;
+                GameData.EquipedCharacter.Experience.Xp.Current.Value = 0;
                 GameData.EquipedCharacter.UpdateStats();
                 GameData.EquipedCharacter.Stats.Restore();
                 map.FadeIn();
+                inventoryOverlay.Show();
                 gameplayHud.FadeIn();
-                inventoryButton.FadeIn();
+                inventoryButton.Show();
                 SetUp();
             });
             AddInternal(endStatContainer);

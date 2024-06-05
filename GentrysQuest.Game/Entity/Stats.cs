@@ -41,6 +41,11 @@
             return null;
         }
 
+        public void Boost(int percent)
+        {
+            foreach (Stat stat in statGrouping) stat.Add(stat.GetPercentFromDefault(percent));
+        }
+
         public Stat[] GetStats() => statGrouping;
 
         /// <summary>

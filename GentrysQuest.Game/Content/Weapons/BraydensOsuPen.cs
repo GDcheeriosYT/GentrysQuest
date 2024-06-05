@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
@@ -12,7 +13,10 @@ namespace GentrysQuest.Game.Content.Weapons
         {
             Name = "Brayden's Osu Pen";
             StarRating = new StarRating(5);
-            Description = "An osu pen";
+            Description = "The man himself, Brayden's osu pen! "
+                          + "When held by the true wielder, gain a 20% + 20 per difficulty increase in all your stats. "
+                          + "On the last attack you have a 20% chance to bleed enemies for 6 seconds. "
+                          + "On a critical hit you get a small boost of speed";
             Damage.SetDefaultValue(46);
             Buff = new Buff(this, StatType.CritDamage);
             Distance = 200;
@@ -28,6 +32,10 @@ namespace GentrysQuest.Game.Content.Weapons
             var distance = 0.35f;
             var time = (int)MathBase.SecondToMs(0.95); // seconds
             var movementSpeed = 0.5f;
+            OnHitEffect lastComboEffect = new OnHitEffect(20)
+            {
+                Effect = new Bleed(6)
+            };
 
             AttackPattern.AddCase(1);
             AttackPattern.Add(new AttackPatternEvent { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed });
@@ -39,13 +47,22 @@ namespace GentrysQuest.Game.Content.Weapons
 
             AttackPattern.AddCase(3);
             AttackPattern.Add(new AttackPatternEvent
-                { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed });
+                { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed, OnHitEffect = lastComboEffect });
             AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
-                { Direction = 180, Distance = distance, Transition = Easing.InSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, MovementSpeed = movementSpeed });
+                { Direction = 180, Distance = distance, Transition = Easing.InSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, MovementSpeed = movementSpeed, OnHitEffect = lastComboEffect });
             AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
-                { Direction = 360, Distance = distance, Transition = Easing.OutSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, ResetHitBox = true, MovementSpeed = movementSpeed });
+                { Direction = 360, Distance = distance, Transition = Easing.OutSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, ResetHitBox = true, MovementSpeed = movementSpeed, OnHitEffect = lastComboEffect });
 
-            #endregion=
+            #endregion
+
+            #region cases
+
+            OnHitEntity += details =>
+            {
+                if (details.IsCrit) Holder.AddEffect(new Swiftness(1));
+            };
+
+            #endregion
 
             #region TextureMapping
 

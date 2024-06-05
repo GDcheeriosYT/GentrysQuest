@@ -12,8 +12,6 @@ public abstract class StatusEffect
         Stack = stack;
     }
 
-    protected StatusEffect(int duration) => Duration = new Second(duration);
-
     /// <summary>
     /// The name of the Effect duh
     /// </summary>
@@ -38,6 +36,11 @@ public abstract class StatusEffect
     /// Who this Effect is effecting
     /// </summary>
     protected Entity Effector { get; private set; }
+
+    /// <summary>
+    /// If it's something that's based on a condition
+    /// </summary>
+    public abstract bool IsInfinite { get; set; }
 
     /// <summary>
     /// when the effect started
@@ -73,6 +76,17 @@ public abstract class StatusEffect
     /// The current step
     /// </summary>
     public int CurrentStep = 1;
+
+    /// <summary>
+    /// Defines how the effect is reset in case you're using the effect as a reference,
+    /// and you can customize it for children classes
+    /// </summary>
+    public virtual void Reset()
+    {
+        CurrentStep = 1;
+        Time = 0;
+        StartTime = null;
+    }
 
     /// <summary>
     /// Set the effector

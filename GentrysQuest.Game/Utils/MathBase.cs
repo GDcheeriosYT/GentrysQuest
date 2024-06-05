@@ -88,7 +88,8 @@ namespace GentrysQuest.Game.Utils
         public static float RandomFloat() => Random.Shared.NextSingle();
         public static bool RandomBool() => Convert.ToBoolean(Random.Shared.Next(2));
         public static bool IsChanceSuccessful(int passingValue, int chance) => (passingValue < RandomInt(chance));
-        public static bool IsChanceSuccessful(float passingValue) => (passingValue < RandomFloat());
+        public static bool IsChanceSuccessful(float passingValue) => passingValue >= RandomFloat();
+
         public static int RandomChoice(int size) => Random.Shared.Next(size);
     }
 }
