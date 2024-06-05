@@ -12,13 +12,13 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class DrawableWeapon : CompositeDrawable
+    public partial class DrawableWeapon : CompositeDrawable, IDrawableEntity
     {
         protected readonly Weapon.Weapon Weapon;
-        protected readonly Sprite Sprite;
-        protected readonly HitBox WeaponHitBox;
         protected readonly DamageQueue DamageQueue = new();
-        public AffiliationType Affiliation;
+        public Sprite Sprite { get; set; }
+        public HitBox HitBox { get; set; }
+        public AffiliationType Affiliation { get; set; }
         public float Distance;
         public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
@@ -27,7 +27,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             Weapon = weapon;
             Affiliation = affiliation;
-            WeaponHitBox = new HitBox(this);
+            HitBox = new HitBox(this);
             Size = new Vector2(1f);
             RelativeSizeAxes = Axes.Both;
             Colour = Colour4.White;
@@ -39,7 +39,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                WeaponHitBox
+                HitBox
             };
             Weapon.CanAttack = true;
             disable();
@@ -47,26 +47,26 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private void disable()
         {
-            WeaponHitBox.Disable();
+            HitBox.Disable();
             Hide();
         }
 
         private void enable()
         {
-            WeaponHitBox.Enable();
+            HitBox.Enable();
             Show();
         }
 
         private void disable(int timeMs)
         {
-            WeaponHitBox.Disable();
+            HitBox.Disable();
             this.FadeOut(timeMs);
             this.ScaleTo(0, timeMs);
         }
 
         private void enable(int timeMs)
         {
-            WeaponHitBox.Enable();
+            HitBox.Enable();
             this.FadeIn(timeMs);
             this.ScaleTo(1, timeMs);
         }
@@ -107,7 +107,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     this.RotateTo(pattern.Direction + direction, duration: speed, pattern.Transition);
                     this.TransformTo(nameof(PositionHolder), pattern.Position, speed, pattern.Transition);
                     this.ResizeTo(pattern.Size, duration: speed, pattern.Transition);
-                    WeaponHitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
+                    HitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
                     this.TransformTo(nameof(Distance), pattern.Distance, speed, pattern.Transition);
                     if (pattern.ResetHitBox) DamageQueue.Clear();
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
@@ -136,7 +136,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 Position = MathBase.RotateVector(PositionHolder, Rotation - 180) + MathBase.GetAngleToVector(Rotation - 90) * Distance;
 
-                foreach (var hitbox in HitBoxScene.GetIntersections(WeaponHitBox))
+                foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
                     if (!DamageQueue.Check(hitbox))
                     {
