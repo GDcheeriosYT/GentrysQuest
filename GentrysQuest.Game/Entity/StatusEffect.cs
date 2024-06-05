@@ -1,3 +1,4 @@
+using System;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
@@ -30,7 +31,7 @@ public abstract class StatusEffect
     /// <summary>
     /// the icon for this effect
     /// </summary>
-    public abstract IconUsage Icon { get; protected set; }
+    public virtual IconUsage Icon { get; protected set; } = FontAwesome.Solid.Circle;
 
     /// <summary>
     /// Who this Effect is effecting
@@ -86,6 +87,7 @@ public abstract class StatusEffect
         CurrentStep = 1;
         Time = 0;
         StartTime = null;
+        Stack = 1;
     }
 
     /// <summary>
@@ -110,4 +112,6 @@ public abstract class StatusEffect
     /// How this Effect will affect!
     /// </summary>
     public abstract void Handle();
+
+    public Action OnRemove;
 }

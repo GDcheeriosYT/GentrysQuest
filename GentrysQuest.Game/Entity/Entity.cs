@@ -10,6 +10,10 @@ namespace GentrysQuest.Game.Entity
         // info
         public bool IsDead;
         public bool IsFullHealth;
+        public bool IsDodging = false;
+        public bool CanDodge = true;
+        public bool CanAttack = true;
+        public bool CanMove = true;
 
         // stats
         public Stats Stats = new();
@@ -22,12 +26,10 @@ namespace GentrysQuest.Game.Entity
         public List<StatusEffect> Effects = new();
 
         // Stat Modifiers
-        // Used for quick use cases like if dodging or blah blah blah
         public float SpeedModifier = 1;
-        public bool IsDodging = false;
-        public bool CanDodge = true;
-        public bool CanAttack = true;
-        public bool CanMove = true;
+        public float HealingModifier = 1;
+        public float DamageModifier = 1;
+        public float DefenseModifier = 1;
 
         public Entity()
         {
@@ -97,7 +99,8 @@ namespace GentrysQuest.Game.Entity
         {
             if (amount <= 0) amount = 1;
             if (IsDodging) amount = 0;
-            Stats.Health.UpdateCurrentValue(-amount);
+            IsFullHealth = false;
+            Stats.Health.UpdateCurrentValue(-amount * DamageModifier);
             if (Stats.Health.Current.Value <= 0 && !IsDead) Die();
             OnHealthEvent?.Invoke();
             OnDamage?.Invoke(amount);
@@ -116,7 +119,7 @@ namespace GentrysQuest.Game.Entity
 
         public virtual void Heal(int amount)
         {
-            Stats.Health.UpdateCurrentValue(amount);
+            Stats.Health.UpdateCurrentValue(amount * HealingModifier);
             IsFullHealth = Stats.Health.Current.Value == Stats.Health.Total();
             OnHealthEvent?.Invoke();
             OnHeal?.Invoke(amount);
@@ -178,6 +181,7 @@ namespace GentrysQuest.Game.Entity
 
                 if (effect.Name != name) continue;
 
+                effect.OnRemove?.Invoke();
                 Effects.Remove(effect);
                 int health = (int)Stats.Health.Current.Value;
                 UpdateStats();

@@ -5,16 +5,66 @@ namespace GentrysQuest.Game.Entity.Weapon
 {
     public class AttackPatternEvent(int timeMs)
     {
+        /// <summary>
+        /// How long until the pattern condition is met.
+        /// Ex: The size will size down to 20px in 600ms.
+        /// </summary>
         public int TimeMs = timeMs;
-        public float? Direction = 0;
-        public Vector2? Position = new Vector2(1);
-        public Vector2? Size = new Vector2(1);
-        public Vector2? HitboxSize = new Vector2(1);
-        public float? Distance = 0;
+
+        /// <summary>
+        /// The direction based on where you're looking.
+        /// </summary>
+        public float Direction = 0;
+
+        /// <summary>
+        /// The Position.
+        /// This can be a little tricky depending on the situation.
+        /// Keep in mind the direction while editing the value.
+        /// Ex case: if the direction is set to 90 degrees,
+        /// it would look like the x value got changed.
+        /// </summary>
+        public Vector2 Position = new Vector2(0);
+
+        /// <summary>
+        /// The size of the drawable
+        /// </summary>
+        public Vector2 Size = new Vector2(1);
+
+        /// <summary>
+        /// The size of the hitbox
+        /// mostly useful if the texture of the drawable isn't the actual size
+        /// </summary>
+        public Vector2 HitboxSize = new Vector2(1);
+
+        /// <summary>
+        /// Distance away from origin
+        /// </summary>
+        public float Distance = 0;
+
+        /// <summary>
+        /// How much extra damage the object will do
+        /// </summary>
         public int DamagePercent = 0;
-        public float? MovementSpeed = 1;
+
+        /// <summary>
+        /// affects how quick the wielder will move.
+        /// big for game stabilization and making it feel more enjoyable
+        /// </summary>
+        public float MovementSpeed = 1;
+
+        /// <summary>
+        /// fluency of transition to the next event
+        /// </summary>
         public Easing Transition = Easing.None;
+
+        /// <summary>
+        /// if this should cause the entity to get hit again
+        /// </summary>
         public bool ResetHitBox = false;
+
+        /// <summary>
+        /// What happens when the entity gets hit
+        /// </summary>
         public OnHitEffect OnHitEffect = null;
 
         public AttackPatternEvent()

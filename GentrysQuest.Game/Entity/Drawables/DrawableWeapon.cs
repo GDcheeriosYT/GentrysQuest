@@ -19,7 +19,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         protected readonly HitBox WeaponHitBox;
         protected readonly DamageQueue DamageQueue = new();
         public AffiliationType Affiliation;
-        protected float Distance;
+        public float Distance;
+        public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
 
         public DrawableWeapon(Weapon.Weapon weapon, AffiliationType affiliation)
@@ -79,16 +80,6 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public Weapon.Weapon GetWeaponObject() { return Weapon; }
 
-        /// <summary>
-        /// Change the size of the weapon's hitbox
-        /// The size is relative to the weapon so 1 is 1:1 size
-        /// </summary>
-        /// <param name="size">The size vector</param>
-        public void ChangeHitBoxSize(Vector2 size)
-        {
-            WeaponHitBox.Size = size;
-        }
-
         public void Attack(float direction)
         {
             DamageQueue.Clear();
@@ -113,14 +104,14 @@ namespace GentrysQuest.Game.Entity.Drawables
                 double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
                 Scheduler.AddDelayed(() =>
                 {
-                    if (pattern.Direction != null) this.RotateTo((float)pattern.Direction + direction, duration: speed, pattern.Transition);
-                    if (pattern.Position != null) this.MoveTo((Vector2)pattern.Position, duration: speed, pattern.Transition);
-                    if (pattern.Size != null) this.ResizeTo((Vector2)pattern.Size, duration: speed, pattern.Transition);
-                    if (pattern.HitboxSize != null) this.WeaponHitBox.ScaleTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
-                    if (pattern.Distance != null) Distance = (float)pattern.Distance;
+                    this.RotateTo(pattern.Direction + direction, duration: speed, pattern.Transition);
+                    this.TransformTo(nameof(PositionHolder), pattern.Position, speed, pattern.Transition);
+                    this.ResizeTo(pattern.Size, duration: speed, pattern.Transition);
+                    WeaponHitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
+                    this.TransformTo(nameof(Distance), pattern.Distance, speed, pattern.Transition);
                     if (pattern.ResetHitBox) DamageQueue.Clear();
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
-                    if (pattern.MovementSpeed != null) Weapon.Holder.SpeedModifier = (float)pattern.MovementSpeed;
+                    Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
                     onHitEffect = pattern.OnHitEffect;
                 }, delay);
                 delay += speed;
@@ -143,7 +134,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (!Weapon.CanAttack)
             {
-                Position = MathBase.GetAngleToVector(Rotation - 90) * Distance;
+                Position = MathBase.RotateVector(PositionHolder, Rotation - 180) + MathBase.GetAngleToVector(Rotation - 90) * Distance;
 
                 foreach (var hitbox in HitBoxScene.GetIntersections(WeaponHitBox))
                 {
@@ -166,7 +157,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                         if (!isValid) continue;
                         int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
-                        damage -= (int)entity.Stats.Defense.Current.Value;
+                        damage -= (int)(entity.Stats.Defense.Current.Value * entity.DefenseModifier);
 
                         if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {

@@ -1,7 +1,6 @@
 using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Content.Characters
 {
@@ -20,6 +19,7 @@ namespace GentrysQuest.Game.Content.Characters
 
             OnSwapWeapon += checkWeapon;
             OnLevelUp += checkWeapon;
+            Artifacts.OnChangeArtifact += checkWeapon;
 
             TextureMapping.Add("Icon", "brayden_idle.png");
             TextureMapping.Add("Idle", "brayden_idle.png");
@@ -30,7 +30,6 @@ namespace GentrysQuest.Game.Content.Characters
 
         private void checkWeapon()
         {
-            Logger.Log(Difficulty.ToString());
             RemoveEffect("Brayden Boost");
 
             if (Weapon != null && Weapon.GetType() == typeof(BraydensOsuPen))

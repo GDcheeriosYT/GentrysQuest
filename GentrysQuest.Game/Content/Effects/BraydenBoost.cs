@@ -14,6 +14,12 @@ namespace GentrysQuest.Game.Content.Effects
 
         private bool boosted;
 
+        public override void Reset()
+        {
+            base.Reset();
+            boosted = false;
+        }
+
         public override void Handle()
         {
             if (boosted) return;

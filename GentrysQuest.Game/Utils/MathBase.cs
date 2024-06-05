@@ -70,6 +70,22 @@ namespace GentrysQuest.Game.Utils
             return new Vector2((float)x, (float)y) * 100;
         }
 
+        /// <summary>
+        /// Rotates a vector
+        /// </summary>
+        /// <param name="vector">the vector</param>
+        /// <param name="degrees">the degrees</param>
+        /// <returns>the rotated vector</returns>
+        public static Vector2 RotateVector(Vector2 vector, float degrees)
+        {
+            float radians = MathF.PI * degrees / 180.0f;
+
+            float newX = vector.X * MathF.Cos(radians) - vector.Y * MathF.Sin(radians);
+            float newY = vector.X * MathF.Sin(radians) + vector.Y * MathF.Cos(radians);
+
+            return new Vector2(newX, newY);
+        }
+
         public static double SecondToMs(double input)
         {
             return input * 1000;
