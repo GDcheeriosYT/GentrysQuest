@@ -18,7 +18,7 @@ namespace GentrysQuest.Game.Entity.Drawables
     /// <summary>
     /// The part of the entity that we see
     /// </summary>
-    public partial class DrawableEntity : CompositeDrawable
+    public partial class DrawableEntity : CompositeDrawable, IDrawableEntity
     {
         /// <summary>
         /// The entity reference
@@ -28,7 +28,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <summary>
         /// The entity sprite
         /// </summary>
-        protected readonly Sprite Sprite;
+        public Sprite Sprite { get; set; }
 
         /// <summary>
         /// The overhead of the entity
@@ -44,9 +44,9 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// The affiliation.
         /// Is it an opp?
         /// </summary>
-        public readonly AffiliationType Affiliation;
+        public AffiliationType Affiliation { get; set; }
 
-        protected HitBox hitBox;
+        public HitBox HitBox { get; set; }
         protected CollisonHitBox colliderBox;
 
         protected bool Moving;
@@ -87,7 +87,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity = entity;
             Affiliation = affiliationType;
             Size = new Vector2(100);
-            hitBox = new HitBox(this);
+            HitBox = new HitBox(this);
             colliderBox = new CollisonHitBox(this);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
@@ -99,7 +99,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     RelativeSizeAxes = Axes.Both,
                 },
                 entityBar = new DrawableEntityBar(Entity),
-                hitBox,
+                HitBox,
                 colliderBox
             };
             if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
