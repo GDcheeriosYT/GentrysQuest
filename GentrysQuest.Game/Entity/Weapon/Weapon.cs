@@ -2,19 +2,67 @@
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
-    public class Weapon : Item
+    public abstract class Weapon : Item
     {
-        public string Type { get; }
-        public int AttackAmount { get; set; }
-        public int Distance { get; set; }
-        public Stat Damage = new("Damage", StatType.Attack, 0); // Base damage
-        public bool CanAttack; // If the weapon is able to attack in the current moment
-        public AttackPattern AttackPattern = new(); // Defines how the weapon attacks work
-        public Entity Holder; // The holder of the weapon
-        public Buff Buff; // The weapon buff
-        public Anchor Origin = Anchor.Centre; // Design purposes
+        /// <summary>
+        /// The weapon type
+        /// </summary>
+        public abstract string Type { get; }
 
-        public Weapon()
+        /// <summary>
+        /// Counter for weapon attack
+        /// </summary>
+        public int AttackAmount { get; set; }
+
+        /// <summary>
+        /// Describes how far away an enemy who is using the weapon needs to be to start attack an opponent
+        /// </summary>
+        public abstract int Distance { get; set; }
+
+        /// <summary>
+        /// A stat representing the damage.
+        /// Makes more sense to have set in constructor
+        /// </summary>
+        public Stat Damage = new("Damage", StatType.Attack, 0); // Base damage
+
+        /// <summary>
+        /// If the weapon can attack
+        /// </summary>
+        public bool CanAttack;
+
+        /// <summary>
+        /// If the weapon itself can deal damage or just other things
+        /// </summary>
+        public virtual bool IsGeneralDamageMode { get; protected set; } = true;
+
+        /// <summary>
+        /// The attack pattern.
+        /// Defines how the weapon works.
+        /// Must be defined in the constructor
+        /// </summary>
+        public AttackPattern AttackPattern = new();
+
+        /// <summary>
+        /// Who is holding the weapon
+        /// </summary>
+        public Entity Holder;
+
+        /// <summary>
+        /// The weapon buff stat
+        /// </summary>
+        public Buff Buff;
+
+        /// <summary>
+        /// Where the weapon should be held from
+        /// design purpose
+        /// </summary>
+        public Anchor Origin = Anchor.Centre;
+
+        public delegate void HitEvent(DamageDetails details);
+
+        public event HitEvent OnHitEntity;
+
+        protected Weapon()
         {
             Buff = new Buff(this);
             OnLevelUp += delegate
@@ -23,6 +71,12 @@ namespace GentrysQuest.Game.Entity.Weapon
                 Buff.Improve();
                 Holder?.UpdateStats();
             };
+        }
+
+        public void HitEntity(DamageDetails details)
+        {
+            OnHitEntity?.Invoke(details);
+            Holder.HitEntity(details);
         }
     }
 }

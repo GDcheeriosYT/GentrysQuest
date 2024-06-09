@@ -10,6 +10,7 @@ public partial class DrawableEntityBar : CompositeDrawable
 {
     // objects
     private readonly ProgressBar healthProgressBar;
+    private FillFlowContainer statusEffects;
     private SpriteText entityName;
     private SpriteText entityLevel;
     private SpriteText healthText;
@@ -61,8 +62,14 @@ public partial class DrawableEntityBar : CompositeDrawable
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Font = FontUsage.Default.With(size: 24)
-                    }
+                    },
                 }
+            },
+            statusEffects = new FillFlowContainer
+            {
+                Anchor = Anchor.CentreRight,
+                Origin = Anchor.CentreRight,
+                Direction = FillDirection.Horizontal,
             }
         };
         healthProgressBar.ForegroundColour = Colour4.Lime;
@@ -82,5 +89,16 @@ public partial class DrawableEntityBar : CompositeDrawable
         };
         entity.OnDeath += delegate { this.FadeOut(); };
         entity.OnSpawn += delegate { this.FadeIn(); };
+        entity.OnEffect += delegate { updateEffects(entity); };
+    }
+
+    private void updateEffects(Entity entity)
+    {
+        statusEffects.Clear();
+
+        foreach (StatusEffect effect in entity.Effects)
+        {
+            statusEffects.Add(new DrawableStatusEffect(effect));
+        }
     }
 }

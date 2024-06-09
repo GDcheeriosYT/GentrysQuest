@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
@@ -12,59 +13,68 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
 {
-    public partial class DrawableWeapon : CompositeDrawable
+    public partial class DrawableWeapon : CompositeDrawable, IDrawableEntity
     {
         protected readonly Weapon.Weapon Weapon;
-        protected readonly Sprite Sprite;
-        protected readonly HitBox WeaponHitBox;
+        protected readonly DrawableEntity Holder;
         protected readonly DamageQueue DamageQueue = new();
-        public AffiliationType Affiliation;
-        protected float Distance;
+        public Sprite Sprite { get; set; }
+        public HitBox HitBox { get; set; }
+        public AffiliationType Affiliation { get; set; }
+        public float Distance;
+        public Vector2 PositionHolder;
+        private OnHitEffect onHitEffect;
 
-        public DrawableWeapon(Weapon.Weapon weapon, AffiliationType affiliation)
+        public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
-            Weapon = weapon;
+            Holder = entity;
+            Weapon = entity.GetEntityObject().Weapon;
             Affiliation = affiliation;
-            WeaponHitBox = new HitBox(this);
+            HitBox = new HitBox(this);
             Size = new Vector2(1f);
             RelativeSizeAxes = Axes.Both;
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
-            Origin = weapon.Origin;
-            InternalChildren = new Drawable[]
+
+            if (Weapon != null)
             {
-                Sprite = new Sprite
+                Origin = Weapon.Origin;
+                InternalChildren = new Drawable[]
                 {
-                    RelativeSizeAxes = Axes.Both
-                },
-                WeaponHitBox
-            };
-            Weapon.CanAttack = true;
+                    Sprite = new Sprite
+                    {
+                        RelativeSizeAxes = Axes.Both
+                    },
+                    HitBox
+                };
+                Weapon.CanAttack = true;
+            }
+
             disable();
         }
 
         private void disable()
         {
-            WeaponHitBox.Disable();
+            HitBox.Disable();
             Hide();
         }
 
         private void enable()
         {
-            WeaponHitBox.Enable();
+            HitBox.Enable();
             Show();
         }
 
         private void disable(int timeMs)
         {
-            WeaponHitBox.Disable();
+            HitBox.Disable();
             this.FadeOut(timeMs);
             this.ScaleTo(0, timeMs);
         }
 
         private void enable(int timeMs)
         {
-            WeaponHitBox.Enable();
+            HitBox.Enable();
             this.FadeIn(timeMs);
             this.ScaleTo(1, timeMs);
         }
@@ -77,16 +87,6 @@ namespace GentrysQuest.Game.Entity.Drawables
         }
 
         public Weapon.Weapon GetWeaponObject() { return Weapon; }
-
-        /// <summary>
-        /// Change the size of the weapon's hitbox
-        /// The size is relative to the weapon so 1 is 1:1 size
-        /// </summary>
-        /// <param name="size">The size vector</param>
-        public void ChangeHitBoxSize(Vector2 size)
-        {
-            WeaponHitBox.Size = size;
-        }
 
         public void Attack(float direction)
         {
@@ -112,14 +112,24 @@ namespace GentrysQuest.Game.Entity.Drawables
                 double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
                 Scheduler.AddDelayed(() =>
                 {
-                    if (pattern.Direction != null) this.RotateTo((float)pattern.Direction + direction, duration: speed, pattern.Transition);
-                    if (pattern.Position != null) this.MoveTo((Vector2)pattern.Position, duration: speed, pattern.Transition);
-                    if (pattern.Size != null) this.ResizeTo((Vector2)pattern.Size, duration: speed, pattern.Transition);
-                    if (pattern.HitboxSize != null) this.WeaponHitBox.ScaleTo((Vector2)pattern.HitboxSize, duration: speed, pattern.Transition);
-                    if (pattern.Distance != null) Distance = (float)pattern.Distance;
+                    this.RotateTo(pattern.Direction + direction, duration: speed, pattern.Transition);
+                    this.TransformTo(nameof(PositionHolder), pattern.Position, speed, pattern.Transition);
+                    this.ResizeTo(pattern.Size, duration: speed, pattern.Transition);
+                    HitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
+                    this.TransformTo(nameof(Distance), pattern.Distance, speed, pattern.Transition);
                     if (pattern.ResetHitBox) DamageQueue.Clear();
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
-                    if (pattern.MovementSpeed != null) Weapon.Holder.SpeedModifier = (float)pattern.MovementSpeed;
+                    Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
+                    onHitEffect = pattern.OnHitEffect;
+
+                    if (pattern.Projectiles == null) return;
+
+                    foreach (var projectile in pattern.Projectiles.Select(parameters => new Projectile(parameters)))
+                    {
+                        projectile.Position *= Distance;
+                        projectile.Direction += direction - 90;
+                        Holder.QueuedProjectiles.Add(projectile);
+                    }
                 }, delay);
                 delay += speed;
             }
@@ -141,13 +151,15 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (!Weapon.CanAttack)
             {
-                Position = MathBase.GetAngleToVector(Rotation - 90) * Distance;
+                Position = MathBase.RotateVector(PositionHolder, Rotation - 180) + MathBase.GetAngleToVector(Rotation - 90) * Distance;
 
-                foreach (var hitbox in HitBoxScene.GetIntersections(WeaponHitBox))
+                foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
-                    if (!DamageQueue.Check(hitbox))
+                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode)
                     {
+                        DamageDetails details = new DamageDetails();
                         Entity entity;
+                        bool isValid = true;
                         bool isCrit = false;
 
                         try
@@ -156,11 +168,14 @@ namespace GentrysQuest.Game.Entity.Drawables
                         }
                         catch (Exception e)
                         {
+                            isValid = false;
                             entity = new Entity();
                         }
 
+                        if (!isValid) continue;
+
                         int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
-                        damage -= (int)entity.Stats.Defense.Current.Value;
+                        damage -= (int)(entity.Stats.Defense.Current.Value * entity.DefenseModifier);
 
                         if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {
@@ -169,32 +184,37 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 Weapon.Holder.Stats.Attack.Current.Value,
                                 Weapon.Holder.Stats.CritDamage.Current.Value
                             );
+                            details.IsCrit = true;
                             entity.Crit(damage);
                         }
-                        else entity.Damage(damage);
+                        else
+                        {
+                            entity.Damage(damage);
+                        }
 
-                        if (entity.IsDead) Weapon.Holder.AddXp(entity.GetXpReward());
+                        details.Damage = damage;
+                        details.Receiver = entity;
+                        details.Sender = Weapon.Holder;
 
-                        bool isWeapon = true; // weapon hitboxes are tracked...
+                        entity.OnHit(details);
+                        if (onHitEffect != null && onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
+                        Weapon.HitEntity(details);
 
                         switch (entity)
                         {
                             case Character character:
                                 GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
                                 if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.CritsTaken);
-                                isWeapon = false;
                                 break;
 
-                            case Enemy enemy:
-                                isWeapon = false;
+                            case Entity:
+                                GameData.CurrentStats.AddToStat(StatTypes.Hits);
                                 break;
                         }
 
                         switch (Weapon.Holder)
                         {
                             case Character character:
-                                if (isWeapon) return;
-
                                 if (entity.IsDead)
                                 {
                                     GameData.CurrentStats.AddToStat(StatTypes.Hits);
@@ -204,6 +224,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                                     int money = entity.GetMoneyReward();
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
+                                    Weapon.Holder.AddXp(entity.GetXpReward());
                                     GameData.Money.Hand(money);
                                     GameData.Weapons.Add(entity.GetWeaponReward());
                                     GameData.CurrentStats.AddToStat(StatTypes.Kills);

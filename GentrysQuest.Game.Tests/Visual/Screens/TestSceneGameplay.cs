@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Content.Characters;
+using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
@@ -21,8 +22,9 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         public TestSceneGameplay()
         {
             theGuy = new BraydenMesserschmidt();
-            testWeapon = new BraydensOsuPen();
+            testWeapon = new Bow();
             GameData.EquipCharacter(theGuy);
+            GameData.Money.InfiniteMoney = true;
             GameData.Characters.Add(theGuy);
             GameData.Characters.Add(new TestCharacter(1));
             theGuy.SetWeapon(testWeapon);
@@ -40,6 +42,8 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
             });
             AddSliderStep("Difficulty", 0, 10, 0, i => gameplay.SetDifficulty(i));
             AddStep("Damage", (() => theGuy.Damage(10)));
+            AddStep("Slow", () => theGuy.AddEffect(new Slowness()));
+            AddStep("Burn", () => theGuy.AddEffect(new Burn()));
             AddStep("Spawn Enemys", () => gameplay.SpawnEntities());
             AddStep("End", () => gameplay.End());
         }

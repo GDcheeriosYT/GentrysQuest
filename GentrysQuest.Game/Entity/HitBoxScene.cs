@@ -24,7 +24,7 @@ namespace GentrysQuest.Game.Entity
 
             foreach (HitBox hitBox in hitBoxes)
             {
-                if (theHitBox.CheckCollision(hitBox) && hitBox.GetType() != typeof(CollisonHitBox)) hitboxList.Add(hitBox);
+                if (theHitBox.CheckCollision(hitBox)) hitboxList.Add(hitBox);
             }
 
             return hitboxList;

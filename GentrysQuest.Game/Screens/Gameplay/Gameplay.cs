@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
 using GentrysQuest.Game.Content.Maps;
@@ -28,7 +30,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private TextFlowContainer scoreFlowContainer;
         private SpriteText scoreText;
         private DrawablePlayableEntity playerEntity;
-        private List<DrawableEntity> enemies = new List<DrawableEntity>();
+        private List<DrawableEntity> enemies = new();
+        private List<Projectile> projectiles = new();
         private GameplayHud gameplayHud;
         private DrawableMap map;
         private InventoryOverlay inventoryOverlay;
@@ -105,7 +108,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
             inventoryButton.SetAction(delegate
             {
                 inventoryOverlay.ToggleDisplay();
-                isPaused = !isPaused;
+                if (isPaused) UnPause();
+                else Pause();
             });
             scoreFlowContainer.AddText(scoreText = new SpriteText
             {
@@ -165,6 +169,30 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             gameplayDifficulty = map.MapReference.Difficulty;
             if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetEntityObject().Difficulty;
+        }
+
+        public void Pause()
+        {
+            playerEntity.GetEntityObject().AddEffect(new Paused());
+
+            foreach (DrawableEntity enemy in enemies)
+            {
+                enemy.GetEntityObject().AddEffect(new Paused());
+            }
+
+            isPaused = true;
+        }
+
+        public void UnPause()
+        {
+            playerEntity.GetEntityObject().RemoveEffect("Paused");
+
+            foreach (DrawableEntity enemy in enemies)
+            {
+                enemy.GetEntityObject().RemoveEffect("Paused");
+            }
+
+            isPaused = false;
         }
 
         /// <summary>
@@ -230,7 +258,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <summary>
         /// Sets up the gameplay scene
         /// </summary>
-        /// <param name="character"></param>
         public void SetUp()
         {
             if (playerEntity is null)
@@ -241,11 +268,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 playerEntity.OnMove += delegate(float direction, double speed)
                 {
                     manage_direction(direction, speed, map);
-
-                    foreach (DrawableEntity enemyEntity in enemies)
-                    {
-                        manage_direction(direction, speed, enemyEntity);
-                    }
+                    foreach (DrawableEntity enemyEntity in enemies) manage_direction(direction, speed, enemyEntity);
+                    foreach (Projectile projectile in projectiles) manage_direction(direction, speed, projectile);
                 };
                 playerEntity.GetEntityObject().OnDeath += End;
                 playerEntity.GetEntityObject().OnLevelUp += SetDifficulty;
@@ -300,7 +324,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 }
             };
             AddInternal(deathContainer);
-            isPaused = true;
+            Pause();
             removeAllEnemies();
             inventoryOverlay.Hide();
             inventoryButton.Hide();
@@ -335,7 +359,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 RemoveInternal(retryButton, true);
                 RemoveInternal(deathContainer, true);
                 RemoveInternal(endStatContainer, true);
-                isPaused = false;
+                UnPause();
                 scoreFlowContainer.Anchor = Anchor.TopRight;
                 scoreFlowContainer.Origin = Anchor.TopRight;
                 scoreFlowContainer.Scale = new Vector2(1);
@@ -344,10 +368,14 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 GameData.Weapons.Clear();
                 GameData.EquipedCharacter.Weapon = new BraydensOsuPen();
                 GameData.EquipedCharacter.Artifacts.Clear();
+                GameData.EquipedCharacter.Experience.Level.Current.Value = 1;
+                GameData.EquipedCharacter.Experience.Xp.Current.Value = 0;
                 GameData.EquipedCharacter.UpdateStats();
                 GameData.EquipedCharacter.Stats.Restore();
                 map.FadeIn();
+                inventoryOverlay.Show();
                 gameplayHud.FadeIn();
+                inventoryButton.Show();
                 SetUp();
             });
             AddInternal(endStatContainer);
@@ -364,8 +392,30 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         protected override void Update()
         {
-            spawnEnemyClock();
             base.Update();
+            spawnEnemyClock();
+
+            foreach (Projectile projectile in playerEntity.QueuedProjectiles.ToList())
+            {
+                projectile.Position = new Vector2(500, -500);
+                projectile.ShootFrom(playerEntity);
+                Scheduler.AddDelayed(() => RemoveInternal(projectile, false), projectile.Lifetime);
+                playerEntity.QueuedProjectiles.Remove(projectile);
+                AddInternal(projectile);
+                projectiles.Add(projectile);
+            }
+
+            foreach (DrawableEntity enemy in enemies)
+            {
+                foreach (Projectile projectile in enemy.QueuedProjectiles.ToList())
+                {
+                    projectile.ShootFrom(enemy);
+                    Scheduler.AddDelayed(() => RemoveInternal(projectile, false), projectile.Lifetime);
+                    enemy.QueuedProjectiles.Remove(projectile);
+                    AddInternal(projectile);
+                    projectiles.Add(projectile);
+                }
+            }
         }
     }
 }

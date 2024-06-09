@@ -50,7 +50,7 @@ namespace GentrysQuest.Game.Screens.MainMenu
             };
             mainMenuButton.SetAction(delegate
             {
-                Character character = new TestCharacter(1);
+                Character character = new BraydenMesserschmidt();
                 Weapon weapon = new BraydensOsuPen();
                 character.Weapon = weapon;
                 GameData.Characters.Add(character);

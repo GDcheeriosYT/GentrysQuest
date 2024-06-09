@@ -70,6 +70,22 @@ namespace GentrysQuest.Game.Utils
             return new Vector2((float)x, (float)y) * 100;
         }
 
+        /// <summary>
+        /// Rotates a vector
+        /// </summary>
+        /// <param name="vector">the vector</param>
+        /// <param name="degrees">the degrees</param>
+        /// <returns>the rotated vector</returns>
+        public static Vector2 RotateVector(Vector2 vector, float degrees)
+        {
+            float radians = MathF.PI * degrees / 180.0f;
+
+            float newX = vector.X * MathF.Cos(radians) - vector.Y * MathF.Sin(radians);
+            float newY = vector.X * MathF.Sin(radians) + vector.Y * MathF.Cos(radians);
+
+            return new Vector2(newX, newY);
+        }
+
         public static double SecondToMs(double input)
         {
             return input * 1000;
@@ -81,11 +97,15 @@ namespace GentrysQuest.Game.Utils
         }
 
         public static double GetPercent(double value, double percent) => value * (percent * 0.01f);
-
-        public static int RandomInt(int min, int max) => Random.Shared.Next(min, max);
-
+        public static int RandomInt(int min, int max) => Random.Shared.Next(min, max + 1);
+        public static int RandomInt(int max) => Random.Shared.Next(max + 1);
         public static float RandomFloat(float min, float max) => min + Random.Shared.NextSingle() * (max - min);
-
+        public static float RandomFloat(float max) => Random.Shared.NextSingle() * max;
+        public static float RandomFloat() => Random.Shared.NextSingle();
         public static bool RandomBool() => Convert.ToBoolean(Random.Shared.Next(2));
+        public static bool IsChanceSuccessful(int passingValue, int chance) => (passingValue < RandomInt(chance));
+        public static bool IsChanceSuccessful(float passingValue) => passingValue >= RandomFloat();
+
+        public static int RandomChoice(int size) => Random.Shared.Next(size);
     }
 }

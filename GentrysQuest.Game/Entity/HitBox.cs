@@ -8,7 +8,7 @@ namespace GentrysQuest.Game.Entity
 {
     public partial class HitBox : CompositeDrawable
     {
-        private const bool DEBUG = false;
+        private const bool DEBUG = true;
         private bool enabled = true;
         public readonly AffiliationType Affiliation;
         private dynamic parent;
@@ -47,7 +47,8 @@ namespace GentrysQuest.Game.Entity
 
         public bool CheckCollision(HitBox hitBox)
         {
-            if (enabled) return collisionQuad.Intersects(hitBox.collisionQuad) && Affiliation != hitBox.Affiliation;
+            if (enabled && !hitBox.Equals(this)) return collisionQuad.Intersects(hitBox.collisionQuad) && Affiliation != hitBox.Affiliation;
+
             return false;
         }
     }
