@@ -12,12 +12,12 @@ namespace GentrysQuest.Game.Database
         /// <summary>
         /// The stat value
         /// </summary>
-        int Value { get; }
+        float Value { get; }
 
         /// <summary>
         /// How much score the stat rewards
         /// </summary>
-        short ScoreReward { get; }
+        float ScoreReward { get; }
 
         /// <summary>
         /// If the value should only count the best
@@ -27,7 +27,7 @@ namespace GentrysQuest.Game.Database
         /// <summary>
         /// Controls how adding to the stat works
         /// </summary>
-        void Add(int amount = 1);
+        void Add(float amount = 1);
 
         /// <summary>
         /// Returns the summary of the stat

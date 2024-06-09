@@ -280,7 +280,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             GameData.StartStatTracker();
             GameData.CurrentStats.ScoreStatistic.OnScoreChange += delegate
             {
-                this.TransformTo(nameof(Score), GameData.CurrentStats.ScoreStatistic.Value, 1000, Easing.Out);
+                this.TransformTo(nameof(Score), (int)GameData.CurrentStats.ScoreStatistic.Value, 1000, Easing.Out);
             };
         }
 

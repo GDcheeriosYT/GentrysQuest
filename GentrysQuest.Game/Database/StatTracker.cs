@@ -14,11 +14,11 @@ namespace GentrysQuest.Game.Database
             ScoreStatistic = new ScoreStatistic();
             stats.Add(ScoreStatistic);
             stats.Add(new Statistic(StatTypes.Hits, 10));
-            stats.Add(new Statistic(StatTypes.Damage));
+            stats.Add(new Statistic(StatTypes.Damage, 0.1f));
             stats.Add(new MaxStatistic(StatTypes.MostDamage));
             stats.Add(new Statistic(StatTypes.Crits, 20));
             stats.Add(new Statistic(StatTypes.Kills, 100));
-            stats.Add(new Statistic(StatTypes.DamageTaken));
+            stats.Add(new Statistic(StatTypes.DamageTaken, 0.1f));
             stats.Add(new MaxStatistic(StatTypes.MostDamageTaken));
             stats.Add(new Statistic(StatTypes.HitsTaken, 2));
             stats.Add(new MaxStatistic(StatTypes.ConsecutiveCrits));
@@ -28,13 +28,13 @@ namespace GentrysQuest.Game.Database
             stats.Add(new MaxStatistic(StatTypes.MoneyGainedOnce));
             stats.Add(new Statistic(StatTypes.MoneySpent, 1));
             stats.Add(new Statistic(StatTypes.MoneyGained));
-            stats.Add(new Statistic(StatTypes.HealthGained));
+            stats.Add(new Statistic(StatTypes.HealthGained, 0.5f));
             stats.Add(new MaxStatistic(StatTypes.HealthGainedOnce));
         }
 
         private void addToStatPattern(IStatistic statistic, int amount)
         {
-            ScoreStatistic.Add(statistic.ScoreReward);
+            ScoreStatistic.Add(statistic.ScoreReward * amount);
             statistic.Add(amount);
         }
 

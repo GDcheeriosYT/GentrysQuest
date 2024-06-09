@@ -4,7 +4,7 @@ namespace GentrysQuest.Game.Database
 {
     public class Statistic : IStatistic
     {
-        public Statistic(StatTypes statType, short scoreReward = 0)
+        public Statistic(StatTypes statType, float scoreReward = 0)
         {
             Logger.Log($"{statType.ToString()} Created");
             StatType = statType;
@@ -88,10 +88,10 @@ namespace GentrysQuest.Game.Database
 
         public string Name { get; }
         public StatTypes StatType { get; }
-        public int Value { get; protected set; } = 0;
-        public short ScoreReward { get; }
+        public float Value { get; protected set; } = 0;
+        public float ScoreReward { get; }
         public bool IsConsecutive { get; protected set; } = false;
-        public virtual void Add(int amount) => Value += amount;
+        public virtual void Add(float amount) => Value += amount;
 
         public string Summary()
         {

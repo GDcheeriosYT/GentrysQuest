@@ -11,10 +11,10 @@ namespace GentrysQuest.Game.Database
         {
         }
 
-        public override void Add(int amount)
+        public override void Add(float amount)
         {
             base.Add(amount);
-            if (amount != 0) OnScoreChange?.Invoke();
+            OnScoreChange?.Invoke();
         }
     }
 }
