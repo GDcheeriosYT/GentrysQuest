@@ -118,7 +118,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     HitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
                     this.TransformTo(nameof(Distance), pattern.Distance, speed, pattern.Transition);
                     if (pattern.ResetHitBox) DamageQueue.Clear();
-                    Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
+                    Weapon.Damage.Add(Weapon.Damage.GetPercentFromTotal(pattern.DamagePercent));
                     Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
                     onHitEffect = pattern.OnHitEffect;
 
@@ -240,7 +240,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             else
             {
-                Weapon.Damage.SetAdditional(0);
+                Weapon.UpdateStats();
                 Weapon.Holder.SpeedModifier = 1;
             }
         }

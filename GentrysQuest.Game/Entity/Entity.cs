@@ -122,7 +122,7 @@ namespace GentrysQuest.Game.Entity
             Stats.Health.UpdateCurrentValue(amount * HealingModifier);
             IsFullHealth = Stats.Health.Current.Value == Stats.Health.Total();
             OnHealthEvent?.Invoke();
-            OnHeal?.Invoke(amount);
+            OnHeal?.Invoke((int)(amount * HealingModifier));
         }
 
         public void SetWeapon([CanBeNull] Weapon.Weapon weapon)

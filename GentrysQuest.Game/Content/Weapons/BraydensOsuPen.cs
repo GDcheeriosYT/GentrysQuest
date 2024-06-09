@@ -22,6 +22,8 @@ namespace GentrysQuest.Game.Content.Weapons
 
         public BraydensOsuPen()
         {
+            Damage.SetDefaultValue(46);
+
             #region Design
 
             Origin = Anchor.BottomCentre;

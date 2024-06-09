@@ -24,6 +24,10 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         protected override void Update()
         {
+            base.Update();
+
+            if (followEntity == null) return;
+
             Vector2 positionTo = MathBase.GetDirection(Position, followEntity.Position);
 
             try
@@ -39,8 +43,6 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 Attack(followEntity.Position);
             }
-
-            base.Update();
         }
     }
 }

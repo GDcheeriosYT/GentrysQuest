@@ -22,8 +22,8 @@ public class Character : Entity
     public override void Heal(int amount)
     {
         base.Heal(amount);
-        GameData.CurrentStats.AddToStat(StatTypes.HealthGained, amount);
-        GameData.CurrentStats.AddToStat(StatTypes.HealthGainedOnce, amount);
+        GameData.CurrentStats.AddToStat(StatTypes.HealthGained, (int)(amount * HealingModifier));
+        GameData.CurrentStats.AddToStat(StatTypes.HealthGainedOnce, (int)(amount * HealingModifier));
     }
 
     public override void Die()

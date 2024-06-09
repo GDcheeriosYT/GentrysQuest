@@ -67,11 +67,13 @@ namespace GentrysQuest.Game.Entity.Weapon
             Buff = new Buff(this);
             OnLevelUp += delegate
             {
-                Damage.SetAdditional(Experience.Level.Current.Value * (Difficulty + 1) * StarRating.Value);
+                UpdateStats();
                 Buff.Improve();
                 Holder?.UpdateStats();
             };
         }
+
+        public void UpdateStats() => Damage.SetAdditional((Experience.Level.Current.Value - 1) * (Difficulty + 1) * StarRating.Value);
 
         public void HitEntity(DamageDetails details)
         {

@@ -1,5 +1,7 @@
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Effects;
+using GentrysQuest.Game.Content.Enemies;
+using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Graphics;
 using NUnit.Framework;
@@ -14,7 +16,9 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
     public partial class TestSceneEntity : GentrysQuestTestScene
     {
         private GentrysQuest.Game.Entity.Entity entity;
+        private Enemy enemy;
         private DrawableEntity drawableEntity;
+        private DrawableEnemyEntity drawableEnemy;
         private SpriteText levelTracker;
         private ProgressBar xpProgress;
 
@@ -23,6 +27,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             Add(new Box { RelativeSizeAxes = Axes.Both, Colour = Colour4.Gray });
 
             entity = new TestCharacter(5);
+            enemy = new TestEnemy(5);
             Add(levelTracker = new SpriteText
             {
                 Text = $"Level: {entity.Experience.Level.Current}"
@@ -39,7 +44,14 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
                 RelativeSizeAxes = Axes.Both,
                 Size = new Vector2(0.2f, 0.02f)
             });
-            Add(drawableEntity = new DrawableEntity(entity));
+            Add(drawableEntity = new DrawableEntity(entity)
+            {
+                Position = new Vector2(-200, 0)
+            });
+            Add(drawableEnemy = new DrawableEnemyEntity(enemy)
+            {
+                Position = new Vector2(200, 0)
+            });
 
             entity.OnLevelUp += delegate
             {
@@ -63,16 +75,52 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
         public virtual void Start()
         {
             int amount = 100;
-            AddStep("Spawn", () => entity.Spawn());
-            AddStep("Die", () => entity.Die());
+            AddStep("Spawn", () =>
+            {
+                entity.Spawn();
+                enemy.Spawn();
+            });
+            AddStep("Die", () =>
+            {
+                entity.Die();
+                enemy.Die();
+            });
             AddSliderStep("Amount", 0, 1000, 100, i => amount = i);
-            AddStep("Damage", () => entity.Damage(amount));
-            AddStep("Crit", () => entity.Crit((int)(amount * 1.5)));
-            AddStep("Heal", () => entity.Heal(amount));
-            AddStep("Burn", () => entity.AddEffect(new Burn()));
-            AddStep("Bleed", () => entity.AddEffect(new Bleed()));
-            AddStep("LevelUp", () => entity.LevelUp());
-            AddStep("AddXp", () => entity.AddXp(amount));
+            AddStep("Damage", () =>
+            {
+                entity.Damage(amount);
+                enemy.Damage(amount);
+            });
+            AddStep("Crit", () =>
+            {
+                entity.Crit((int)(amount * 1.5));
+                enemy.Crit((int)(amount * 1.5));
+            });
+            AddStep("Heal", () =>
+            {
+                entity.Heal(amount);
+                enemy.Heal(amount);
+            });
+            AddStep("Burn", () =>
+            {
+                entity.AddEffect(new Burn());
+                enemy.AddEffect(new Burn());
+            });
+            AddStep("Bleed", () =>
+            {
+                entity.AddEffect(new Bleed());
+                enemy.AddEffect(new Bleed());
+            });
+            AddStep("LevelUp", () =>
+            {
+                entity.LevelUp();
+                enemy.LevelUp();
+            });
+            AddStep("AddXp", () =>
+            {
+                entity.AddXp(amount);
+                enemy.AddXp(amount);
+            });
         }
     }
 }

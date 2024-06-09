@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GentrysQuest.Game.Utils;
 
@@ -17,21 +18,21 @@ public class Enemy : Entity
         int level = Experience.Level.Current.Value;
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 2000, Stats.Health.point, 1000) +
-            CalculatePointBenefit(level * 45, Stats.Health.point, 100)
+            CalculatePointBenefit(Math.Pow(Difficulty, 3) * 2000, Stats.Health.point, 5000) +
+            CalculatePointBenefit(level * 25, Stats.Health.point, 100)
         );
 
         Stats.Attack.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 50, Stats.Attack.point, 20) +
+            CalculatePointBenefit(Difficulty * 15, Stats.Attack.point, 20) +
             CalculatePointBenefit(level * 5, Stats.Attack.point, 5)
         );
 
         Stats.Defense.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 20, Stats.Defense.point, 18) +
+            CalculatePointBenefit(Difficulty * 42, Stats.Defense.point, 18) +
             CalculatePointBenefit(level * 4, Stats.Defense.point, 2)
         );
 
-        Stats.CritRate.SetDefaultValue(5);
+        Stats.CritRate.SetDefaultValue(20);
 
         Stats.CritDamage.SetDefaultValue(Difficulty * 20);
 
