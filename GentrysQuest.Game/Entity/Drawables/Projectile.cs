@@ -1,4 +1,5 @@
 using System.Linq;
+using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Location.Drawables;
@@ -168,6 +169,21 @@ namespace GentrysQuest.Game.Entity.Drawables
                 entity.OnHit(details);
 
                 if (OnHitEffect != null && OnHitEffect.Applies()) entity.AddEffect(OnHitEffect.Effect);
+
+                switch (entity)
+                {
+                    case Character character:
+                        GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
+                        GameData.CurrentStats.AddToStat(StatTypes.DamageTaken, damage);
+                        GameData.CurrentStats.AddToStat(StatTypes.MostDamageTaken, damage);
+                        break;
+
+                    case Entity:
+                        GameData.CurrentStats.AddToStat(StatTypes.Hits);
+                        GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
+                        GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
+                        break;
+                }
 
                 damageQueue.Add(hitBox);
             }
