@@ -12,7 +12,6 @@ using GentrysQuest.Game.Location.Drawables;
 using GentrysQuest.Game.Overlays.Inventory;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
-using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
@@ -26,7 +25,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
 {
     public partial class Gameplay : Screen
     {
-        private Bindable<int> score = new();
+        public int Score { get; set; } = new();
         private TextFlowContainer scoreFlowContainer;
         private SpriteText scoreText;
         private DrawablePlayableEntity playerEntity;
@@ -115,16 +114,15 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 Text = "0",
                 Colour = Colour4.Black,
-                Font = FontUsage.Default.With(size: 58)
+                Font = FontUsage.Default.With(size: 64)
             });
             scoreFlowContainer.AddText(new SpriteText
             {
                 Text = "score",
                 Colour = Colour4.Black,
-                Font = FontUsage.Default.With(size: 48),
+                Font = FontUsage.Default.With(size: 52),
                 Padding = new MarginPadding { Left = 15 }
             });
-            score.ValueChanged += delegate { scoreText.Text = $"{score}"; };
             SetUp();
         }
 
@@ -280,7 +278,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
             gameplayTime = Clock.CurrentTime;
             GameData.EquipedCharacter.Spawn();
             GameData.StartStatTracker();
-            GameData.CurrentStats.ScoreStatistic.OnScoreChange += delegate { score.Value = GameData.CurrentStats.ScoreStatistic.Value; };
+            GameData.CurrentStats.ScoreStatistic.OnScoreChange += delegate
+            {
+                this.TransformTo(nameof(Score), GameData.CurrentStats.ScoreStatistic.Value, 1000, Easing.Out);
+            };
         }
 
         /// <summary>
@@ -394,6 +395,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             base.Update();
             spawnEnemyClock();
+            scoreText.Text = "" + Score;
 
             foreach (Projectile projectile in playerEntity.QueuedProjectiles.ToList())
             {

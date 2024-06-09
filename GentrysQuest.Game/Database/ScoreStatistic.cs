@@ -14,7 +14,7 @@ namespace GentrysQuest.Game.Database
         public override void Add(int amount)
         {
             base.Add(amount);
-            OnScoreChange?.Invoke();
+            if (amount != 0) OnScoreChange?.Invoke();
         }
     }
 }
