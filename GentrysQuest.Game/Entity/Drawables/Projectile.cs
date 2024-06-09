@@ -6,7 +6,6 @@ using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -135,8 +134,6 @@ namespace GentrysQuest.Game.Entity.Drawables
                 DamageDetails details = new();
                 Entity entity;
                 bool isValid = true;
-
-                Logger.Log(hitBox.getParent().ToString());
 
                 switch (hitBox.getParent())
                 {
