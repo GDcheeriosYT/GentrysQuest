@@ -40,11 +40,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// </summary>
         protected DrawableWeapon weapon;
 
-        /// <summary>
-        /// The affiliation.
-        /// Is it an opp?
-        /// </summary>
         public AffiliationType Affiliation { get; set; }
+        public List<Projectile> QueuedProjectiles { get; set; } = new();
 
         public HitBox HitBox { get; set; }
         protected CollisonHitBox colliderBox;
@@ -102,7 +99,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 HitBox,
                 colliderBox
             };
-            if (Entity.Weapon != null) weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
+            if (Entity.Weapon != null) weapon = new DrawableWeapon(this, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
@@ -221,7 +218,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (Entity.Weapon != null)
             {
-                weapon = new DrawableWeapon(Entity.Weapon, Affiliation);
+                weapon = new DrawableWeapon(this, Affiliation);
                 weapon.Affiliation = Affiliation;
                 AddInternal(weapon);
             }
@@ -232,10 +229,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// should be used by some test class or by Gameplay class
         /// </summary>
         /// <param name="entities">The list of entities</param>
-        public void SetEntities(List<DrawableEntity> entities)
-        {
-            EntitiesHitCheckList = entities;
-        }
+        public void SetEntities(List<DrawableEntity> entities) => EntitiesHitCheckList = entities;
 
         /// <summary>
         /// In some cases you'll want to get the entity reference for this drawable class
@@ -247,11 +241,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// Manages the speed of the entity
         /// </summary>
         /// <returns></returns>
-        public double GetSpeed()
-        {
-            // return 1;
-            return SPEED_MAIN * Entity.Stats.Speed.Current.Value * Entity.SpeedModifier;
-        }
+        public double GetSpeed() => SPEED_MAIN * Entity.Stats.Speed.Current.Value * Entity.SpeedModifier;
 
         protected override void Update()
         {

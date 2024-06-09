@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
@@ -29,7 +30,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private TextFlowContainer scoreFlowContainer;
         private SpriteText scoreText;
         private DrawablePlayableEntity playerEntity;
-        private List<DrawableEntity> enemies = new List<DrawableEntity>();
+        private List<DrawableEntity> enemies = new();
+        private List<Projectile> projectiles = new();
         private GameplayHud gameplayHud;
         private DrawableMap map;
         private InventoryOverlay inventoryOverlay;
@@ -256,7 +258,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <summary>
         /// Sets up the gameplay scene
         /// </summary>
-        /// <param name="character"></param>
         public void SetUp()
         {
             if (playerEntity is null)
@@ -267,11 +268,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 playerEntity.OnMove += delegate(float direction, double speed)
                 {
                     manage_direction(direction, speed, map);
-
-                    foreach (DrawableEntity enemyEntity in enemies)
-                    {
-                        manage_direction(direction, speed, enemyEntity);
-                    }
+                    foreach (DrawableEntity enemyEntity in enemies) manage_direction(direction, speed, enemyEntity);
+                    foreach (Projectile projectile in projectiles) manage_direction(direction, speed, projectile);
                 };
                 playerEntity.GetEntityObject().OnDeath += End;
                 playerEntity.GetEntityObject().OnLevelUp += SetDifficulty;
@@ -394,8 +392,30 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         protected override void Update()
         {
-            spawnEnemyClock();
             base.Update();
+            spawnEnemyClock();
+
+            foreach (Projectile projectile in playerEntity.QueuedProjectiles.ToList())
+            {
+                projectile.Position = new Vector2(500, -500);
+                projectile.ShootFrom(playerEntity);
+                Scheduler.AddDelayed(() => RemoveInternal(projectile, false), projectile.Lifetime);
+                playerEntity.QueuedProjectiles.Remove(projectile);
+                AddInternal(projectile);
+                projectiles.Add(projectile);
+            }
+
+            foreach (DrawableEntity enemy in enemies)
+            {
+                foreach (Projectile projectile in enemy.QueuedProjectiles.ToList())
+                {
+                    projectile.ShootFrom(enemy);
+                    Scheduler.AddDelayed(() => RemoveInternal(projectile, false), projectile.Lifetime);
+                    enemy.QueuedProjectiles.Remove(projectile);
+                    AddInternal(projectile);
+                    projectiles.Add(projectile);
+                }
+            }
         }
     }
 }

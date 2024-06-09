@@ -11,7 +11,7 @@ namespace GentrysQuest.Game.Content.Enemies
             StarRating = new StarRating(starRating);
 
             WeaponChoices.Add(new Knife());
-            WeaponChoices.Add(new BraydensOsuPen());
+            WeaponChoices.Add(new Bow());
         }
     }
 }

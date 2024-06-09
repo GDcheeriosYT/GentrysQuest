@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Utils;
@@ -15,6 +16,7 @@ namespace GentrysQuest.Game.Entity.Drawables
     public partial class DrawableWeapon : CompositeDrawable, IDrawableEntity
     {
         protected readonly Weapon.Weapon Weapon;
+        protected readonly DrawableEntity Holder;
         protected readonly DamageQueue DamageQueue = new();
         public Sprite Sprite { get; set; }
         public HitBox HitBox { get; set; }
@@ -23,25 +25,31 @@ namespace GentrysQuest.Game.Entity.Drawables
         public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
 
-        public DrawableWeapon(Weapon.Weapon weapon, AffiliationType affiliation)
+        public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
-            Weapon = weapon;
+            Holder = entity;
+            Weapon = entity.GetEntityObject().Weapon;
             Affiliation = affiliation;
             HitBox = new HitBox(this);
             Size = new Vector2(1f);
             RelativeSizeAxes = Axes.Both;
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
-            Origin = weapon.Origin;
-            InternalChildren = new Drawable[]
+
+            if (Weapon != null)
             {
-                Sprite = new Sprite
+                Origin = Weapon.Origin;
+                InternalChildren = new Drawable[]
                 {
-                    RelativeSizeAxes = Axes.Both
-                },
-                HitBox
-            };
-            Weapon.CanAttack = true;
+                    Sprite = new Sprite
+                    {
+                        RelativeSizeAxes = Axes.Both
+                    },
+                    HitBox
+                };
+                Weapon.CanAttack = true;
+            }
+
             disable();
         }
 
@@ -113,6 +121,15 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Weapon.Damage.SetAdditional(Weapon.Damage.GetPercentFromDefault(pattern.DamagePercent));
                     Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
                     onHitEffect = pattern.OnHitEffect;
+
+                    if (pattern.Projectiles == null) return;
+
+                    foreach (var projectile in pattern.Projectiles.Select(parameters => new Projectile(parameters)))
+                    {
+                        projectile.Position *= Distance;
+                        projectile.Direction += direction - 90;
+                        Holder.QueuedProjectiles.Add(projectile);
+                    }
                 }, delay);
                 delay += speed;
             }
@@ -138,7 +155,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
-                    if (!DamageQueue.Check(hitbox))
+                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode)
                     {
                         DamageDetails details = new DamageDetails();
                         Entity entity;
@@ -156,6 +173,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         }
 
                         if (!isValid) continue;
+
                         int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
                         damage -= (int)(entity.Stats.Defense.Current.Value * entity.DefenseModifier);
 

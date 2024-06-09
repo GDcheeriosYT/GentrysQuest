@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osuTK;
 
@@ -66,6 +67,11 @@ namespace GentrysQuest.Game.Entity.Weapon
         /// What happens when the entity gets hit
         /// </summary>
         public OnHitEffect OnHitEffect = null;
+
+        /// <summary>
+        /// The projectiles
+        /// </summary>
+        public List<ProjectileParameters> Projectiles = null;
 
         public AttackPatternEvent()
             : this(0)
