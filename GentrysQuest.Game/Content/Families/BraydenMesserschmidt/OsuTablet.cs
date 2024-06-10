@@ -5,7 +5,7 @@ namespace GentrysQuest.Game.Content.Families.BraydenMesserschmidt
 {
     public class OsuTablet : Artifact
     {
-        public new List<StatType> ValidMainAttributes { get; set; } = new() { StatType.CritRate };
+        public override List<StatType> ValidMainAttributes { get; set; } = [StatType.CritRate];
 
         public OsuTablet()
         {

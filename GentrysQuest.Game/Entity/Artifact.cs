@@ -9,9 +9,9 @@ namespace GentrysQuest.Game.Entity
         public Family Family { get; private set; } = null;
         public Buff MainAttribute { get; set; }
         public List<Buff> Attributes { get; set; }
-        public List<StatType> ValidMainAttributes { get; set; } = new();
-        public List<int> ValidStarRatings { get; set; } = new() { 1, 2, 3, 4, 5 };
-        public AllowedPercentMethod AllowedPercentMethod { get; set; } = AllowedPercentMethod.Allowed;
+        public virtual List<StatType> ValidMainAttributes { get; set; } = new();
+        public virtual List<int> ValidStarRatings { get; set; } = new() { 1, 2, 3, 4, 5 };
+        public virtual AllowedPercentMethod AllowedPercentMethod { get; set; } = AllowedPercentMethod.Allowed;
         public Character Holder;
 
         public void SetFamily(Family family)
