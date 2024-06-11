@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
@@ -19,6 +20,8 @@ namespace GentrysQuest.Game.Content.Weapons
                                                                      + "On a critical hit you get a small boost of speed";
 
         public override StarRating StarRating { get; protected set; } = new(5);
+
+        public override List<StatType> ValidBuffs { get; set; } = [StatType.CritDamage];
 
         public BraydensOsuPen()
         {

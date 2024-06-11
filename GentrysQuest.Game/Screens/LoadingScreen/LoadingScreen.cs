@@ -62,7 +62,8 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
                 status.Origin = Anchor.Centre;
             }, 1500);
             Scheduler.AddDelayed(() => status.FadeOut(250), 2700);
-            Scheduler.AddDelayed(() => { this.Push(new Intro.Intro()); }, 3000);
+            // Scheduler.AddDelayed(() => { this.Push(new Intro.Intro()); }, 3000);
+            Scheduler.AddDelayed(() => { this.Push(new MainMenu.MainMenu()); }, 3000);
         }
     }
 }

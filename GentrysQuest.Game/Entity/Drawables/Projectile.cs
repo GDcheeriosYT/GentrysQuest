@@ -136,7 +136,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 Entity entity;
                 bool isValid = true;
 
-                switch (hitBox.getParent())
+                switch (hitBox.GetParent())
                 {
                     case DrawableEntity drawableEntity:
                         entity = drawableEntity.GetEntityObject();

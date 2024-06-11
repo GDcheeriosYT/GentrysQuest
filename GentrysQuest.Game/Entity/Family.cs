@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -7,22 +8,17 @@ namespace GentrysQuest.Game.Entity
     {
         public string Name { get; protected set; }
         public string Description { get; protected set; }
-        protected List<Artifact> Artifacts = new();
+        protected List<Type> Artifacts = new();
         public TwoSetBuff TwoSetBuff { get; protected set; }
         public FourSetBuff FourSetBuff { get; protected set; }
 
-        public void AddArtifact(Artifact artifact)
-        {
-            Artifacts.Add(artifact);
-            artifact.SetFamily(this);
-        }
-
         public Artifact GetArtifact()
         {
-            return Artifacts[Random.Shared.Next(Artifacts.Count + 1)];
+            var artifact = Artifacts[MathBase.RandomChoice(Artifacts.Count)];
+            return (Artifact)Activator.CreateInstance(artifact);
         }
 
-        public List<Artifact> GetArtifacts()
+        public List<Type> GetArtifacts()
         {
             return Artifacts;
         }

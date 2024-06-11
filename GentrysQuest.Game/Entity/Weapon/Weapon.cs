@@ -1,4 +1,6 @@
-﻿using osu.Framework.Graphics;
+﻿using System.Collections.Generic;
+using GentrysQuest.Game.Utils;
+using osu.Framework.Graphics;
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
@@ -53,10 +55,17 @@ namespace GentrysQuest.Game.Entity.Weapon
         public Buff Buff;
 
         /// <summary>
+        /// The valid buffs that this weapon can have
+        /// </summary>
+        public virtual List<StatType> ValidBuffs { get; set; } = new();
+
+        /// <summary>
         /// Where the weapon should be held from
         /// design purpose
         /// </summary>
         public Anchor Origin = Anchor.Centre;
+
+        public virtual float DropChance { get; set; } = 0.1f;
 
         public delegate void HitEvent(DamageDetails details);
 
@@ -64,7 +73,8 @@ namespace GentrysQuest.Game.Entity.Weapon
 
         protected Weapon()
         {
-            Buff = new Buff(this);
+            Buff = ValidBuffs.Count > 0 ? new Buff(this, ValidBuffs[MathBase.RandomChoice(ValidBuffs.Count)]) : new Buff(this);
+
             OnLevelUp += delegate
             {
                 UpdateStats();

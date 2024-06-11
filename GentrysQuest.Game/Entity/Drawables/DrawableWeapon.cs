@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Database;
@@ -155,21 +154,23 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
-                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode)
+                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode && hitbox.GetType() != typeof(CollisonHitBox))
                     {
                         DamageDetails details = new DamageDetails();
                         Entity entity;
                         bool isValid = true;
                         bool isCrit = false;
 
-                        try
+                        switch (hitbox.GetParent())
                         {
-                            entity = hitbox.getParent().GetEntityObject();
-                        }
-                        catch (Exception e)
-                        {
-                            isValid = false;
-                            entity = new Entity();
+                            case DrawableEntity drawableEntity:
+                                entity = drawableEntity.GetEntityObject();
+                                break;
+
+                            default:
+                                isValid = false;
+                                entity = new Entity();
+                                break;
                         }
 
                         if (!isValid) continue;
@@ -226,7 +227,10 @@ namespace GentrysQuest.Game.Entity.Drawables
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
                                     Weapon.Holder.AddXp(entity.GetXpReward());
                                     GameData.Money.Hand(money);
-                                    GameData.Weapons.Add(entity.GetWeaponReward());
+
+                                    Weapon.Weapon reward = entity.GetWeaponReward();
+                                    if (reward != null) GameData.Add(reward);
+
                                     GameData.CurrentStats.AddToStat(StatTypes.Kills);
                                 }
 

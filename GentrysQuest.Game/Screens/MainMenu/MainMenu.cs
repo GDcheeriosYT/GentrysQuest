@@ -53,7 +53,7 @@ namespace GentrysQuest.Game.Screens.MainMenu
                 Character character = new BraydenMesserschmidt();
                 Weapon weapon = new BraydensOsuPen();
                 character.Weapon = weapon;
-                GameData.Characters.Add(character);
+                GameData.Add(character);
                 GameData.EquipCharacter(character);
                 this.Push(new Gameplay.Gameplay());
             });

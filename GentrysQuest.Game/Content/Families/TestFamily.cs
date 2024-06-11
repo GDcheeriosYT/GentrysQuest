@@ -8,7 +8,7 @@ namespace GentrysQuest.Game.Content.Families
         {
             Name = "Test Family";
             Description = "Just a family for testing";
-            AddArtifact(new TestArtifact());
+            Artifacts.Add(typeof(TestArtifact));
         }
     }
 

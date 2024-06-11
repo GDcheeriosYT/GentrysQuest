@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GentrysQuest.Game.Utils;
 using JetBrains.Annotations;
 
 namespace GentrysQuest.Game.Entity
@@ -155,7 +156,9 @@ namespace GentrysQuest.Game.Entity
 
         public virtual Weapon.Weapon GetWeaponReward()
         {
-            return Weapon;
+            if (MathBase.IsChanceSuccessful(Weapon!.DropChance)) return Weapon;
+
+            return null;
         }
 
         public void AddEffect(StatusEffect statusEffect)

@@ -1,12 +1,14 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 
 namespace GentrysQuest.Game.Overlays.Notifications;
 
 public partial class NotificationContainer : CompositeDrawable
 {
     private const bool DEBUG = true;
+    private FillFlowContainer notifications;
+    private static NotificationContainer instance;
+    public static NotificationContainer Instance => instance ??= new NotificationContainer();
 
     public NotificationContainer()
     {
@@ -16,12 +18,30 @@ public partial class NotificationContainer : CompositeDrawable
         Anchor = Anchor.TopRight;
         InternalChildren = new Drawable[]
         {
-            new Box
+            notifications = new FillFlowContainer()
             {
-                RelativeSizeAxes = Axes.Both,
-                Colour = Colour4.Black,
-                Alpha = (float)(DEBUG ? 0.2f : 0)
+                Anchor = Anchor.TopRight,
+                Origin = Anchor.TopRight,
+                Direction = FillDirection.Vertical,
+                AutoSizeAxes = Axes.Both
             }
         };
+    }
+
+    /// <summary>
+    /// Adds a notification to the container
+    /// </summary>
+    /// <param name="notification">The notification</param>
+    public void AddNotification(Notification notification)
+    {
+        int length = notification.Message.Length * 100;
+        notification.ScaleTo(0, 1);
+        notifications.Add(notification);
+        notification.ScaleTo(1, 100);
+        Scheduler.AddDelayed(() => { notification.FadeOut(100); }, length);
+        Scheduler.AddDelayed(() =>
+        {
+            notifications.Remove(notification, false);
+        }, length + 100);
     }
 }

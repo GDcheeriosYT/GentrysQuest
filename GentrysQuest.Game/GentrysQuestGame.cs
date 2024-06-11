@@ -12,7 +12,6 @@ namespace GentrysQuest.Game
     {
         private ScreenStack screenStack;
         private readonly VersionText versionText = new VersionText("Super Dooper Beta");
-        private readonly NotificationContainer notificationContainer = new NotificationContainer();
 
         [BackgroundDependencyLoader]
         private void load()
@@ -21,7 +20,7 @@ namespace GentrysQuest.Game
             // A screen stack and sample screen has been provided for convenience, but you can replace it if you don't want to use screens.
             Child = screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
             Add(versionText);
-            Add(notificationContainer);
+            Add(NotificationContainer.Instance);
             Add(new CursorContainer());
         }
 

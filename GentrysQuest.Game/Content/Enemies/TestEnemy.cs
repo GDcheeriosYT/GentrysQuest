@@ -10,8 +10,8 @@ namespace GentrysQuest.Game.Content.Enemies
             Name = "Test Enemy";
             StarRating = new StarRating(starRating);
 
-            WeaponChoices.Add(new Knife());
-            WeaponChoices.Add(new Bow());
+            WeaponChoices.AddChoice(new Bow(), 50);
+            WeaponChoices.AddChoice(new Knife(), 50);
         }
     }
 }

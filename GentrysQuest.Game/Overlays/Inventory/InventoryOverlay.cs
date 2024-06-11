@@ -288,7 +288,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     Weapon weapon = (Weapon)entityInfoDrawable.entity;
                                     Weapon? weaponFromCharacter = equippingToCharacter?.Weapon;
                                     equippingToCharacter?.SetWeapon(weapon);
-                                    if (weaponFromCharacter != null) GameData.Weapons.Add(weaponFromCharacter);
+                                    if (weaponFromCharacter != null) GameData.Add(weaponFromCharacter);
                                     GameData.Weapons.Remove(weapon);
                                 }
                                 else

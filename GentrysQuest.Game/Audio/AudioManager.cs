@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using osu.Framework.Audio;
 using osu.Framework.Graphics.Audio;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Audio
 {
@@ -28,8 +27,6 @@ namespace GentrysQuest.Game.Audio
                 gameMusic.VolumeTo(musicVolume.Amount, FADE_TIME);
             };
 
-            Logger.Log($"music volume is {musicVolume.Amount}");
-
             if (gameMusic == null)
             {
                 gameMusic = track;
@@ -45,7 +42,6 @@ namespace GentrysQuest.Game.Audio
 
         public static void PlaySound(DrawableSample sample)
         {
-            Logger.Log("playing sound");
             sample.VolumeTo(soundVolume.Amount);
             sample.Play();
         }

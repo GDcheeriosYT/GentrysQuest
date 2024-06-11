@@ -21,7 +21,18 @@ namespace GentrysQuest.Game.Entity
 
         public Artifact()
         {
-            StarRating.Value = ValidStarRatings[Random.Shared.Next(ValidStarRatings.Count)];
+            Initialize(ValidStarRatings[Random.Shared.Next(ValidStarRatings.Count)]);
+            OnLevelUp += delegate
+            {
+                if (Experience.Level.Current.Value % 4 == 0) addBuff();
+                MainAttribute.Improve();
+                Holder?.UpdateStats();
+            };
+        }
+
+        public void Initialize(int starRating)
+        {
+            StarRating.Value = starRating;
             StatType stat = Buff.GetRandomStat();
             bool isPercent = false;
 
@@ -44,12 +55,6 @@ namespace GentrysQuest.Game.Entity
             MainAttribute = new Buff(this, stat, isPercent);
 
             initializeAttributes();
-            OnLevelUp += delegate
-            {
-                if (Experience.Level.Current.Value % 4 == 0) addBuff();
-                MainAttribute.Improve();
-                Holder?.UpdateStats();
-            };
         }
 
         private void initializeAttributes()

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Content.Enemies;
-using GentrysQuest.Game.Content.Families.BraydenMesserschmidt;
 using GentrysQuest.Game.Content.Maps;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
@@ -10,6 +10,7 @@ using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Location.Drawables;
 using GentrysQuest.Game.Overlays.Inventory;
+using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -17,6 +18,7 @@ using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
@@ -26,6 +28,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
     public partial class Gameplay : Screen
     {
         public int Score { get; set; } = new();
+        private int spendableScore;
         private TextFlowContainer scoreFlowContainer;
         private SpriteText scoreText;
         private DrawablePlayableEntity playerEntity;
@@ -141,7 +144,35 @@ namespace GentrysQuest.Game.Screens.Gameplay
             enemies.Add(newEnemy);
             enemy.SetWeapon();
             newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
-            newEnemy.GetEntityObject().OnDeath += delegate { GameData.Artifacts.Add(new OsuTablet()); };
+            newEnemy.GetEntityObject().OnDeath += delegate
+            {
+                bool notValidArtifact = true;
+                int spendAmount = (int)(Math.Pow(gameplayDifficulty + 1, 2) * 1000);
+                Logger.Log(spendAmount.ToString());
+                Logger.Log(spendableScore.ToString());
+
+                if (spendableScore >= spendAmount)
+                {
+                    spendableScore -= spendAmount;
+
+                    while (notValidArtifact)
+                    {
+                        string familyString = map.MapReference.Families[MathBase.RandomChoice(map.MapReference.Families.Count)].Name;
+                        Logger.Log(familyString);
+                        int starRating = MathBase.GetStarRating(gameplayDifficulty);
+                        Logger.Log(starRating.ToString());
+                        Artifact artifact = GameData.Content.GetFamily(familyString).GetArtifact();
+                        Logger.Log(artifact.Name);
+
+                        if (artifact.ValidStarRatings.Contains(starRating))
+                        {
+                            artifact.Initialize(starRating);
+                            GameData.Add(artifact);
+                            notValidArtifact = false;
+                        }
+                    }
+                }
+            };
             newEnemy.FollowEntity(playerEntity);
             playerEntity.SetEntities(enemies);
         }
@@ -273,13 +304,19 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 playerEntity.GetEntityObject().OnLevelUp += SetDifficulty;
             }
 
+            Scheduler.AddDelayed(() =>
+            {
+                NotificationContainer.Instance.MoveToY(0.1f, 100);
+            }, 100);
+
             gameplayHud.SetEntity(GameData.EquipedCharacter);
             playerEntity.SetupClickContainer();
             gameplayTime = Clock.CurrentTime;
             GameData.EquipedCharacter.Spawn();
             GameData.StartStatTracker();
-            GameData.CurrentStats.ScoreStatistic.OnScoreChange += delegate
+            GameData.CurrentStats.ScoreStatistic.OnScoreChange += change =>
             {
+                spendableScore += change;
                 this.TransformTo(nameof(Score), (int)GameData.CurrentStats.ScoreStatistic.Value, 1000, Easing.Out);
             };
         }
@@ -302,6 +339,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
+            NotificationContainer.Instance.MoveToY(0);
             Container deathContainer = new Container
             {
                 Alpha = 0,

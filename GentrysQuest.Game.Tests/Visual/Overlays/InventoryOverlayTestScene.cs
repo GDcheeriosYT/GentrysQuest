@@ -24,28 +24,20 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
 
             GameData.Money.InfiniteMoney = true;
 
-            GameData.Characters.Add(new TestCharacter(1));
-            GameData.Characters.Add(new TestCharacter(2));
-            GameData.Characters.Add(new TestCharacter(3));
-            GameData.Characters.Add(new TestCharacter(4));
-            GameData.Characters.Add(new TestCharacter(5));
+            GameData.Add(new TestCharacter(1));
+            GameData.Add(new TestCharacter(2));
+            GameData.Add(new TestCharacter(3));
+            GameData.Add(new TestCharacter(4));
+            GameData.Add(new TestCharacter(5));
 
             foreach (var character in GameData.Content.Characters)
             {
-                GameData.Characters.Add(character);
-            }
-
-            foreach (var family in GameData.Content.Families)
-            {
-                foreach (var artifact in family.GetArtifacts())
-                {
-                    GameData.Artifacts.Add(artifact);
-                }
+                GameData.Add(character);
             }
 
             foreach (var weapon in GameData.Content.Weapons)
             {
-                GameData.Weapons.Add(weapon);
+                GameData.Add(weapon);
             }
 
             Add(inventoryOverlay = new InventoryOverlay());
@@ -61,7 +53,7 @@ namespace GentrysQuest.Game.Tests.Visual.Overlays
         [Test]
         public void Collection()
         {
-            AddStep("Add Artifact", () => GameData.Artifacts.Add(new TestArtifact()));
+            AddStep("Add Artifact", () => GameData.Add(new TestArtifact()));
         }
     }
 }

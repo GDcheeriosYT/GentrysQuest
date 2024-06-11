@@ -103,9 +103,23 @@ namespace GentrysQuest.Game.Utils
         public static float RandomFloat(float max) => Random.Shared.NextSingle() * max;
         public static float RandomFloat() => Random.Shared.NextSingle();
         public static bool RandomBool() => Convert.ToBoolean(Random.Shared.Next(2));
-        public static bool IsChanceSuccessful(int passingValue, int chance) => (passingValue < RandomInt(chance));
+        public static bool IsChanceSuccessful(int passingValue, int chance) => (passingValue >= RandomInt(chance));
         public static bool IsChanceSuccessful(float passingValue) => passingValue >= RandomFloat();
 
         public static int RandomChoice(int size) => Random.Shared.Next(size);
+
+        /// <summary>
+        /// Get the star rating based off of difficulty
+        /// </summary>
+        /// <param name="difficulty">The difficulty</param>
+        /// <returns>the star rating</returns>
+        public static int GetStarRating(int difficulty)
+        {
+            // difficulty starts at zero so we add one
+            int currentStarRating = difficulty + 1;
+            if (IsChanceSuccessful(0.15f)) currentStarRating++;
+            if (IsChanceSuccessful(0.03f)) currentStarRating++;
+            return currentStarRating;
+        }
     }
 }

@@ -1,10 +1,10 @@
-using System;
-
 namespace GentrysQuest.Game.Database
 {
     public class ScoreStatistic : Statistic
     {
-        public Action OnScoreChange;
+        public delegate void ScoreEvent(int change);
+
+        public ScoreEvent OnScoreChange;
 
         public ScoreStatistic()
             : base(StatTypes.Score)
@@ -14,7 +14,7 @@ namespace GentrysQuest.Game.Database
         public override void Add(float amount)
         {
             base.Add(amount);
-            OnScoreChange?.Invoke();
+            OnScoreChange?.Invoke((int)amount);
         }
     }
 }

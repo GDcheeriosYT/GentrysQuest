@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Database;
+using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Location;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
@@ -13,8 +14,8 @@ namespace GentrysQuest.Game.Content.Maps
             Name = "Test Map";
             DifficultyScales = true;
 
-            Families.Add(GameData.Content.GetFamily("Test Family"));
-            Enemies.Add(GameData.Content.GetEnemy("Test Enemy"));
+            foreach (Family family in GameData.Content.Families) Families.Add(family);
+            foreach (Enemy enemy in GameData.Content.Enemies) Enemies.Add(enemy);
 
             for (int i = 0; i < 200; i++)
             {

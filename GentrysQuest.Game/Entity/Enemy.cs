@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity;
 
 public class Enemy : Entity
 {
-    protected List<Weapon.Weapon> WeaponChoices = new();
+    protected WeaponChoices WeaponChoices = new();
 
     public Enemy()
         : base()
@@ -47,8 +45,5 @@ public class Enemy : Entity
         base.UpdateStats();
     }
 
-    public void SetWeapon()
-    {
-        SetWeapon(WeaponChoices[MathBase.RandomChoice(WeaponChoices.Count)]);
-    }
+    public void SetWeapon() => SetWeapon(WeaponChoices.GetChoice());
 }
