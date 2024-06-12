@@ -19,5 +19,7 @@ namespace GentrysQuest.Game.Content.Families
         {
             Name = "Test Artifact";
         }
+
+        public override Family family { get; protected set; } = new TestFamily();
     }
 }

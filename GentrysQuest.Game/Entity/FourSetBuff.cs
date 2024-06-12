@@ -1,6 +1,7 @@
 namespace GentrysQuest.Game.Entity
 {
-    public class FourSetBuff
+    public abstract class FourSetBuff : SetBuff
     {
+        public abstract override void ApplyToCharacter(Character character);
     }
 }

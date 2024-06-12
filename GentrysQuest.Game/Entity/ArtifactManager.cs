@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Database;
 
@@ -28,6 +29,24 @@ namespace GentrysQuest.Game.Entity
             artifact.Holder = parent;
             findAverageRating();
             OnChangeArtifact?.Invoke();
+        }
+
+        public void UpdateStats()
+        {
+            Dictionary<string, int> familyCount = new Dictionary<string, int>();
+
+            foreach (Artifact artifact in artifacts)
+            {
+                if (familyCount.Keys.Contains(artifact.family.Name)) familyCount[artifact.family.Name]++;
+                else familyCount.Add(artifact.family.Name, 1);
+            }
+
+            foreach (string name in familyCount.Keys)
+            {
+                if (familyCount[name] >= 2) GameData.Content.GetFamily(name).TwoSetBuff.ApplyToCharacter(parent);
+                if (familyCount[name] >= 4) GameData.Content.GetFamily(name).FourSetBuff.ApplyToCharacter(parent);
+                if (familyCount[name] == 5) parent.Stats.Boost((int)averageRating);
+            }
         }
 
         public void Clear() => artifacts = new Artifact[5];

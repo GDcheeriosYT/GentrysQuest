@@ -6,6 +6,7 @@ public class MadokaChibiPlush : Artifact
 {
     public override string Name { get; protected set; } = "Madoka Chibi Plush";
     public override string Description { get; protected set; } = "Brayden's trusty old Madoka Chibi Plush";
+    public override Family family { get; protected set; } = new BraydenMesserschmidtFamily();
 
     public MadokaChibiPlush()
     {

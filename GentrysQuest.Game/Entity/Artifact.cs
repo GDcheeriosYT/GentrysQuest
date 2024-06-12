@@ -4,20 +4,15 @@ using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
 {
-    public class Artifact : EntityBase
+    public abstract class Artifact : EntityBase
     {
-        public Family Family { get; private set; } = null;
+        public abstract Family family { get; protected set; }
         public Buff MainAttribute { get; set; }
         public List<Buff> Attributes { get; set; }
         public virtual List<StatType> ValidMainAttributes { get; set; } = new();
         public virtual List<int> ValidStarRatings { get; set; } = new() { 1, 2, 3, 4, 5 };
         public virtual AllowedPercentMethod AllowedPercentMethod { get; set; } = AllowedPercentMethod.Allowed;
         public Character Holder;
-
-        public void SetFamily(Family family)
-        {
-            if (Family != null) Family = family;
-        }
 
         public Artifact()
         {
