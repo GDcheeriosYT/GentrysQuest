@@ -71,7 +71,7 @@ namespace GentrysQuest.Game.Content.Weapons
 
             OnHitEntity += details =>
             {
-                if (details.IsCrit) Holder.AddEffect(new Swiftness(1));
+                if (details.IsCrit) Holder.AddEffect(new Swiftness());
             };
 
             #endregion

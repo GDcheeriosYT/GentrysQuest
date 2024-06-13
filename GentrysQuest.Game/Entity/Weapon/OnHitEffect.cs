@@ -6,7 +6,7 @@ namespace GentrysQuest.Game.Entity.Weapon
     /// The effect that may apply on hit
     /// </summary>
     /// <param name="chance">represents the chance of succession. 1.0 = 100%</param>
-    public class OnHitEffect(float chance)
+    public class OnHitEffect(float chance = 1)
     {
         /// <summary>
         /// The effect

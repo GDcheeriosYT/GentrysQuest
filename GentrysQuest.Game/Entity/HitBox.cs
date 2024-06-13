@@ -8,7 +8,7 @@ namespace GentrysQuest.Game.Entity
 {
     public partial class HitBox : CompositeDrawable
     {
-        private const bool DEBUG = false;
+        private const bool DEBUG = true;
         private bool enabled = true;
         public readonly AffiliationType Affiliation;
         private dynamic parent;

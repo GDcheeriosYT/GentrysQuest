@@ -21,5 +21,7 @@ namespace GentrysQuest.Game.Entity
         /// The receiver of the attack
         /// </summary>
         public Entity Receiver = null;
+
+        public int GetHitAmount() => Sender.EnemyHitCounter[Receiver];
     }
 }

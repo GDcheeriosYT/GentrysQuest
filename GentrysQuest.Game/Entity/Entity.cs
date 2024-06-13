@@ -18,6 +18,7 @@ namespace GentrysQuest.Game.Entity
 
         // stats
         public Stats Stats = new();
+        public Dictionary<Entity, int> EnemyHitCounter = new();
 
         // equips
         [CanBeNull]

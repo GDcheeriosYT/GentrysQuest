@@ -196,6 +196,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Damage = damage;
                         details.Receiver = entity;
                         details.Sender = Weapon.Holder;
+                        if (!details.Sender.EnemyHitCounter.TryAdd(details.Receiver, 1)) details.Sender.EnemyHitCounter[details.Receiver]++;
 
                         entity.OnHit(details);
                         if (onHitEffect != null && onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
