@@ -9,6 +9,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
@@ -54,8 +55,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private int sortIndexCounter = 0;
 
         private ItemDisplay itemInfo;
-
-        private bool displayingInfo;
         private SelectionModes selectionMode = SelectionModes.Single;
         private Character equippingToCharacter;
         public Artifact FocusedArtifact;
@@ -496,6 +495,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void ToggleDisplay()
         {
+            Logger.Log(isShowing.ToString());
+
             switch (isShowing)
             {
                 case true:
@@ -510,7 +511,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         private void displayInfo(EntityInfoDrawable entityInfoDrawable)
         {
-            displayingInfo = true;
             itemContainer.ResizeTo(new Vector2(0.5f, 0.9f), 100);
             itemInfo.ResizeTo(new Vector2(0.5f, 0.9f), 100);
             itemInfo.DisplayItem(entityInfoDrawable.entity);
@@ -521,7 +521,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
             itemContainer.ResizeTo(new Vector2(1, 0.9f), 100);
             itemInfo.ResizeTo(new Vector2(0, 0.9f), 100);
             itemInfo.FadeOut(100);
-            displayingInfo = false;
         }
 
         public override void Show()
@@ -543,10 +542,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
             itemContainer.ClearList();
             displayingSection.Value = InventoryDisplay.Hidden;
             itemContainerBox.FadeOut(FADE_TIME, Easing.InOutCubic);
-            Scheduler.AddDelayed(() =>
-            {
-                base.Hide();
-            }, FADE_TIME);
             setStatus();
         }
     }

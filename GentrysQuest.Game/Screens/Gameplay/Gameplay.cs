@@ -366,7 +366,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             AddInternal(deathContainer);
             Pause();
             removeAllEnemies();
-            inventoryOverlay.Hide();
+            // inventoryOverlay.Hide();
             inventoryButton.Hide();
             gameplayHud.Delay(3000).Then().FadeOut();
             map.Delay(3000).Then().FadeOut();
@@ -413,7 +413,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 GameData.EquipedCharacter.UpdateStats();
                 GameData.EquipedCharacter.Stats.Restore();
                 map.FadeIn();
-                inventoryOverlay.Show();
                 gameplayHud.FadeIn();
                 inventoryButton.Show();
                 SetUp();
