@@ -198,6 +198,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             gameplayDifficulty = map.MapReference.Difficulty;
             if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetEntityObject().Difficulty;
+            enemyLimit = (gameplayDifficulty + 1) * 2;
         }
 
         public void Pause()

@@ -9,7 +9,7 @@ namespace GentrysQuest.Game.Entity
         public string Name { get; protected set; }
         public string Description { get; protected set; }
         protected List<Type> Artifacts = new();
-        public TwoSetBuff TwoSetBuff { get; protected set; }
+        public TwoSetBuff TwoSetBuff { get; protected set; } = new TwoSetBuff(new Buff(20, StatType.Health, true));
         public FourSetBuff FourSetBuff { get; protected set; }
 
         public Artifact GetArtifact()
@@ -18,9 +18,6 @@ namespace GentrysQuest.Game.Entity
             return (Artifact)Activator.CreateInstance(artifact);
         }
 
-        public List<Type> GetArtifacts()
-        {
-            return Artifacts;
-        }
+        public List<Type> GetArtifacts() => Artifacts;
     }
 }

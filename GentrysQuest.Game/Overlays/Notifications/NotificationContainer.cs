@@ -34,7 +34,7 @@ public partial class NotificationContainer : CompositeDrawable
     /// <param name="notification">The notification</param>
     public void AddNotification(Notification notification)
     {
-        int length = notification.Message.Length * 100;
+        int length = notification.Message.Length * 150;
         notification.ScaleTo(0, 1);
         notifications.Add(notification);
         notification.ScaleTo(1, 100);

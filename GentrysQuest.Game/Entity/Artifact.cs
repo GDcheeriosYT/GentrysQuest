@@ -4,9 +4,14 @@ using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
 {
-    public abstract class Artifact : EntityBase
+    public class Artifact : EntityBase
     {
-        public abstract Family family { get; protected set; }
+        public virtual Family family
+        {
+            get { throw new NotImplementedException(); }
+            protected set { throw new NotImplementedException(); }
+        }
+
         public Buff MainAttribute { get; set; }
         public List<Buff> Attributes { get; set; }
         public virtual List<StatType> ValidMainAttributes { get; set; } = new();

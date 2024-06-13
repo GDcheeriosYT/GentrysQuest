@@ -61,7 +61,7 @@ namespace GentrysQuest.Game.Database
         /// <param name="entity">entity to add</param>
         public static void Add(EntityBase entity)
         {
-            NotificationContainer.Instance.AddNotification(new Notification($"Obtained {entity.StarRating.Value} star {entity.Name}"));
+            NotificationContainer.Instance.AddNotification(new Notification($"Obtained {entity.StarRating.Value} star {entity.Name}", NotificationType.Obtained));
 
             switch (entity)
             {
@@ -81,7 +81,7 @@ namespace GentrysQuest.Game.Database
 
         public static void EquipCharacter(Character character)
         {
-            NotificationContainer.Instance.AddNotification(new Notification($"Equipped {character.Name}"));
+            NotificationContainer.Instance.AddNotification(new Notification($"Equipped {character.Name}", NotificationType.Informative));
             EquipedCharacter = character;
         }
     }

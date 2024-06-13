@@ -4,6 +4,7 @@ namespace GentrysQuest.Game.Overlays.Notifications
     {
         None = 0,
         Error = 1,
-        Informative = 2
+        Informative = 2,
+        Obtained = 3
     }
 }

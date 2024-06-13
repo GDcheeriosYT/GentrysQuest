@@ -29,6 +29,10 @@ namespace GentrysQuest.Game.Overlays.Notifications
                 case NotificationType.Informative:
                     colour = Colour4.Yellow;
                     break;
+
+                case NotificationType.Obtained:
+                    colour = Colour4.Blue;
+                    break;
             }
 
             Anchor = Anchor.TopRight;
@@ -60,8 +64,8 @@ namespace GentrysQuest.Game.Overlays.Notifications
                         new SpriteText
                         {
                             Text = message,
-                            Anchor = Anchor.CentreRight,
-                            Origin = Anchor.CentreRight,
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
                             Colour = colour,
                             AllowMultiline = false,
                             Truncate = false,

@@ -29,6 +29,7 @@ namespace GentrysQuest.Game.Entity
             artifact.Holder = parent;
             findAverageRating();
             OnChangeArtifact?.Invoke();
+            UpdateStats();
         }
 
         public void UpdateStats()
@@ -37,8 +38,9 @@ namespace GentrysQuest.Game.Entity
 
             foreach (Artifact artifact in artifacts)
             {
-                if (familyCount.Keys.Contains(artifact.family.Name)) familyCount[artifact.family.Name]++;
-                else familyCount.Add(artifact.family.Name, 1);
+                if (artifact == null) continue;
+
+                if (!familyCount.TryAdd(artifact.family.Name, 1)) familyCount[artifact.family.Name]++;
             }
 
             foreach (string name in familyCount.Keys)
@@ -57,6 +59,7 @@ namespace GentrysQuest.Game.Entity
             artifacts[index].Holder = null;
             artifacts[index] = null;
             OnChangeArtifact?.Invoke();
+            UpdateStats();
         }
     }
 }

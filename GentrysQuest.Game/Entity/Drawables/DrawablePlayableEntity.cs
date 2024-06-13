@@ -1,3 +1,4 @@
+using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Screens.Gameplay;
 using osuTK.Input;
 
@@ -17,7 +18,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
     public DrawablePlayableEntity(Character entity)
         : base(entity, AffiliationType.Player, false)
     {
-        // pass
+        entity.OnLevelUp += delegate { NotificationContainer.Instance.AddNotification(new Notification("Leveled up!", NotificationType.Informative)); };
     }
 
     public void SetupClickContainer() => AddInternal(clickContainer = new GameplayClickContainer(this));
