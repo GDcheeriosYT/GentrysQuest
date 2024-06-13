@@ -44,22 +44,22 @@ namespace GentrysQuest.Game.Content.Weapons
             };
 
             AttackPattern.AddCase(1);
-            AttackPattern.Add(new AttackPatternEvent { Direction = 110, Distance = distance, MovementSpeed = movementSpeed });
-            AttackPattern.Add(new AttackPatternEvent(time) { Direction = -75, Distance = distance, MovementSpeed = movementSpeed, Transition = Easing.InCubic });
+            AttackPattern.Add(new AttackPatternEvent { Direction = 110, Distance = distance, MovementSpeed = movementSpeed, DamagePercent = 15 });
+            AttackPattern.Add(new AttackPatternEvent(time) { Direction = -75, Distance = distance, MovementSpeed = movementSpeed, Transition = Easing.InCubic, DamagePercent = 15 });
 
             AttackPattern.AddCase(2);
-            AttackPattern.Add(new AttackPatternEvent { Direction = -75, Distance = distance, MovementSpeed = movementSpeed, DamagePercent = 5 });
-            AttackPattern.Add(new AttackPatternEvent(new Second(0.2)) { Direction = -110, Distance = distance, MovementSpeed = movementSpeed, Transition = Easing.OutCubic, DamagePercent = 5 });
-            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 75, Distance = distance, MovementSpeed = movementSpeed, Transition = Easing.InCubic, DamagePercent = 5 });
+            AttackPattern.Add(new AttackPatternEvent { Direction = -75, Distance = distance, MovementSpeed = movementSpeed, DamagePercent = 30 });
+            AttackPattern.Add(new AttackPatternEvent(new Second(0.2)) { Direction = -110, Distance = distance, MovementSpeed = movementSpeed, Transition = Easing.OutCubic, DamagePercent = 30 });
+            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 75, Distance = distance, MovementSpeed = movementSpeed, Transition = Easing.InCubic, DamagePercent = 30 });
 
             Vector2 boxSize = new Vector2(0);
 
             AttackPattern.AddCase(3);
             AttackPattern.Add(new AttackPatternEvent { Direction = 75, MovementSpeed = 0.2f, HitboxSize = boxSize });
             AttackPattern.Add(new AttackPatternEvent(new Second(0.2)) { Direction = 180, MovementSpeed = 0.1f, HitboxSize = boxSize });
-            AttackPattern.Add(new AttackPatternEvent(new Second(0.2)) { Direction = 180, MovementSpeed = 0, HitboxSize = boxSize, DamagePercent = 20 });
+            AttackPattern.Add(new AttackPatternEvent(new Second(0.2)) { Direction = 180, MovementSpeed = 0, HitboxSize = boxSize });
             AttackPattern.Add(new AttackPatternEvent(new Second(0.1))
-                { Direction = 180, Position = new Vector2(0, -100), MovementSpeed = 0.1f, ResetHitBox = true, OnHitEffect = hiltAttack, DamagePercent = 20 });
+                { Direction = 180, Position = new Vector2(0, -100), MovementSpeed = 0.1f, ResetHitBox = true, OnHitEffect = hiltAttack });
 
             #endregion
 
@@ -70,6 +70,13 @@ namespace GentrysQuest.Game.Content.Weapons
                 Entity.Entity receiver = details.Receiver;
                 if (details.GetHitAmount() == 1) receiver.Damage((int)receiver.Stats.Health.GetPercentFromTotal((float)(1 + Holder.Difficulty * 2.5)));
             };
+
+            #endregion
+
+            #region TextureMapping
+
+            TextureMapping.Add("Icon", "weapons_brodys_broadsword.png");
+            TextureMapping.Add("Base", "weapons_brodys_broadsword.png");
 
             #endregion
         }
