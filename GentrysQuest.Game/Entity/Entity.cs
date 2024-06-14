@@ -8,7 +8,7 @@ namespace GentrysQuest.Game.Entity
 {
     public class Entity : EntityBase
     {
-        // info
+        // Info
         public bool IsDead;
         public bool IsFullHealth;
         public bool IsDodging = false;
@@ -16,15 +16,15 @@ namespace GentrysQuest.Game.Entity
         public bool CanAttack = true;
         public bool CanMove = true;
 
-        // stats
+        // Stats
         public Stats Stats = new();
         public Dictionary<Entity, int> EnemyHitCounter = new();
 
-        // equips
+        // Equips
         [CanBeNull]
         public Weapon.Weapon Weapon;
 
-        // effects
+        // Effects
         public List<StatusEffect> Effects = new();
 
         // Stat Modifiers
@@ -32,6 +32,11 @@ namespace GentrysQuest.Game.Entity
         public float HealingModifier = 1;
         public float DamageModifier = 1;
         public float DefenseModifier = 1;
+
+        // Skills
+        public Skill Secondary = null;
+        public Skill Utility = null;
+        public Skill Ultimate = null;
 
         public Entity()
         {

@@ -1,6 +1,7 @@
 using GentrysQuest.Game.Entity;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 
@@ -14,15 +15,17 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         private readonly GameplayBar healthBar;
         private readonly GameplayBar experienceBar;
+        private readonly Container skillContainer;
 
-        private SpriteText levelText;
+        private readonly SpriteText levelText;
 
         public GameplayHud()
         {
             RelativeSizeAxes = Axes.Both;
             Depth = -2;
 
-            AddInternal(
+            InternalChildren = new Drawable[]
+            {
                 barsContainer = new Container()
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -66,7 +69,23 @@ namespace GentrysQuest.Game.Screens.Gameplay
                             Position = new Vector2(0)
                         }
                     }
-                });
+                },
+                skillContainer = new Container
+                {
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(500, 200),
+                    Position = new Vector2(-100, -100),
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Colour4.Black
+                        }
+                    }
+                }
+            };
         }
 
         public void SetEntity(Entity.Entity theEntity)

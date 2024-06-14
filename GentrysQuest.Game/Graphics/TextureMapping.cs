@@ -2,6 +2,10 @@ using System.Collections.Generic;
 
 namespace GentrysQuest.Game.Graphics
 {
+    /// <summary>
+    /// Easy mapping for textures.
+    /// Makes setting and getting textures easy.
+    /// </summary>
     public class TextureMapping
     {
         private List<string> textureKeys = new();

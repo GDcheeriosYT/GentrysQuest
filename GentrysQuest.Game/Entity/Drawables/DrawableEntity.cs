@@ -254,6 +254,11 @@ namespace GentrysQuest.Game.Entity.Drawables
             // Effects logic
             Entity.Affect(Clock.CurrentTime);
 
+            // Skills logic
+            Entity.Secondary?.SetPercent(Clock.CurrentTime);
+            Entity.Utility?.SetPercent(Clock.CurrentTime);
+            Entity.Ultimate?.SetPercent(Clock.CurrentTime);
+
             // Regen should always be at the bottom
             if (Entity.IsDead || Entity.IsFullHealth) return;
 
