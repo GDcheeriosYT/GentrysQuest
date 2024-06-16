@@ -1,9 +1,11 @@
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
 using osuTK;
+using osuTK.Input;
 
 namespace GentrysQuest.Game.Screens.Gameplay;
 
@@ -24,15 +26,35 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
 
     protected override bool OnMouseDown(MouseDownEvent e)
     {
-        isHeld = true;
+        switch (e.Button)
+        {
+            case MouseButton.Left:
+                isHeld = true;
+                break;
+
+            case MouseButton.Right:
+                if (player.GetEntityObject().Secondary?.PercentToDone == 100)
+                {
+                    player.GetEntityObject().Secondary?.Act();
+                    player.GetEntityObject().Secondary.TimeActed = Clock.CurrentTime;
+                }
+                break;
+        }
+
         return base.OnMouseDown(e);
     }
 
     protected override void OnMouseUp(MouseUpEvent e)
     {
-        isHeld = false;
-        var weapon = player.GetEntityObject().Weapon;
-        if (weapon != null) weapon.AttackAmount = 0;
+        switch (e.Button)
+        {
+            case MouseButton.Left:
+                isHeld = false;
+                var weapon = player.GetEntityObject().Weapon;
+                if (weapon != null) weapon.AttackAmount = 0;
+                break;
+        }
+
         base.OnMouseUp(e);
     }
 
@@ -46,5 +68,6 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
     {
         base.Update();
         if (isHeld) player.Attack(mousePos);
+        player.Direction = (int)MathBase.GetAngle(player.Position + new Vector2(50), mousePos);
     }
 }

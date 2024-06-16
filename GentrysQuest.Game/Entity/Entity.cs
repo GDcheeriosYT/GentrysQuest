@@ -54,6 +54,8 @@ namespace GentrysQuest.Game.Entity
 
         public delegate void EntityHitEvent(DamageDetails details);
 
+        public delegate void ProjectileAdditionEvent(ProjectileParameters parameters);
+
         // Spawn / Death events
         public event EntitySpawnEvent OnSpawn;
         public event EntitySpawnEvent OnDeath;
@@ -76,6 +78,7 @@ namespace GentrysQuest.Game.Entity
         // Other Events
         public event EntityEvent OnUpdateStats;
         public event Action OnEffect;
+        public event ProjectileAdditionEvent OnAddProjectile;
 
         #endregion
 
@@ -218,6 +221,8 @@ namespace GentrysQuest.Game.Entity
 
             OnEffect?.Invoke();
         }
+
+        public void AddProjectile(ProjectileParameters parameters) => OnAddProjectile?.Invoke(parameters);
 
         /// <summary>
         /// Defines how stats will update

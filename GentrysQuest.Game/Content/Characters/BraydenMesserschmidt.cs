@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Content.Effects;
+using GentrysQuest.Game.Content.Skills;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;
 
@@ -16,6 +17,8 @@ namespace GentrysQuest.Game.Content.Characters
             Stats.AttackSpeed.point = 1;
             Stats.CritRate.point = 1;
             Stats.CritDamage.point = 1;
+
+            Secondary = new CircleThrow(this);
 
             OnSwapWeapon += checkWeapon;
             OnLevelUp += checkWeapon;

@@ -46,8 +46,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         public HitBox HitBox { get; set; }
         protected CollisonHitBox colliderBox;
 
-        protected bool Moving;
-        protected Vector2 lastPosition;
+        public int Direction;
 
         /// <summary>
         /// The entity list to check when attacking
@@ -114,6 +113,12 @@ namespace GentrysQuest.Game.Entity.Drawables
                     effect.StartTime ??= Clock.CurrentTime;
                 }
             };
+            entity.OnAddProjectile += parameters =>
+            {
+                Projectile projectile = new Projectile(parameters);
+                projectile.Direction += Direction;
+                QueuedProjectiles.Add(projectile);
+            };
             entity.UpdateStats();
             entity.Stats.Restore();
         }
@@ -138,7 +143,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.Heal((int)Entity.Stats.RegenStrength.Current.Value);
         }
 
-        protected virtual void Move(float direction, double speed)
+        public virtual void Move(float direction, double speed)
         {
             if (!Entity.CanMove) return;
 
@@ -155,13 +160,14 @@ namespace GentrysQuest.Game.Entity.Drawables
         public void Attack(Vector2 position)
         {
             if (!Entity.CanAttack) return;
+
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(Position + center, position);
             if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle + 90);
         }
 
         /// <summary>
-        /// Adds a indicator text for when this entity heals/takes damage
+        /// Adds an indicator text for when this entity heals/takes damage
         /// </summary>
         /// <param name="amount">The amount of health change</param>
         /// <param name="type">The type of damage</param>
@@ -199,7 +205,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             }, indicatorReference.FadeOut());
         }
 
-        protected void Dodge()
+        public void Dodge()
         {
             if (Entity.CanDodge)
             {
