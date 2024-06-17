@@ -73,7 +73,7 @@ namespace GentrysQuest.Game.Entity
         {
             var elapsedTime = currentTime - TimeActed;
 
-            if (PercentToDone < 100) { PercentToDone = (int)((elapsedTime / (float)Cooldown) * 100); }
+            if (PercentToDone < 100 && UsesAvailable < MaxStack) { PercentToDone = (int)((elapsedTime / (float)Cooldown) * 100); }
             else
             {
                 if (UsesAvailable < MaxStack)
