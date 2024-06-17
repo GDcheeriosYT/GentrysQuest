@@ -4,12 +4,12 @@ namespace GentrysQuest.Game.Utils
     /// Because we work in milliseconds I'll make a usefull class to make this easier
     /// </summary>
     /// <param name="time">seconds</param>
-    public class Second(double time)
+    public class Second(double time = 1)
     {
         /// <summary>
         /// The value
         /// </summary>
-        private double value = time;
+        private readonly double value = time;
 
         /// <summary>
         /// Converts into milliseconds

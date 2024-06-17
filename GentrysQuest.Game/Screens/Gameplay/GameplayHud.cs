@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Entity;
+using GentrysQuest.Game.Overlays.SkillOverlay;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -14,15 +15,17 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         private readonly GameplayBar healthBar;
         private readonly GameplayBar experienceBar;
+        private readonly SkillOverlay skillOverlay;
 
-        private SpriteText levelText;
+        private readonly SpriteText levelText;
 
         public GameplayHud()
         {
             RelativeSizeAxes = Axes.Both;
             Depth = -2;
 
-            AddInternal(
+            InternalChildren = new Drawable[]
+            {
                 barsContainer = new Container()
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -35,7 +38,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     Masking = true,
 
                     Size = new Vector2(0.4f, 0.15f),
-                    Position = new Vector2(0.05f, -0.1f),
+                    Margin = new MarginPadding { Left = 30, Bottom = 10 },
 
                     Children = new Drawable[]
                     {
@@ -66,7 +69,16 @@ namespace GentrysQuest.Game.Screens.Gameplay
                             Position = new Vector2(0)
                         }
                     }
-                });
+                },
+                skillOverlay = new SkillOverlay
+                {
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.BottomRight,
+                    Position = new Vector2(0, 0),
+                    Size = new Vector2(300, 150),
+                    Margin = new MarginPadding { Right = 20, Bottom = 10 }
+                }
+            };
         }
 
         public void SetEntity(Entity.Entity theEntity)
@@ -82,6 +94,9 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 SetHealth(theEntity.Stats.Health);
                 SetExperience(theEntity.Experience);
             };
+
+            skillOverlay.ClearSkills();
+            skillOverlay.SetUpSkills(theEntity);
         }
 
         public void SetHealth(Stat health)
