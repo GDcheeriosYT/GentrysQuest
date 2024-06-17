@@ -56,6 +56,7 @@ namespace GentrysQuest.Game.Entity
         public virtual void Act()
         {
             Logger.Log($"{UsesAvailable}, {PercentToDone}");
+
             if (UsesAvailable > 0 || PercentToDone >= 100)
             {
                 UsesAvailable--;
@@ -72,13 +73,14 @@ namespace GentrysQuest.Game.Entity
         {
             var elapsedTime = currentTime - TimeActed;
 
-            if (PercentToDone < 100) PercentToDone = (int)((elapsedTime / (float)Cooldown) * 100);
+            if (PercentToDone < 100) { PercentToDone = (int)((elapsedTime / (float)Cooldown) * 100); }
             else
             {
                 if (UsesAvailable < MaxStack)
                 {
                     UsesAvailable++;
                     PercentToDone = 0;
+                    TimeActed = currentTime;
                 }
                 else PercentToDone = 100;
             }

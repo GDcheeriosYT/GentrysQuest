@@ -30,8 +30,6 @@ public partial class ProgressBar : CompositeDrawable
         this.min = new Bindable<double>(min);
         cur = new Bindable<double>(0f);
         this.max = new Bindable<double>(max);
-
-        RelativeSizeAxes = Axes.Both;
         Size = new Vector2(1f);
         InternalChildren = new Drawable[]
         {

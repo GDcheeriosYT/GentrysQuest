@@ -14,6 +14,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         private readonly SpriteText skillName;
         private readonly ProgressBar percentageDisplay;
         private readonly Sprite skillDisplay;
+        private readonly SpriteText skillStack;
 
         public SkillDrawable(Skill skillReference)
         {
@@ -23,8 +24,6 @@ namespace GentrysQuest.Game.Entity.Drawables
             }
             else
             {
-                Anchor = Anchor.Centre;
-                Origin = Anchor.Centre;
                 Size = new Vector2(100);
                 this.skillReference = skillReference;
 
@@ -42,19 +41,36 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 Anchor = Anchor.TopCentre,
                                 Children = new Drawable[]
                                 {
-                                    new Container
+                                    new FillFlowContainer
                                     {
-                                        Masking = true,
-                                        CornerExponent = 2,
-                                        CornerRadius = 6,
+                                        Direction = FillDirection.Horizontal,
+                                        AutoSizeAxes = Axes.Both,
                                         Origin = Anchor.Centre,
-                                        Size = new Vector2(60, 10),
-                                        Child = percentageDisplay = new ProgressBar(0, 100)
+                                        Children = new Drawable[]
                                         {
-                                            RelativeSizeAxes = Axes.Both,
-                                            BackgroundColour = new Colour4(0, 0, 0, 0),
-                                            ForegroundColour = new Colour4(255, 255, 255, 200),
-                                            Current = 0
+                                            skillStack = new SpriteText
+                                            {
+                                                Text = "0",
+                                                Font = FontUsage.Default.With(size: 24),
+                                                Margin = new MarginPadding { Left = 2 },
+                                                Origin = Anchor.CentreRight,
+                                                Padding = new MarginPadding { Right = 5 }
+                                            },
+                                            new Container
+                                            {
+                                                Masking = true,
+                                                CornerExponent = 2,
+                                                CornerRadius = 6,
+                                                Origin = Anchor.Centre,
+                                                Size = new Vector2(60, 10),
+                                                Child = percentageDisplay = new ProgressBar(0, 100)
+                                                {
+                                                    RelativeSizeAxes = Axes.Both,
+                                                    BackgroundColour = new Colour4(0, 0, 0, 0),
+                                                    ForegroundColour = new Colour4(255, 255, 255, 200),
+                                                    Current = 0
+                                                }
+                                            }
                                         }
                                     },
                                     skillDisplay = new Sprite
@@ -87,6 +103,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             base.Update();
 
             percentageDisplay.Current = skillReference.PercentToDone;
+            skillStack.Text = skillReference.UsesAvailable.ToString();
         }
     }
 }

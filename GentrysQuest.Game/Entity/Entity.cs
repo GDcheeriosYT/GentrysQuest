@@ -32,6 +32,7 @@ namespace GentrysQuest.Game.Entity
         public float HealingModifier = 1;
         public float DamageModifier = 1;
         public float DefenseModifier = 1;
+        public float PositionJump = 0; // For teleporting
 
         // Skills
         public Skill Secondary = null;

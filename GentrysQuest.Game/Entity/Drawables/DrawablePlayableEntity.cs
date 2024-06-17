@@ -62,7 +62,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
                 break;
 
             case Key.Space:
-                if (Entity.Utility?.PercentToDone == 100)
+                if (Entity.Utility?.PercentToDone == 100 || Entity.Utility?.UsesAvailable > 0)
                 {
                     Entity.Utility?.Act();
                     if (Entity.Utility != null) Entity.Utility.TimeActed = Clock.CurrentTime;
@@ -71,7 +71,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
                 break;
 
             case Key.R:
-                if (Entity.Ultimate?.PercentToDone == 100)
+                if (Entity.Ultimate?.PercentToDone == 100 || Entity.Ultimate?.UsesAvailable > 0)
                 {
                     Entity.Ultimate?.Act();
                     if (Entity.Ultimate != null) Entity.Ultimate.TimeActed = Clock.CurrentTime;
