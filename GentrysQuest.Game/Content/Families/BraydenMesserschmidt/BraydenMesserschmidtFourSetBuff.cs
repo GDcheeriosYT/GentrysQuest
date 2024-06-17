@@ -5,12 +5,17 @@ namespace GentrysQuest.Game.Content.Families.BraydenMesserschmidt
 {
     public class BraydenMesserschmidtFourSetBuff : FourSetBuff
     {
-        public override void ApplyToCharacter(Character character)
+        private Entity.Entity.EntityHitEvent buff;
+
+        public BraydenMesserschmidtFourSetBuff()
         {
-            character.OnHitEntity += details =>
+            buff += details =>
             {
                 if (details.IsCrit) details.Receiver.AddEffect(new Bleed(5));
             };
         }
+
+        public override void ApplyToCharacter(Character character) => character.OnHitEntity += buff;
+        public override void RemoveFromCharacter(Character character) => character.OnHitEntity -= buff;
     }
 }

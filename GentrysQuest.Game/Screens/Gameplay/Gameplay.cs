@@ -19,7 +19,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
@@ -133,8 +132,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 bool notValidArtifact = true;
                 int spendAmount = (int)(Math.Pow(gameplayDifficulty + 1, 2) * 1000);
-                Logger.Log(spendAmount.ToString());
-                Logger.Log(spendableScore.ToString());
 
                 if (spendableScore >= spendAmount)
                 {
@@ -143,11 +140,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     while (notValidArtifact)
                     {
                         string familyString = map.MapReference.Families[MathBase.RandomChoice(map.MapReference.Families.Count)].Name;
-                        Logger.Log(familyString);
                         int starRating = MathBase.GetStarRating(gameplayDifficulty);
-                        Logger.Log(starRating.ToString());
                         Artifact artifact = GameData.Content.GetFamily(familyString).GetArtifact();
-                        Logger.Log(artifact.Name);
 
                         if (artifact.ValidStarRatings.Contains(starRating))
                         {

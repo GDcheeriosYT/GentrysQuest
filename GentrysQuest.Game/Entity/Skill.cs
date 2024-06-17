@@ -1,6 +1,5 @@
 using System;
 using GentrysQuest.Game.Graphics;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -55,8 +54,6 @@ namespace GentrysQuest.Game.Entity
         /// </summary>
         public virtual void Act()
         {
-            Logger.Log($"{UsesAvailable}, {PercentToDone}");
-
             if (UsesAvailable > 0 || PercentToDone >= 100)
             {
                 UsesAvailable--;

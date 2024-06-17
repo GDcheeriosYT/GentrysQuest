@@ -9,7 +9,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
@@ -495,8 +494,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void ToggleDisplay()
         {
-            Logger.Log(isShowing.ToString());
-
             switch (isShowing)
             {
                 case true:
