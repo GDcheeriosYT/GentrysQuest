@@ -5,7 +5,7 @@ namespace GentrysQuest.Game.Content.Families.BraydenMesserschmidt
 {
     public class BraydenMesserschmidtFourSetBuff : FourSetBuff
     {
-        private Entity.Entity.EntityHitEvent buff;
+        private readonly Entity.Entity.EntityHitEvent buff;
 
         public BraydenMesserschmidtFourSetBuff()
         {
