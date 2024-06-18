@@ -1,9 +1,11 @@
 #nullable enable
 using System;
+using System.Linq;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Entity.Weapon;
+using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -451,13 +453,14 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void ExchangeArtifacts()
         {
-            foreach (EntityInfoDrawable entityInfoDrawable in itemContainer.GetEntityInfoDrawables())
+            foreach (var entityInfoDrawable in itemContainer.GetEntityInfoDrawables().Where(entityInfoDrawable => entityInfoDrawable.IsSelected && entityInfoDrawable.entity != FocusedArtifact))
             {
-                if (entityInfoDrawable.IsSelected && entityInfoDrawable.entity != FocusedArtifact)
+                if (FocusedArtifact.Experience.CurrentLevel() < FocusedArtifact.StarRating * 4)
                 {
                     FocusedArtifact.AddXp(getItemXp(entityInfoDrawable.entity));
                     GameData.Artifacts.Remove((Artifact)entityInfoDrawable.entity);
                 }
+                else NotificationContainer.Instance.AddNotification(new Notification("Artifact is max level", NotificationType.Informative));
             }
 
             changeState();
