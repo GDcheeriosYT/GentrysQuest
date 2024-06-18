@@ -18,10 +18,11 @@ using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Logging;
+using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
+using osuTK.Input;
 
 namespace GentrysQuest.Game.Screens.Gameplay
 {
@@ -37,7 +38,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private GameplayHud gameplayHud;
         private DrawableMap map;
         private InventoryOverlay inventoryOverlay;
-        private InventoryButton inventoryButton;
 
         private bool showingInventory = false;
 
@@ -90,15 +90,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 gameplayHud = new GameplayHud(),
                 map = new DrawableMap(new TestMap()),
                 inventoryOverlay = new InventoryOverlay(),
-                inventoryButton = new InventoryButton("Inventory")
-                {
-                    Anchor = Anchor.TopLeft,
-                    Origin = Anchor.TopLeft,
-                    RelativeSizeAxes = Axes.Both,
-                    RelativePositionAxes = Axes.Both,
-                    Size = new Vector2(0.15f, 0.06f),
-                    Position = new Vector2(0.005f),
-                },
                 scoreFlowContainer = new TextFlowContainer
                 {
                     AutoSizeAxes = Axes.Both,
@@ -106,13 +97,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     Origin = Anchor.TopRight
                 },
             };
-
-            inventoryButton.SetAction(delegate
-            {
-                inventoryOverlay.ToggleDisplay();
-                if (isPaused) UnPause();
-                else Pause();
-            });
             scoreFlowContainer.AddText(scoreText = new SpriteText
             {
                 Text = "0",
@@ -148,8 +132,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 bool notValidArtifact = true;
                 int spendAmount = (int)(Math.Pow(gameplayDifficulty + 1, 2) * 1000);
-                Logger.Log(spendAmount.ToString());
-                Logger.Log(spendableScore.ToString());
 
                 if (spendableScore >= spendAmount)
                 {
@@ -158,11 +140,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     while (notValidArtifact)
                     {
                         string familyString = map.MapReference.Families[MathBase.RandomChoice(map.MapReference.Families.Count)].Name;
-                        Logger.Log(familyString);
                         int starRating = MathBase.GetStarRating(gameplayDifficulty);
-                        Logger.Log(starRating.ToString());
                         Artifact artifact = GameData.Content.GetFamily(familyString).GetArtifact();
-                        Logger.Log(artifact.Name);
 
                         if (artifact.ValidStarRatings.Contains(starRating))
                         {
@@ -264,6 +243,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <param name="enemy">The enemy to remove</param>
         public void RemoveEnemy(DrawableEnemyEntity enemy)
         {
+            HitBoxScene.Remove(enemy.HitBox);
             enemies.Remove(enemy);
             RemoveInternal(enemy, false);
             playerEntity.SetEntities(enemies);
@@ -366,8 +346,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
             AddInternal(deathContainer);
             Pause();
             removeAllEnemies();
-            // inventoryOverlay.Hide();
-            inventoryButton.Hide();
             gameplayHud.Delay(3000).Then().FadeOut();
             map.Delay(3000).Then().FadeOut();
             deathContainer.FadeIn(3000).Then()
@@ -406,6 +384,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 scoreFlowContainer.Position = new Vector2(0);
                 GameData.Artifacts.Clear();
                 GameData.Weapons.Clear();
+                GameData.Money.Amount.Value = 0;
                 GameData.EquipedCharacter.Weapon = new BraydensOsuPen();
                 GameData.EquipedCharacter.Artifacts.Clear();
                 GameData.EquipedCharacter.Experience.Level.Current.Value = 1;
@@ -414,7 +393,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 GameData.EquipedCharacter.Stats.Restore();
                 map.FadeIn();
                 gameplayHud.FadeIn();
-                inventoryButton.Show();
                 SetUp();
             });
             AddInternal(endStatContainer);
@@ -427,6 +405,20 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 AddInternal(retryButton);
             }, 9000);
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            switch (e.Key)
+            {
+                case Key.C:
+                    inventoryOverlay.ToggleDisplay();
+                    if (isPaused) UnPause();
+                    else Pause();
+                    break;
+            }
+
+            return base.OnKeyDown(e);
         }
 
         protected override void Update()

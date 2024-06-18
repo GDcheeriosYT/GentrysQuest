@@ -1,12 +1,9 @@
-using osu.Framework.Logging;
-
 namespace GentrysQuest.Game.Database
 {
     public class Statistic : IStatistic
     {
         public Statistic(StatTypes statType, float scoreReward = 0)
         {
-            Logger.Log($"{statType.ToString()} Created");
             StatType = statType;
             ScoreReward = scoreReward;
 

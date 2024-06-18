@@ -30,8 +30,6 @@ public partial class ProgressBar : CompositeDrawable
         this.min = new Bindable<double>(min);
         cur = new Bindable<double>(0f);
         this.max = new Bindable<double>(max);
-
-        RelativeSizeAxes = Axes.Both;
         Size = new Vector2(1f);
         InternalChildren = new Drawable[]
         {
@@ -64,7 +62,7 @@ public partial class ProgressBar : CompositeDrawable
         {
             cur.Value = value;
             checkCurrent();
-            set_progress();
+            setProgress();
         }
     }
 
@@ -74,7 +72,7 @@ public partial class ProgressBar : CompositeDrawable
         set
         {
             min.Value = value;
-            set_progress();
+            setProgress();
         }
     }
 
@@ -84,7 +82,7 @@ public partial class ProgressBar : CompositeDrawable
         set
         {
             max.Value = value;
-            set_progress();
+            setProgress();
         }
     }
 
@@ -100,9 +98,8 @@ public partial class ProgressBar : CompositeDrawable
         set => foreground.Colour = value;
     }
 
-    public void set_progress()
+    private void setProgress()
     {
-        // Logger.Log($"{cur.Value} {max.Value}");
         if (max.Value > 0) foreground.ResizeWidthTo((float)(cur.Value / max.Value), 250, easing: Easing.OutCirc);
         OnProgressChange?.Invoke();
     }

@@ -1,5 +1,6 @@
 using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Screens.Gameplay;
+using osu.Framework.Input.Events;
 using osuTK.Input;
 
 namespace GentrysQuest.Game.Entity.Drawables;
@@ -14,6 +15,12 @@ public partial class DrawablePlayableEntity : DrawableEntity
     /// Since it's a playable entity you should be able to click
     /// </summary>
     private GameplayClickContainer clickContainer;
+
+    // Movement information
+    private bool up;
+    private bool down;
+    private bool left;
+    private bool right;
 
     public DrawablePlayableEntity(Character entity)
         : base(entity, AffiliationType.Player, false)
@@ -30,17 +37,81 @@ public partial class DrawablePlayableEntity : DrawableEntity
         clickContainer = null;
     }
 
-    /// <summary>
-    /// Manage key inputs
-    /// </summary>
+    protected override bool OnKeyDown(KeyDownEvent e)
+    {
+        switch (e.Key)
+        {
+            case Key.A:
+                left = true;
+                break;
+
+            case Key.D:
+                right = true;
+                break;
+
+            case Key.W:
+                up = true;
+                break;
+
+            case Key.S:
+                down = true;
+                break;
+
+            case Key.ShiftLeft:
+                Dodge();
+                break;
+
+            case Key.Space:
+                if (Entity.Utility?.PercentToDone == 100 || Entity.Utility?.UsesAvailable > 0)
+                {
+                    Entity.Utility?.Act();
+                    if (Entity.Utility != null) Entity.Utility.TimeActed = Clock.CurrentTime;
+                }
+
+                break;
+
+            case Key.R:
+                if (Entity.Ultimate?.PercentToDone == 100 || Entity.Ultimate?.UsesAvailable > 0)
+                {
+                    Entity.Ultimate?.Act();
+                    if (Entity.Ultimate != null) Entity.Ultimate.TimeActed = Clock.CurrentTime;
+                }
+                break;
+        }
+
+        return base.OnKeyDown(e);
+    }
+
+    protected override void OnKeyUp(KeyUpEvent e)
+    {
+        switch (e.Key)
+        {
+            case Key.A:
+                left = false;
+                break;
+
+            case Key.D:
+                right = false;
+                break;
+
+            case Key.W:
+                up = false;
+                break;
+
+            case Key.S:
+                down = false;
+                break;
+        }
+
+        base.OnKeyUp(e);
+    }
+
     protected override void Update()
     {
         base.Update();
-
-        if (Keyboard.GetState().IsKeyDown(Key.A)) Move(180, GetSpeed());
-        if (Keyboard.GetState().IsKeyDown(Key.D)) Move(0, GetSpeed());
-        if (Keyboard.GetState().IsKeyDown(Key.W)) Move(270, GetSpeed());
-        if (Keyboard.GetState().IsKeyDown(Key.S)) Move(90, GetSpeed());
-        if (Keyboard.GetState().IsKeyDown(Key.ShiftLeft)) Dodge();
+        if (left) Move(180, GetSpeed());
+        if (right) Move(0, GetSpeed());
+        if (up) Move(270, GetSpeed());
+        if (down) Move(90, GetSpeed());
     }
 }

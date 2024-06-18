@@ -1,12 +1,12 @@
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Effects;
+using GentrysQuest.Game.Content.Families;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Screens.Gameplay;
 using NUnit.Framework;
-using osu.Framework.Logging;
 using osu.Framework.Screens;
 
 namespace GentrysQuest.Game.Tests.Visual.Screens
@@ -21,8 +21,13 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
 
         public TestSceneGameplay()
         {
-            theGuy = new TestCharacter(1);
-            testWeapon = new BrodysBroadsword();
+            theGuy = new BraydenMesserschmidt();
+            theGuy.Artifacts.Equip(new TestArtifact(), 0);
+            theGuy.Artifacts.Equip(new TestArtifact(), 1);
+            theGuy.Artifacts.Equip(new TestArtifact(), 2);
+            theGuy.Artifacts.Equip(new TestArtifact(), 3);
+            theGuy.Artifacts.Equip(new TestArtifact(), 4);
+            testWeapon = new BraydensOsuPen();
             GameData.EquipCharacter(theGuy);
             GameData.Money.InfiniteMoney = true;
             GameData.Add(theGuy);
@@ -35,7 +40,6 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         [Test]
         public void Gameplay()
         {
-            AddStep("Ready", () => Logger.Log("Gameplay ready"));
             AddStep("AddEnemy", () =>
             {
                 gameplay.AddEnemy(theGuy.Experience.Level.Current.Value);

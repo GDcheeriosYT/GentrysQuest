@@ -16,5 +16,7 @@ namespace GentrysQuest.Game.Entity
             get => value.Value;
             set => this.value.Value = value;
         }
+
+        public static implicit operator int(StarRating starRating) => starRating.Value;
     }
 }

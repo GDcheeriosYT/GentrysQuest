@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
@@ -9,7 +10,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.Inventory
@@ -381,8 +381,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
         {
             int xp = 0;
 
-            xp += item.Experience.CurrentLevel() * 80;
-            xp += item.StarRating.Value * 2 * 100;
+            xp += (item.Experience.CurrentLevel() - 1) * 250;
+            xp += (int)Math.Pow(item.StarRating.Value, 1.2) * 500;
 
             return xp;
         }
@@ -495,8 +495,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public void ToggleDisplay()
         {
-            Logger.Log(isShowing.ToString());
-
             switch (isShowing)
             {
                 case true:
