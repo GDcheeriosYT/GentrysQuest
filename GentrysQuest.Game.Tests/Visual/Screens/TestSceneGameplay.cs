@@ -22,6 +22,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         public TestSceneGameplay()
         {
             theGuy = new BraydenMesserschmidt();
+            theGuy.Invincible = true;
             theGuy.Artifacts.Equip(new TestArtifact(), 0);
             theGuy.Artifacts.Equip(new TestArtifact(), 1);
             theGuy.Artifacts.Equip(new TestArtifact(), 2);

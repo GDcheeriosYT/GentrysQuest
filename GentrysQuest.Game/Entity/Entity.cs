@@ -15,6 +15,7 @@ namespace GentrysQuest.Game.Entity
         public bool CanDodge = true;
         public bool CanAttack = true;
         public bool CanMove = true;
+        public bool Invincible = false;
 
         // Stats
         public Stats Stats = new();
@@ -108,6 +109,8 @@ namespace GentrysQuest.Game.Entity
 
         public virtual void Damage(int amount)
         {
+            if (Invincible) return;
+
             if (amount <= 0) amount = 1;
             if (IsDodging) amount = 0;
             IsFullHealth = false;
