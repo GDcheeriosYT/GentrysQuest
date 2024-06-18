@@ -176,12 +176,24 @@ namespace GentrysQuest.Game.Entity.Drawables
                         GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
                         GameData.CurrentStats.AddToStat(StatTypes.DamageTaken, damage);
                         GameData.CurrentStats.AddToStat(StatTypes.MostDamageTaken, damage);
+                        if (character.IsDead) GameData.CurrentStats.AddToStat(StatTypes.Deaths);
                         break;
 
-                    case Entity:
+                    case Enemy enemy:
                         GameData.CurrentStats.AddToStat(StatTypes.Hits);
                         GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
                         GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
+
+                        if (entity.IsDead)
+                        {
+                            GameData.CurrentStats.AddToStat(StatTypes.Kills);
+                            int money = enemy.GetMoneyReward();
+                            GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
+                            GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
+                            details.Sender.AddXp(enemy.GetXpReward());
+                            GameData.Money.Hand(money);
+                        }
+
                         break;
                 }
 
