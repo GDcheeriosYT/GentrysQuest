@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -46,14 +47,7 @@ namespace GentrysQuest.Game.Entity
 
         public static bool Collides(CollisonHitBox theHitBox)
         {
-            foreach (HitBox hitBox in hitBoxes)
-            {
-                if (hitBox.GetType() != typeof(CollisonHitBox)) continue;
-
-                if (theHitBox.CheckCollision(hitBox)) return true;
-            }
-
-            return false;
+            return hitBoxes.Where(hitBox => hitBox.GetType() == typeof(CollisonHitBox)).Any(theHitBox.CheckCollision);
         }
     }
 }

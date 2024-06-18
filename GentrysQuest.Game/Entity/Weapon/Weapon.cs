@@ -81,6 +81,8 @@ namespace GentrysQuest.Game.Entity.Weapon
                 Buff.Improve();
                 Holder?.UpdateStats();
             };
+
+            CalculateXpRequirement();
         }
 
         public void UpdateStats() => Damage.SetAdditional((Experience.Level.Current.Value - 1) * (Difficulty + 1) * StarRating.Value);

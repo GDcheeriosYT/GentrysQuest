@@ -55,6 +55,12 @@ namespace GentrysQuest.Game.Entity
             MainAttribute = new Buff(this, stat, isPercent);
 
             initializeAttributes();
+            CalculateXpRequirement();
+        }
+
+        public override void CalculateXpRequirement()
+        {
+            Experience.Xp.Requirement.Value = (Experience.CurrentLevel() * (100 * StarRating)) + ((Experience.CurrentLevel() / 4) * (1000 * StarRating));
         }
 
         private void initializeAttributes()

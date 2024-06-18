@@ -45,7 +45,7 @@ namespace GentrysQuest.Game.Entity
 
             foreach (string name in familyCount.Keys)
             {
-                GameData.Content.GetFamily(name).FourSetBuff.RemoveFromCharacter(parent);
+                GameData.Content.GetFamily(name).FourSetBuff?.RemoveFromCharacter(parent);
                 if (familyCount[name] >= 2) GameData.Content.GetFamily(name).TwoSetBuff?.ApplyToCharacter(parent);
                 if (familyCount[name] >= 4) GameData.Content.GetFamily(name).FourSetBuff?.ApplyToCharacter(parent);
                 if (familyCount[name] == 5) parent.Stats.Boost((int)averageRating);

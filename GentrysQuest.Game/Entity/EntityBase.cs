@@ -33,6 +33,6 @@ namespace GentrysQuest.Game.Entity
             OnLevelUp?.Invoke();
         }
 
-        public void CalculateXpRequirement() => Experience.Xp.CalculateRequirement(Experience.Level.Current.Value, StarRating.Value);
+        public virtual void CalculateXpRequirement() => Experience.Xp.CalculateRequirement(Experience.Level.Current.Value, StarRating.Value);
     }
 }

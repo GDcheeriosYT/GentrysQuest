@@ -243,6 +243,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <param name="enemy">The enemy to remove</param>
         public void RemoveEnemy(DrawableEnemyEntity enemy)
         {
+            HitBoxScene.Remove(enemy.HitBox);
             enemies.Remove(enemy);
             RemoveInternal(enemy, false);
             playerEntity.SetEntities(enemies);
@@ -383,6 +384,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 scoreFlowContainer.Position = new Vector2(0);
                 GameData.Artifacts.Clear();
                 GameData.Weapons.Clear();
+                GameData.Money.Amount.Value = 0;
                 GameData.EquipedCharacter.Weapon = new BraydensOsuPen();
                 GameData.EquipedCharacter.Artifacts.Clear();
                 GameData.EquipedCharacter.Experience.Level.Current.Value = 1;
