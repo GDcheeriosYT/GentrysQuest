@@ -12,7 +12,7 @@ namespace GentrysQuest.Game.Content.Weapons
     {
         public override string Type { get; } = "Pen";
         public override int Distance { get; set; } = 200;
-        public override string Name { get; protected set; } = "Brayden's Osu Pen";
+        public override string Name { get; set; } = "Brayden's Osu Pen";
 
         public override string Description { get; protected set; } = "The man himself, Brayden's osu pen! "
                                                                      + "When held by the true wielder, gain a 20% + 20 per difficulty increase in all your stats. "

@@ -8,7 +8,7 @@ namespace GentrysQuest.Game.Content.Weapons
     {
         public override string Type { get; } = "Bow";
         public override int Distance { get; set; } = 1000;
-        public override string Name { get; protected set; } = "Bow";
+        public override string Name { get; set; } = "Bow";
         public override string Description { get; protected set; } = "Just a bow.";
         public override bool IsGeneralDamageMode { get; protected set; } = false;
 

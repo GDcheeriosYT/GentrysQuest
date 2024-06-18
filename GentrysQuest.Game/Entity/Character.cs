@@ -104,6 +104,19 @@ public class Character : Entity
         base.UpdateStats();
     }
 
+    public Enemy CreateEnemy(WeaponChoices weaponChoices)
+    {
+        Enemy enemy = new Enemy();
+        enemy.Name = Name;
+        enemy.TextureMapping.Remove("Idle");
+        enemy.TextureMapping.Add("Idle", TextureMapping.Get("Idle"));
+        enemy.Secondary = Secondary;
+        enemy.Utility = Utility;
+        enemy.Ultimate = Ultimate;
+        enemy.WeaponChoices = weaponChoices;
+        return enemy;
+    }
+
     private void addToStat(Buff attribute)
     {
         Stat stat = Stats.GetStat(attribute.StatType.ToString());

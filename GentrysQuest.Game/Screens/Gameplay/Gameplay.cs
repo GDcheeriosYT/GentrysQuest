@@ -8,6 +8,7 @@ using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
+using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Location.Drawables;
 using GentrysQuest.Game.Overlays.Inventory;
 using GentrysQuest.Game.Overlays.Notifications;
@@ -19,6 +20,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
+using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
@@ -117,9 +119,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// Add an enemy to the gameplay scene
         /// </summary>
         /// <param name="level">Current level of the character</param>
-        public void AddEnemy(int level)
+        /// <param name="enemy">For if you want to use custom enemies</param>
+        public void AddEnemy(int level, Enemy enemy = null)
         {
-            Enemy enemy = new TestEnemy(1);
+            enemy ??= new TestEnemy(1);
             enemy.Experience.Level.Current.Value = level;
             enemy.UpdateStats();
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);
@@ -283,6 +286,35 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 };
                 playerEntity.GetEntityObject().OnDeath += End;
                 playerEntity.GetEntityObject().OnLevelUp += SetDifficulty;
+                playerEntity.GetEntityObject().OnLevelUp += delegate
+                {
+                    if (playerEntity.GetEntityObject().Experience.CurrentLevel() % 5 == 0)
+                    {
+                        Logger.Log("Hello");
+                        removeAllEnemies();
+                        Character character = GameData.Content.Characters[MathBase.RandomChoice(GameData.Content.Characters.Count)];
+                        character.Experience.Level.Current.Value = playerEntity.GetEntityObject().Experience.CurrentLevel();
+                        character.Stats.Health.point += 5;
+                        WeaponChoices weaponChoices = new WeaponChoices();
+
+                        switch (character.Name)
+                        {
+                            case "Brayden Messerschmidt":
+                                Weapon weapon = new BraydensOsuPen();
+                                weapon.Experience.Level.Current.Value = character.Experience.CurrentLevel();
+                                weaponChoices.AddChoice(weapon, 100);
+                                break;
+
+                            default:
+                                weaponChoices.AddChoice(new Knife(), 100);
+                                break;
+                        }
+
+                        Logger.Log("brotha");
+                        AddEnemy(playerEntity.GetEntityObject().Experience.CurrentLevel(), character.CreateEnemy(weaponChoices));
+                        Logger.Log("sista");
+                    }
+                };
             }
 
             Scheduler.AddDelayed(() =>

@@ -4,7 +4,7 @@ namespace GentrysQuest.Game.Entity;
 
 public class Enemy : Entity
 {
-    protected WeaponChoices WeaponChoices = new();
+    public WeaponChoices WeaponChoices = new();
 
     public Enemy()
         : base()

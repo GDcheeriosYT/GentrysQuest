@@ -9,7 +9,7 @@ namespace GentrysQuest.Game.Content.Weapons
     {
         public override string Type { get; } = "Knife";
         public override int Distance { get; set; } = 150;
-        public override string Name { get; protected set; } = "Knife";
+        public override string Name { get; set; } = "Knife";
         public override string Description { get; protected set; } = "Just a knife...";
 
         public Knife()

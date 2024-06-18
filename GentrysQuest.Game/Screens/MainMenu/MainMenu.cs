@@ -51,6 +51,8 @@ namespace GentrysQuest.Game.Screens.MainMenu
             mainMenuButton.SetAction(delegate
             {
                 Character character = new BraydenMesserschmidt();
+                character.Experience.Level.Current.Value = 4;
+                character.Experience.Xp.Current.Value = 500;
                 Weapon weapon = new BraydensOsuPen();
                 character.Weapon = weapon;
                 GameData.Add(character);

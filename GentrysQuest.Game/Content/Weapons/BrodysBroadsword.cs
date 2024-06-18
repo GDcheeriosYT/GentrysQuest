@@ -9,7 +9,7 @@ namespace GentrysQuest.Game.Content.Weapons
 {
     public class BrodysBroadsword : Weapon
     {
-        public override string Name { get; protected set; } = "Brody's Broadsword";
+        public override string Name { get; set; } = "Brody's Broadsword";
         public override string Type { get; } = "Broadsword";
 
         public override string Description { get; protected set; } =
