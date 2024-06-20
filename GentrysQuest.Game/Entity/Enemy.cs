@@ -16,13 +16,14 @@ public class Enemy : Entity
         int level = Experience.Level.Current.Value;
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(Math.Pow(Difficulty, 3) * 2000, Stats.Health.point, 5000) +
-            CalculatePointBenefit(level * 25, Stats.Health.point, 100)
+            Math.Pow(Difficulty, 3) * (2000 * (Stats.Health.point + 1)) +
+            level * 25 * (Stats.Health.point + 1)
         );
 
         Stats.Attack.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 15, Stats.Attack.point, 20) +
-            CalculatePointBenefit(level * 5, Stats.Attack.point, 5)
+            2 +
+            CalculatePointBenefit(Math.Pow(Difficulty, 2.5) * 15, Stats.Attack.point, 20) +
+            CalculatePointBenefit(level * 1, Stats.Attack.point, 5)
         );
 
         Stats.Defense.SetDefaultValue(
