@@ -74,9 +74,9 @@ namespace GentrysQuest.Game.Entity
                     break;
 
                 case StatType.CritRate:
-                    value = 1;
-                    starRating = 0.5;
-                    level = 0.25;
+                    value = 2;
+                    starRating = 1;
+                    level = 0.5;
                     IsPercent = false;
                     break;
 
@@ -103,8 +103,8 @@ namespace GentrysQuest.Game.Entity
 
                 case StatType.RegenSpeed:
                     value = 0.25;
-                    starRating = 0.25;
-                    level = 0.25;
+                    starRating = 0.15;
+                    level = 0.15;
                     IsPercent = false;
                     break;
 
