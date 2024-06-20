@@ -80,6 +80,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <param name="showInfo">Will overhead info be shown on screen?</param>
         public DrawableEntity(Entity entity, AffiliationType affiliationType = AffiliationType.None, bool showInfo = true)
         {
+            entity.UpdateStats();
+            entity.Stats.Restore();
             Entity = entity;
             Affiliation = affiliationType;
             Size = new Vector2(100);
@@ -119,8 +121,6 @@ namespace GentrysQuest.Game.Entity.Drawables
                 projectile.Direction += Direction;
                 QueuedProjectiles.Add(projectile);
             };
-            entity.UpdateStats();
-            entity.Stats.Restore();
         }
 
         [BackgroundDependencyLoader]

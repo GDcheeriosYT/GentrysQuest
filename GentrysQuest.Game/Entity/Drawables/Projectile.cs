@@ -159,7 +159,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 hits++;
                 int damage = Damage;
-                if (TakesDefense) damage -= (int)(entity.Stats.Defense.Current.Value * entity.DefenseModifier);
+                if (TakesDefense) entity.DamageWithDefense(damage);
                 entity.Damage(damage);
 
                 details.Damage = damage;

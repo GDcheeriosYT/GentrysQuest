@@ -176,7 +176,6 @@ namespace GentrysQuest.Game.Entity.Drawables
                         if (!isValid) continue;
 
                         int damage = (int)(Weapon.Damage.Current.Value + Weapon.Holder.Stats.Attack.Current.Value);
-                        damage -= (int)(entity.Stats.Defense.Current.Value * entity.DefenseModifier);
 
                         if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {
@@ -186,11 +185,11 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 Weapon.Holder.Stats.CritDamage.Current.Value
                             );
                             details.IsCrit = true;
-                            entity.Crit(damage);
+                            entity.CritWithDefense(damage);
                         }
                         else
                         {
-                            entity.Damage(damage);
+                            entity.DamageWithDefense(damage);
                         }
 
                         details.Damage = damage;

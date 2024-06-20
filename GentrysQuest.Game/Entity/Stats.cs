@@ -6,7 +6,7 @@
     {
         public readonly Stat Health = new IntStat("Health", StatType.Health, 100, false);
         public readonly Stat Attack = new IntStat("Attack", StatType.Attack, 10);
-        public readonly Stat Defense = new IntStat("Defense", StatType.Defense, 6);
+        public readonly Stat Defense = new IntStat("Defense", StatType.Defense, 100);
         public readonly Stat CritRate = new IntStat("CritRate", StatType.CritRate, 1);
         public readonly Stat CritDamage = new IntStat("CritDamage", StatType.CritDamage, 20);
         public readonly Stat Speed = new Stat("Speed", StatType.Speed, 1);

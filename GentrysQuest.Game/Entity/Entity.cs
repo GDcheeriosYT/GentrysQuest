@@ -107,6 +107,8 @@ namespace GentrysQuest.Game.Entity
             OnAttack?.Invoke();
         }
 
+        public int AfterDefense(int amount) => (int)(amount * (100 / (Stats.Defense.Current.Value * DefenseModifier)));
+
         public virtual void Damage(int amount)
         {
             if (Invincible) return;
@@ -120,8 +122,7 @@ namespace GentrysQuest.Game.Entity
             OnDamage?.Invoke(amount);
         }
 
-        public void HitEntity(DamageDetails details) => OnHitEntity?.Invoke(details);
-        public void OnHit(DamageDetails details) => OnGetHit?.Invoke(details);
+        public void DamageWithDefense(int amount) => Damage(AfterDefense(amount));
 
         public virtual void Crit(int amount)
         {
@@ -130,6 +131,11 @@ namespace GentrysQuest.Game.Entity
             Damage(amount);
             OnCrit?.Invoke(amount);
         }
+
+        public void CritWithDefense(int amount) => Crit(AfterDefense(amount));
+
+        public void HitEntity(DamageDetails details) => OnHitEntity?.Invoke(details);
+        public void OnHit(DamageDetails details) => OnGetHit?.Invoke(details);
 
         public virtual void Heal(int amount)
         {

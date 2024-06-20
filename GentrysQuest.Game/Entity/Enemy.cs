@@ -26,7 +26,7 @@ public class Enemy : Entity
         );
 
         Stats.Defense.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 42, Stats.Defense.point, 18) +
+            CalculatePointBenefit(Difficulty * 100, Stats.Defense.point, 18) +
             CalculatePointBenefit(level * 4, Stats.Defense.point, 2)
         );
 
