@@ -203,7 +203,6 @@ namespace GentrysQuest.Game.Entity.Drawables
             if (hits < PassthroughAmount) return;
 
             Hide();
-            HitBox.Disable();
         }
     }
 }

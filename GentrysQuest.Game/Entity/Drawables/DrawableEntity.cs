@@ -44,7 +44,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         public List<Projectile> QueuedProjectiles { get; set; } = new();
 
         public HitBox HitBox { get; set; }
-        protected CollisonHitBox colliderBox;
+        public CollisonHitBox ColliderBox;
 
         public int Direction;
 
@@ -84,7 +84,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Affiliation = affiliationType;
             Size = new Vector2(100);
             HitBox = new HitBox(this);
-            colliderBox = new CollisonHitBox(this);
+            ColliderBox = new CollisonHitBox(this);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
@@ -96,7 +96,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 },
                 entityBar = new DrawableEntityBar(Entity),
                 HitBox,
-                colliderBox
+                ColliderBox
             };
             if (Entity.Weapon != null) weapon = new DrawableWeapon(this, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
@@ -148,9 +148,9 @@ namespace GentrysQuest.Game.Entity.Drawables
             if (!Entity.CanMove) return;
 
             float value = (float)(Clock.ElapsedFrameTime * speed);
-            colliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
+            ColliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
 
-            if (!HitBoxScene.Collides(colliderBox)) OnMove?.Invoke(direction, speed);
+            if (!HitBoxScene.Collides(ColliderBox)) OnMove?.Invoke(direction, speed);
         }
 
         /// <summary>
@@ -220,7 +220,11 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private void setDrawableWeapon()
         {
-            if (weapon != null) RemoveInternal(weapon, true);
+            if (weapon != null)
+            {
+                RemoveInternal(weapon, true);
+                HitBoxScene.Remove(weapon.HitBox);
+            }
 
             if (Entity.Weapon != null)
             {
@@ -255,7 +259,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             base.Update();
 
             // Reset collider box
-            colliderBox.Position = new Vector2(0);
+            ColliderBox.Position = new Vector2(0);
 
             // Effects logic
             Entity.Affect(Clock.CurrentTime);
