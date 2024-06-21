@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GentrysQuest.Game.Utils;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -17,16 +16,12 @@ namespace GentrysQuest.Game.Entity
 
         public Weapon.Weapon GetChoice()
         {
-            Logger.Log("zebra");
             while (true)
             {
                 for (int i = 0; i < weapons.Count; i++)
                 {
-                    Logger.Log("Dog");
-
                     if (MathBase.IsChanceSuccessful(chanceOfPicking[i], 100))
                     {
-                        Logger.Log("Pig");
                         return weapons[i];
                     }
                 }

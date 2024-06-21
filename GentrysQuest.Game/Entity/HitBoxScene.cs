@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -11,8 +12,19 @@ namespace GentrysQuest.Game.Entity
     {
         private static List<HitBox> hitBoxes = new();
 
-        public static void Add(HitBox hitBox) => hitBoxes.Add(hitBox);
-        public static void Remove(HitBox hitBox) => hitBoxes.Remove(hitBox);
+        public static void Add(HitBox hitBox)
+        {
+            hitBoxes.Add(hitBox);
+            Logger.Log(hitBoxes.Count.ToString());
+        }
+
+        public static void Remove(HitBox hitBox)
+        {
+            hitBoxes.Remove(hitBox);
+            Logger.Log(hitBoxes.Count.ToString());
+        }
+
+        public static void clear() => hitBoxes.Clear();
 
         /// <summary>
         /// Gets intersections for hitboxes.

@@ -20,7 +20,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
@@ -90,7 +89,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     RelativeSizeAxes = Axes.Both
                 },
                 gameplayHud = new GameplayHud(),
-                map = new DrawableMap(new TestMap()),
+                map = new DrawableMap(),
                 inventoryOverlay = new InventoryOverlay(),
                 scoreFlowContainer = new TextFlowContainer
                 {
@@ -247,6 +246,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         public void RemoveEnemy(DrawableEnemyEntity enemy)
         {
             HitBoxScene.Remove(enemy.HitBox);
+            HitBoxScene.Remove(enemy.ColliderBox);
+            HitBoxScene.Remove(enemy.Weapon.HitBox);
             enemies.Remove(enemy);
             RemoveInternal(enemy, false);
             playerEntity.SetEntities(enemies);
@@ -273,6 +274,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void SetUp()
         {
+            map.Load(new TestMap());
+
             if (playerEntity is null)
             {
                 AddInternal(playerEntity = new DrawablePlayableEntity(GameData.EquipedCharacter));
@@ -290,7 +293,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 {
                     if (playerEntity.GetEntityObject().Experience.CurrentLevel() % 5 == 0)
                     {
-                        Logger.Log("Hello");
                         removeAllEnemies();
                         Character character = GameData.Content.Characters[MathBase.RandomChoice(GameData.Content.Characters.Count)];
                         character.Experience.Level.Current.Value = playerEntity.GetEntityObject().Experience.CurrentLevel();
@@ -310,9 +312,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                                 break;
                         }
 
-                        Logger.Log("brotha");
                         AddEnemy(playerEntity.GetEntityObject().Experience.CurrentLevel(), character.CreateEnemy(weaponChoices));
-                        Logger.Log("sista");
                     }
                 };
             }
@@ -379,7 +379,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             Pause();
             removeAllEnemies();
             gameplayHud.Delay(3000).Then().FadeOut();
-            map.Delay(3000).Then().FadeOut();
+            Scheduler.AddDelayed(() => map.Unload(), 3000);
             deathContainer.FadeIn(3000).Then()
                           .Delay(1000).FadeOut(2000);
             scoreFlowContainer.FadeOut().Then()
@@ -463,7 +463,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
             {
                 projectile.Position = new Vector2(500, -500);
                 projectile.ShootFrom(playerEntity);
-                Scheduler.AddDelayed(() => RemoveInternal(projectile, false), projectile.Lifetime);
+                Scheduler.AddDelayed(() =>
+                {
+                    RemoveInternal(projectile, false);
+                    HitBoxScene.Remove(projectile.HitBox);
+                }, projectile.Lifetime);
                 playerEntity.QueuedProjectiles.Remove(projectile);
                 AddInternal(projectile);
                 projectiles.Add(projectile);
@@ -474,7 +478,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 foreach (Projectile projectile in enemy.QueuedProjectiles.ToList())
                 {
                     projectile.ShootFrom(enemy);
-                    Scheduler.AddDelayed(() => RemoveInternal(projectile, false), projectile.Lifetime);
+                    Scheduler.AddDelayed(() =>
+                    {
+                        RemoveInternal(projectile, false);
+                        HitBoxScene.Remove(projectile.HitBox);
+                    }, projectile.Lifetime);
                     enemy.QueuedProjectiles.Remove(projectile);
                     AddInternal(projectile);
                     projectiles.Add(projectile);
