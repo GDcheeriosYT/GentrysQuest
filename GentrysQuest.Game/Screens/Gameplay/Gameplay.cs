@@ -247,6 +247,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             HitBoxScene.Remove(enemy.HitBox);
             HitBoxScene.Remove(enemy.ColliderBox);
+            HitBoxScene.Remove(enemy.Weapon.HitBox);
             enemies.Remove(enemy);
             RemoveInternal(enemy, false);
             playerEntity.SetEntities(enemies);
