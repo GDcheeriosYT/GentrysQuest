@@ -38,7 +38,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <summary>
         /// The visual weapon
         /// </summary>
-        protected DrawableWeapon weapon;
+        public DrawableWeapon Weapon;
 
         public AffiliationType Affiliation { get; set; }
         public List<Projectile> QueuedProjectiles { get; set; } = new();
@@ -98,7 +98,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 HitBox,
                 ColliderBox
             };
-            if (Entity.Weapon != null) weapon = new DrawableWeapon(this, Affiliation);
+            if (Entity.Weapon != null) Weapon = new DrawableWeapon(this, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
@@ -163,7 +163,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(Position + center, position);
-            if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle + 90);
+            if (Weapon.GetWeaponObject().CanAttack) Weapon.Attack((float)angle + 90);
         }
 
         /// <summary>
@@ -220,17 +220,17 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private void setDrawableWeapon()
         {
-            if (weapon != null)
+            if (Weapon != null)
             {
-                RemoveInternal(weapon, true);
-                HitBoxScene.Remove(weapon.HitBox);
+                RemoveInternal(Weapon, true);
+                HitBoxScene.Remove(Weapon.HitBox);
             }
 
             if (Entity.Weapon != null)
             {
-                weapon = new DrawableWeapon(this, Affiliation);
-                weapon.Affiliation = Affiliation;
-                AddInternal(weapon);
+                Weapon = new DrawableWeapon(this, Affiliation);
+                Weapon.Affiliation = Affiliation;
+                AddInternal(Weapon);
             }
         }
 
