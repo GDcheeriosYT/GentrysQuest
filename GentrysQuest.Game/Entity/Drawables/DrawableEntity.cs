@@ -38,13 +38,13 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <summary>
         /// The visual weapon
         /// </summary>
-        protected DrawableWeapon weapon;
+        public DrawableWeapon Weapon;
 
         public AffiliationType Affiliation { get; set; }
         public List<Projectile> QueuedProjectiles { get; set; } = new();
 
         public HitBox HitBox { get; set; }
-        protected CollisonHitBox colliderBox;
+        public CollisonHitBox ColliderBox;
 
         public int Direction;
 
@@ -86,7 +86,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Affiliation = affiliationType;
             Size = new Vector2(100);
             HitBox = new HitBox(this);
-            colliderBox = new CollisonHitBox(this);
+            ColliderBox = new CollisonHitBox(this);
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
@@ -98,9 +98,9 @@ namespace GentrysQuest.Game.Entity.Drawables
                 },
                 entityBar = new DrawableEntityBar(Entity),
                 HitBox,
-                colliderBox
+                ColliderBox
             };
-            if (Entity.Weapon != null) weapon = new DrawableWeapon(this, Affiliation);
+            if (Entity.Weapon != null) Weapon = new DrawableWeapon(this, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
@@ -148,9 +148,9 @@ namespace GentrysQuest.Game.Entity.Drawables
             if (!Entity.CanMove) return;
 
             float value = (float)(Clock.ElapsedFrameTime * speed);
-            colliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
+            ColliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
 
-            if (!HitBoxScene.Collides(colliderBox)) OnMove?.Invoke(direction, speed);
+            if (!HitBoxScene.Collides(ColliderBox)) OnMove?.Invoke(direction, speed);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(Position + center, position);
-            if (weapon.GetWeaponObject().CanAttack) weapon.Attack((float)angle + 90);
+            if (Weapon.GetWeaponObject().CanAttack) Weapon.Attack((float)angle + 90);
         }
 
         /// <summary>
@@ -220,13 +220,17 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         private void setDrawableWeapon()
         {
-            if (weapon != null) RemoveInternal(weapon, true);
+            if (Weapon != null)
+            {
+                RemoveInternal(Weapon, true);
+                HitBoxScene.Remove(Weapon.HitBox);
+            }
 
             if (Entity.Weapon != null)
             {
-                weapon = new DrawableWeapon(this, Affiliation);
-                weapon.Affiliation = Affiliation;
-                AddInternal(weapon);
+                Weapon = new DrawableWeapon(this, Affiliation);
+                Weapon.Affiliation = Affiliation;
+                AddInternal(Weapon);
             }
         }
 
@@ -255,7 +259,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             base.Update();
 
             // Reset collider box
-            colliderBox.Position = new Vector2(0);
+            ColliderBox.Position = new Vector2(0);
 
             // Effects logic
             Entity.Affect(Clock.CurrentTime);

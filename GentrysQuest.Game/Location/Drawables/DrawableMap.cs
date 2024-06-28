@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GentrysQuest.Game.Entity;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK;
@@ -7,10 +8,18 @@ namespace GentrysQuest.Game.Location.Drawables
 {
     public sealed partial class DrawableMap : CompositeDrawable
     {
-        public Map MapReference { get; }
-        public List<DrawableMapObject> mapObjects { get; }
+        public Map MapReference { get; private set; }
+        public List<DrawableMapObject> mapObjects { get; private set; }
 
-        public DrawableMap(Map map)
+        public DrawableMap()
+        {
+            Anchor = Anchor.Centre;
+            Origin = Anchor.Centre;
+
+            Size = new Vector2(5000);
+        }
+
+        public void Load(Map map)
         {
             MapReference = map;
             mapObjects = new();
@@ -23,11 +32,15 @@ namespace GentrysQuest.Game.Location.Drawables
                 mapObjects.Add(newMapObject);
                 AddInternal(newMapObject);
             }
+        }
 
-            Anchor = Anchor.Centre;
-            Origin = Anchor.Centre;
-
-            Size = new Vector2(5000);
+        public void Unload()
+        {
+            foreach (DrawableMapObject mapObject in mapObjects)
+            {
+                HitBoxScene.Remove(mapObject.Collider);
+                RemoveInternal(mapObject, true);
+            }
         }
     }
 }
