@@ -343,7 +343,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private void manage_direction(float direction, double speed, Drawable drawable)
         {
             var value = (float)(Clock.ElapsedFrameTime * speed);
-
             drawable.MoveTo(drawable.Position + ((MathBase.GetAngleToVector(direction, true) * DrawableEntity.SLOWING_FACTOR) * value));
         }
 
@@ -466,6 +465,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 Scheduler.AddDelayed(() =>
                 {
                     RemoveInternal(projectile, false);
+                    projectiles.Remove(projectile);
                     HitBoxScene.Remove(projectile.HitBox);
                 }, projectile.Lifetime);
                 playerEntity.QueuedProjectiles.Remove(projectile);
@@ -481,6 +481,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     Scheduler.AddDelayed(() =>
                     {
                         RemoveInternal(projectile, false);
+                        projectiles.Remove(projectile);
                         HitBoxScene.Remove(projectile.HitBox);
                     }, projectile.Lifetime);
                     enemy.QueuedProjectiles.Remove(projectile);
