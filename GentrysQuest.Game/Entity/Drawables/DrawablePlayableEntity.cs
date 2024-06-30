@@ -76,6 +76,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
                     Entity.Ultimate?.Act();
                     if (Entity.Ultimate != null) Entity.Ultimate.TimeActed = Clock.CurrentTime;
                 }
+
                 break;
         }
 

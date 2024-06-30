@@ -47,7 +47,7 @@ public class Character : Entity
 
         Stats.Attack.SetDefaultValue(
             CalculatePointBenefit(Difficulty * 8, Stats.Attack.point, 5) +
-            CalculatePointBenefit(level * 2, Stats.Attack.point, 4) +
+            CalculatePointBenefit(level * 1, Stats.Attack.point, 4) +
             CalculatePointBenefit(starRating, Stats.Attack.point, 3)
         );
 

@@ -1,6 +1,5 @@
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Effects;
-using GentrysQuest.Game.Content.Families;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
@@ -22,12 +21,6 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         public TestSceneGameplay()
         {
             theGuy = new BraydenMesserschmidt();
-            theGuy.Invincible = true;
-            theGuy.Artifacts.Equip(new TestArtifact(), 0);
-            theGuy.Artifacts.Equip(new TestArtifact(), 1);
-            theGuy.Artifacts.Equip(new TestArtifact(), 2);
-            theGuy.Artifacts.Equip(new TestArtifact(), 3);
-            theGuy.Artifacts.Equip(new TestArtifact(), 4);
             testWeapon = new BraydensOsuPen();
             GameData.EquipCharacter(theGuy);
             GameData.Money.InfiniteMoney = true;

@@ -19,6 +19,8 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
         private Enemy enemy;
         private DrawableEntity drawableEntity;
         private DrawableEnemyEntity drawableEnemy;
+        private StatDrawableContainer characterStats;
+        private StatDrawableContainer enemyStats;
         private SpriteText levelTracker;
         private ProgressBar xpProgress;
 
@@ -48,10 +50,24 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             {
                 Position = new Vector2(-200, 0)
             });
+            Add(characterStats = new StatDrawableContainer
+            {
+                Position = new Vector2(-5, 600),
+                RelativeSizeAxes = Axes.None,
+                Size = new Vector2(200, 350)
+            });
             Add(drawableEnemy = new DrawableEnemyEntity(enemy)
             {
                 Position = new Vector2(200, 0)
             });
+            Add(enemyStats = new StatDrawableContainer()
+            {
+                Position = new Vector2(400, 600),
+                RelativeSizeAxes = Axes.None,
+                Size = new Vector2(200, 350)
+            });
+
+            initializeStats();
 
             entity.OnLevelUp += delegate
             {
@@ -60,6 +76,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
                 xpProgress.Max = entity.Experience.Xp.Requirement.Value;
                 xpProgress.Current = entity.Experience.Xp.Current.Value;
                 xpProgress.Min = 0;
+                updateStats();
             };
             entity.OnGainXp += delegate
             {
@@ -69,6 +86,32 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
                 xpProgress.Current = entity.Experience.Xp.Current.Value;
                 xpProgress.Min = 0;
             };
+        }
+
+        private void initializeStats()
+        {
+            foreach (Stat stat in entity.Stats.GetStats())
+            {
+                characterStats.AddStat(new StatDrawable(stat.Name, (float)stat.Total(), false));
+            }
+
+            foreach (Stat stat in enemy.Stats.GetStats())
+            {
+                enemyStats.AddStat(new StatDrawable(stat.Name, (float)stat.Total(), false));
+            }
+        }
+
+        private void updateStats()
+        {
+            foreach (Stat stat in entity.Stats.GetStats())
+            {
+                characterStats.GetStatDrawable(stat.Name).UpdateValue((float)stat.Current.Value);
+            }
+
+            foreach (Stat stat in enemy.Stats.GetStats())
+            {
+                enemyStats.GetStatDrawable(stat.Name).UpdateValue((float)stat.Current.Value);
+            }
         }
 
         [Test]

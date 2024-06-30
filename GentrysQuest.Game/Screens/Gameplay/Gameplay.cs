@@ -34,8 +34,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private TextFlowContainer scoreFlowContainer;
         private SpriteText scoreText;
         private DrawablePlayableEntity playerEntity;
-        private List<DrawableEntity> enemies = new();
-        private List<Projectile> projectiles = new();
+        private readonly List<DrawableEntity> enemies = new();
+        private readonly List<Projectile> projectiles = new();
         private GameplayHud gameplayHud;
         private DrawableMap map;
         private InventoryOverlay inventoryOverlay;
@@ -45,12 +45,12 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <summary>
         /// Maximum enemies allowed to spawn at once
         /// </summary>
-        private int enemySpawnLimit = 4;
+        private int enemySpawnLimit;
 
         /// <summary>
         /// How many enemies are allowed on the screen
         /// </summary>
-        private int enemyLimit = 4;
+        private int enemyLimit;
 
         /// <summary>
         /// The gameplay difficulty

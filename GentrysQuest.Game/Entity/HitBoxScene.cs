@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -12,54 +11,21 @@ namespace GentrysQuest.Game.Entity
     {
         private static List<HitBox> hitBoxes = new();
 
-        public static void Add(HitBox hitBox)
-        {
-            hitBoxes.Add(hitBox);
-            Logger.Log(hitBoxes.Count.ToString());
-        }
+        public static void Add(HitBox hitBox) => hitBoxes.Add(hitBox);
 
-        public static void Remove(HitBox hitBox)
-        {
-            hitBoxes.Remove(hitBox);
-            Logger.Log(hitBoxes.Count.ToString());
-        }
+        public static void Remove(HitBox hitBox) => hitBoxes.Remove(hitBox);
 
-        public static void clear() => hitBoxes.Clear();
+        public static void Clear() => hitBoxes.Clear();
 
         /// <summary>
         /// Gets intersections for hitboxes.
         /// </summary>
         /// <param name="theHitBox">The hitbox to check for intersections</param>
         /// <returns></returns>
-        public static List<HitBox> GetIntersections(HitBox theHitBox)
-        {
-            List<HitBox> hitboxList = new();
+        public static List<HitBox> GetIntersections(HitBox theHitBox) => hitBoxes.Where(theHitBox.CheckCollision).ToList();
 
-            foreach (HitBox hitBox in hitBoxes)
-            {
-                if (theHitBox.CheckCollision(hitBox)) hitboxList.Add(hitBox);
-            }
+        public static List<CollisonHitBox> GetCollisions(CollisonHitBox theHitBox) => (from hitBox in hitBoxes where hitBox.GetType() == typeof(CollisonHitBox) where theHitBox.CheckCollision(hitBox) select (CollisonHitBox)hitBox).ToList();
 
-            return hitboxList;
-        }
-
-        public static List<CollisonHitBox> GetCollisions(CollisonHitBox theHitBox)
-        {
-            List<CollisonHitBox> colliders = new();
-
-            foreach (HitBox hitBox in hitBoxes)
-            {
-                if (hitBox.GetType() != typeof(CollisonHitBox)) continue;
-
-                if (theHitBox.CheckCollision(hitBox)) colliders.Add((CollisonHitBox)hitBox);
-            }
-
-            return colliders;
-        }
-
-        public static bool Collides(CollisonHitBox theHitBox)
-        {
-            return hitBoxes.Where(hitBox => hitBox.GetType() == typeof(CollisonHitBox)).Any(theHitBox.CheckCollision);
-        }
+        public static bool Collides(CollisonHitBox theHitBox) => hitBoxes.Where(hitBox => hitBox.GetType() == typeof(CollisonHitBox)).Any(theHitBox.CheckCollision);
     }
 }
