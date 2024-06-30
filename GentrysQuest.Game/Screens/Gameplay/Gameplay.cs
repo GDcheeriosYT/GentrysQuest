@@ -351,6 +351,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
+            playerEntity.RemoveClickContainer();
             NotificationContainer.Instance.MoveToY(0);
             Container deathContainer = new Container
             {
