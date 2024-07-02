@@ -1,6 +1,7 @@
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using NUnit.Framework;
+using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Tests.Visual.Entity
 {
@@ -15,6 +16,10 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
         public TestSceneArtifactStats()
         {
             Add(statContainer);
+            AddStep("ok!", () =>
+            {
+                Logger.Log("I'm ready!");
+            });
             AddStep("Reset", resetDisplay);
             AddToggleStep("Is percent", b => toggleBool());
             AddSliderStep("Star Rating", 1, 5, 1, setStarRating);

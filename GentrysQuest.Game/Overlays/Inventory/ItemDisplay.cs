@@ -4,14 +4,13 @@ using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Graphics;
-using osu.Framework.Allocation;
+using GentrysQuest.Game.Graphics.TextStyles;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
 using osu.Framework.Logging;
 using osuTK;
 
@@ -22,16 +21,20 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private EntityBase entity;
         private readonly InventoryOverlay inventoryReference;
         private readonly SpriteText nameText;
-        private readonly SpriteText descriptionText;
+        private readonly TaggedTextContainer descriptionText;
         private readonly SpriteText levelText;
         private readonly SpriteText experienceRequirementText;
         private readonly ProgressBar experienceBar;
         private readonly InventoryLevelUpBox inventoryLevelUpBox;
         private readonly InventoryButton levelUpButton;
         private readonly InventoryButton exchangeButton;
-        private readonly StarRatingContainer starRatingContainer;
         private readonly StatDrawableContainer statDrawableContainer;
-        private readonly Container characterAttributesContainer;
+        private readonly InnerInventoryButton detailsButton;
+        private readonly InnerInventoryButton statsButton;
+        private readonly InnerInventoryButton artifactsButton;
+        private readonly Container detailsContainer;
+        private readonly Container statsContainer;
+        private readonly Container artifactsContainer;
         private EquipIcon artifactIcon1;
         private EquipIcon artifactIcon2;
         private EquipIcon artifactIcon3;
@@ -41,8 +44,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private Character characterInfo;
         private Artifact artifactInfo;
         private Weapon weaponInfo;
-        private readonly Sprite entityDisplay;
-        private TextureStore textureStore;
+        private Bindable<DisplayMode> displaying = new();
 
         #region DesignProperties
 
@@ -53,12 +55,18 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
         public ItemDisplay(InventoryOverlay inventoryReference)
         {
+            displaying.Value = DisplayMode.Details;
             this.inventoryReference = inventoryReference;
             RelativeSizeAxes = Axes.Both;
             RelativePositionAxes = Axes.Both;
             InternalChildren = new Drawable[]
             {
-                new Container
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = ColourInfo.GradientVertical(new Colour4(12, 12, 12, 46), new Colour4(21, 21, 21, 64))
+                },
+                new Container // name
                 {
                     Anchor = Anchor.TopCentre,
                     Origin = Anchor.TopCentre,
@@ -109,118 +117,17 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             Truncate = true,
                             AllowMultiline = false,
                             Padding = new MarginPadding { Left = 2 }
-                        },
-                        new Container
-                        {
-                            Anchor = Anchor.TopLeft,
-                            Origin = Anchor.TopLeft,
-                            Position = new Vector2(0, 80),
-                            Size = new Vector2(1, 420),
-                            RelativeSizeAxes = Axes.X,
-                            Children = new Drawable[]
-                            {
-                                entityDisplay = new Sprite
-                                {
-                                    Anchor = Anchor.TopLeft,
-                                    Origin = Anchor.TopLeft,
-                                    Size = new Vector2(1),
-                                    RelativeSizeAxes = Axes.Both
-                                },
-                                new Container
-                                {
-                                    RelativeSizeAxes = Axes.Both,
-                                    Size = new Vector2(1, 0),
-                                    Position = new Vector2(0, 30),
-                                    Children = new Drawable[]
-                                    {
-                                        starRatingContainer = new StarRatingContainer(1)
-                                        {
-                                            Anchor = Anchor.CentreLeft,
-                                            Origin = Anchor.CentreLeft,
-                                            Size = new Vector2(0, 80)
-                                        },
-                                        new Container
-                                        {
-                                            Size = new Vector2(140, 40),
-                                            Masking = true,
-                                            EdgeEffect = new EdgeEffectParameters
-                                            {
-                                                Type = EdgeEffectType.Shadow,
-                                                Colour = new Colour4(0, 0, 0, 180),
-                                                Radius = 20,
-                                                Roundness = 3
-                                            },
-                                            Anchor = Anchor.CentreRight,
-                                            Origin = Anchor.CentreRight,
-                                            Children = new Drawable[]
-                                            {
-                                                levelText = new SpriteText
-                                                {
-                                                    Anchor = Anchor.CentreRight,
-                                                    Origin = Anchor.CentreRight,
-                                                    Text = "",
-                                                    Font = FontUsage.Default.With(size: 32),
-                                                    AllowMultiline = false,
-                                                    RelativeSizeAxes = Axes.Both
-                                                }
-                                            }
-                                        },
-                                        experienceBar = new ProgressBar(0, 1)
-                                        {
-                                            RelativeSizeAxes = Axes.None,
-                                            Size = new Vector2(140, 5),
-                                            Position = new Vector2(0, 10),
-                                            Anchor = Anchor.TopRight,
-                                            Origin = Anchor.TopRight,
-                                            ForegroundColour = Colour4.DarkBlue
-                                        },
-                                        experienceRequirementText = new SpriteText
-                                        {
-                                            Text = "",
-                                            Position = new Vector2(0, 20),
-                                            Anchor = Anchor.TopRight,
-                                            Origin = Anchor.TopRight,
-                                        }
-                                    }
-                                },
-                                descriptionText = new SpriteText
-                                {
-                                    Text = "",
-                                    Anchor = Anchor.TopLeft,
-                                    Origin = Anchor.TopLeft,
-                                    Font = FontUsage.Default.With(size: 24),
-                                    Position = new Vector2(0, 120),
-                                    RelativeSizeAxes = Axes.X,
-                                    Width = 1f,
-                                    AllowMultiline = true,
-                                    Padding = new MarginPadding { Left = 5 }
-                                }
-                            }
                         }
                     }
                 },
-                new Container
+                new Container // navigation bar
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(1, 0.5f),
-                    Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.BottomCentre,
+                    RelativeSizeAxes = Axes.X,
+                    Y = 80,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
                     Children = new Drawable[]
                     {
-                        new Box
-                        {
-                            Anchor = Anchor.TopCentre,
-                            Origin = Anchor.BottomCentre,
-                            RelativePositionAxes = Axes.Both,
-                            RelativeSizeAxes = Axes.X,
-                            Colour = ColourInfo.GradientVertical(new Colour4(0, 0, 26, 0), new Colour4(0, 0, 0, 155)),
-                            Size = new Vector2(1, 100)
-                        },
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Colour4.LightGray
-                        },
                         new Container
                         {
                             Anchor = Anchor.TopCentre,
@@ -250,43 +157,147 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     Size = new Vector2(1, 3),
                                     Colour = Colour4.DarkGray
                                 },
-                                new SpriteText
+                                new FillFlowContainer
                                 {
-                                    Text = "Details",
-                                    Anchor = Anchor.Centre,
+                                    AutoSizeAxes = Axes.Both,
+                                    Direction = FillDirection.Horizontal,
                                     Origin = Anchor.Centre,
+                                    Anchor = Anchor.Centre,
+                                    Spacing = new Vector2(20, 0),
+                                    Children = new Drawable[]
+                                    {
+                                        detailsButton = new InnerInventoryButton(new SpriteText
+                                        {
+                                            Text = "Details",
+                                            Anchor = Anchor.Centre,
+                                            Origin = Anchor.Centre
+                                        })
+                                        {
+                                            Size = new Vector2(128, 42)
+                                        },
+                                        statsButton = new InnerInventoryButton(new SpriteText
+                                        {
+                                            Text = "Stats",
+                                            Anchor = Anchor.Centre,
+                                            Origin = Anchor.Centre
+                                        })
+                                        {
+                                            Size = new Vector2(128, 42)
+                                        },
+                                        artifactsButton = new InnerInventoryButton(new SpriteText
+                                        {
+                                            Text = "Artifacts",
+                                            Anchor = Anchor.Centre,
+                                            Origin = Anchor.Centre
+                                        })
+                                        {
+                                            Size = new Vector2(128, 42)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                new Container // details, stats, artifacts parent
+                {
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    RelativeSizeAxes = Axes.X,
+                    Width = 0.95f,
+                    Height = 400,
+                    CornerExponent = 2,
+                    CornerRadius = 15,
+                    Masking = true,
+                    Y = 150,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = new Colour4(0, 0, 0, 48)
+                        },
+                        new Container
+                        {
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Child = new FillFlowContainer
+                            {
+                                Direction = FillDirection.Horizontal,
+                                Spacing = new Vector2(10, 0),
+                                Children = new Drawable[]
+                                {
+                                    levelText = new SpriteText
+                                    {
+                                        Text = "Level",
+                                        Anchor = Anchor.TopCentre,
+                                        Origin = Anchor.TopCentre,
+                                        Font = FontUsage.Default.With(size: 24)
+                                    },
+                                    experienceBar = new ProgressBar(0, 1)
+                                    {
+                                        Size = new Vector2(100, 12),
+                                        ForegroundColour = Colour4.Aqua,
+                                        BackgroundColour = new Colour4(255, 255, 255, 12),
+                                        Margin = new MarginPadding { Top = 5 },
+                                        Anchor = Anchor.TopCentre,
+                                        Origin = Anchor.TopCentre,
+                                    },
+                                    experienceRequirementText = new SpriteText
+                                    {
+                                        Text = "",
+                                        Anchor = Anchor.TopCentre,
+                                        Origin = Anchor.TopCentre,
+                                    }
                                 }
                             }
                         },
-                        statDrawableContainer = new StatDrawableContainer
+                        detailsContainer = new Container
                         {
-                            Size = new Vector2(1, 0.65f),
-                            Position = new Vector2(0, 60)
-                        },
-                        characterAttributesContainer = new Container
-                        {
-                            Masking = true,
                             RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.5f, 0.65f),
-                            Position = new Vector2(0, 60),
-                            Anchor = Anchor.TopRight,
-                            Origin = Anchor.TopRight,
                             Children = new Drawable[]
                             {
-                                new SpriteText
+                                weaponIcon = new EquipIcon(null)
                                 {
-                                    Text = "Equips",
+                                    Margin = new MarginPadding { Left = 40, Top = 30 },
+                                    Anchor = Anchor.TopLeft,
+                                    Origin = Anchor.TopLeft
+                                },
+                                descriptionText = new TaggedTextContainer
+                                {
+                                    Y = 130,
                                     Anchor = Anchor.TopCentre,
                                     Origin = Anchor.TopCentre,
-                                    Font = FontUsage.Default.With(size: 36)
-                                },
+                                    RelativeSizeAxes = Axes.Both,
+                                    Padding = new MarginPadding(20)
+                                }
+                            }
+                        },
+                        statsContainer = new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Children = new Drawable[]
+                            {
+                                statDrawableContainer = new StatDrawableContainer
+                                {
+                                    Y = 20,
+                                    Anchor = Anchor.TopCentre,
+                                    Origin = Anchor.TopCentre
+                                }
+                            }
+                        },
+                        artifactsContainer = new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Children = new Drawable[]
+                            {
                                 new BasicScrollContainer
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Size = new Vector2(1, 0.8f),
                                     Position = new Vector2(0, 32),
                                     ClampExtension = 1,
-                                    ScrollbarVisible = false,
+                                    ScrollbarVisible = true,
                                     Child = new FillFlowContainer
                                     {
                                         Y = 0,
@@ -296,13 +307,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                         Origin = Anchor.TopCentre,
                                         Children = new Drawable[]
                                         {
-                                            weaponIcon = new EquipIcon(null),
-                                            new Box
-                                            {
-                                                Size = new Vector2(120, 4),
-                                                Origin = Anchor.Centre,
-                                                Colour = Colour4.DarkGray
-                                            },
                                             artifactIcon1 = new EquipIcon(null),
                                             artifactIcon2 = new EquipIcon(null),
                                             artifactIcon3 = new EquipIcon(null),
@@ -312,41 +316,65 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                     }
                                 }
                             }
-                        },
-                        new FillFlowContainer
+                        }
+                    }
+                },
+                new FillFlowContainer // Level buttons
+                {
+                    Size = new Vector2(0, 60),
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Direction = FillDirection.Horizontal,
+                    Margin = new MarginPadding { Bottom = 20 },
+                    AutoSizeAxes = Axes.X,
+                    Spacing = new Vector2(20),
+                    Children = new Drawable[]
+                    {
+                        exchangeButton = new InventoryButton("Infuse")
                         {
-                            Size = new Vector2(0, 60),
-                            Anchor = Anchor.BottomCentre,
-                            Origin = Anchor.BottomCentre,
-                            Direction = FillDirection.Horizontal,
-                            AutoSizeAxes = Axes.X,
-                            Spacing = new Vector2(20),
-                            Children = new Drawable[]
-                            {
-                                exchangeButton = new InventoryButton("Infuse")
-                                {
-                                    Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
-                                },
-                                inventoryLevelUpBox = new InventoryLevelUpBox()
-                                {
-                                    Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
-                                },
-                                levelUpButton = new InventoryButton("Upgrade")
-                                {
-                                    Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
-                                },
-                            }
+                            Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
+                        },
+                        inventoryLevelUpBox = new InventoryLevelUpBox
+                        {
+                            Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
+                        },
+                        levelUpButton = new InventoryButton("Upgrade")
+                        {
+                            Size = new Vector2(LEVEL_UP_BUTTON_WIDTH, LEVEL_UP_BUTTON_HEIGHT),
                         }
                     }
                 }
             };
-            Masking = true;
-        }
+            detailsButton.SetAction(delegate { displaying.Value = DisplayMode.Details; });
+            statsButton.SetAction(delegate { displaying.Value = DisplayMode.Stats; });
+            artifactsButton.SetAction(delegate { displaying.Value = DisplayMode.Artifacts; });
+            statsContainer.Hide();
+            artifactsContainer.Hide();
+            displaying.ValueChanged += delegate
+            {
+                const int DURATION = 100;
 
-        [BackgroundDependencyLoader]
-        private void load(TextureStore textureStore)
-        {
-            this.textureStore = textureStore;
+                switch (displaying.Value)
+                {
+                    case DisplayMode.Details:
+                        detailsContainer.FadeIn(DURATION);
+                        artifactsContainer.FadeOut(DURATION);
+                        statsContainer.FadeOut(DURATION);
+                        break;
+
+                    case DisplayMode.Stats:
+                        detailsContainer.FadeOut(DURATION);
+                        artifactsContainer.FadeOut(DURATION);
+                        statsContainer.FadeIn(DURATION);
+                        break;
+
+                    case DisplayMode.Artifacts:
+                        detailsContainer.FadeOut(DURATION);
+                        artifactsContainer.FadeIn(DURATION);
+                        statsContainer.FadeOut(DURATION);
+                        break;
+                }
+            };
         }
 
         public void DisplayItem(EntityBase entity)
@@ -356,7 +384,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
             weaponInfo = null;
             this.FadeIn(50);
             nameText.Text = entity.Name;
-            descriptionText.Text = entity.Description;
+            descriptionText.SetTaggedText(entity.Description);
             updateExperienceBar(entity);
             levelUpButton.SetAction(delegate
             {
@@ -370,27 +398,26 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
                 updateExperienceBar(entity);
             });
-            starRatingContainer.starRating.Value = entity.StarRating.Value;
-            entityDisplay.Texture = textureStore.Get(entity.TextureMapping.Get("Icon"));
             statDrawableContainer.Clear();
-            characterAttributesContainer.Hide();
 
             switch (entity)
             {
                 case Character character:
                     characterInfo = character;
-                    characterAttributesContainer.Show();
 
                     exchangeButton.Hide();
                     inventoryLevelUpBox.Show();
                     resizeLevelUpComponents(2);
 
+                    descriptionText.Y = 130;
+                    weaponIcon.Show();
+                    artifactsButton.Show();
+                    artifactsButton.Scale = new Vector2(1);
+
                     foreach (Stat stat in character.Stats.GetStats())
                     {
-                        statDrawableContainer.AddStat(new StatDrawable(stat.Name, (float)stat.Total(), false));
+                        statDrawableContainer.AddStat(new StatDrawable($"{stat.Name} {stat.GetDefault()} + {stat.GetAdditional()}", (float)stat.Total(), false, stat.Name));
                     }
-
-                    statDrawableContainer.ResizeWidthTo(0.5f);
 
                     weaponIcon.SetEquip(character.Weapon);
                     weaponIcon.SetAction(delegate { inventoryReference.ClickWeapon(); });
@@ -427,11 +454,20 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     break;
 
                 case Artifact artifact:
+                    displaying.Value = DisplayMode.Stats;
                     inventoryReference.FocusedArtifact = artifact;
                     artifactInfo = artifact;
                     Buff mainAttribute = artifact.MainAttribute;
                     exchangeButton.SetAction(inventoryReference.StartArtifactExchange);
 
+                    string description = $"{artifact.Description}\n"
+                                         + $"Two Set Buff:\n"
+                                         + $"{artifact.family.TwoSetBuff.BuffExplanation()}\n"
+                                         + $"Four Set Buff:\n"
+                                         + $"{artifact.family.FourSetBuff?.Explanation}";
+
+                    descriptionText.SetTaggedText(description);
+                    descriptionText.Y = 0;
                     inventoryLevelUpBox.Hide();
                     exchangeButton.Show();
                     levelUpButton.SetAction(delegate
@@ -447,19 +483,24 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         statDrawableContainer.AddStat(new StatDrawable(attribute.StatType.ToString(), (float)attribute.Value.Value, false));
                     }
 
-                    statDrawableContainer.ResizeWidthTo(1f);
+                    artifactsButton.Hide();
+                    weaponIcon.Hide();
+                    artifactsButton.Scale = new Vector2(0);
 
                     artifactInfo.OnLevelUp -= updateArtifactStatContainer;
                     artifactInfo.OnLevelUp += updateArtifactStatContainer;
                     break;
 
                 case Weapon weapon:
+                    displaying.Value = DisplayMode.Stats;
                     inventoryReference.FocusedWeapon = weapon;
                     weaponInfo = weapon;
 
+                    descriptionText.Y = 0;
                     exchangeButton.SetAction(inventoryReference.StartWeaponExchange);
                     exchangeButton.Show();
                     inventoryLevelUpBox.Show();
+                    weaponIcon.Hide();
                     levelUpButton.SetAction(delegate
                     {
                         if (GameData.Money.CanAfford(inventoryLevelUpBox.GetAmount()))
@@ -473,9 +514,10 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         updateExperienceBar(entity);
                     });
                     resizeLevelUpComponents(3);
+                    artifactsButton.Hide();
+                    artifactsButton.Scale = new Vector2(0);
                     statDrawableContainer.AddStat(new StatDrawable("Damage", (float)weapon.Damage.Total(), true));
                     statDrawableContainer.AddStat(new StatDrawable(weapon.Buff.StatType.ToString(), (float)weapon.Buff.Value.Value, false));
-                    statDrawableContainer.ResizeWidthTo(1f);
                     weaponInfo.OnLevelUp -= updateWeaponStatContainer;
                     weaponInfo.OnLevelUp += updateWeaponStatContainer;
                     break;
@@ -490,13 +532,13 @@ namespace GentrysQuest.Game.Overlays.Inventory
             levelUpButton.ResizeTo(new Vector2(LEVEL_UP_BUTTON_WIDTH / amount, LEVEL_UP_BUTTON_HEIGHT));
         }
 
-        private void updateExperienceBar(EntityBase entity)
+        private void updateExperienceBar(EntityBase entityRef)
         {
-            levelText.Text = entity.Experience.Level.ToString();
-            experienceRequirementText.Text = entity.Experience.Xp.ToString();
+            levelText.Text = entityRef.Experience.Level.ToString();
+            experienceRequirementText.Text = entityRef.Experience.Xp.ToString();
             experienceBar.Min = 0;
-            experienceBar.Current = entity.Experience.Xp.Current.Value;
-            experienceBar.Max = entity.Experience.Xp.Requirement.Value;
+            experienceBar.Current = entityRef.Experience.Xp.Current.Value;
+            experienceBar.Max = entityRef.Experience.Xp.Requirement.Value;
         }
 
         private void updateCharacterStatContainer()
@@ -524,7 +566,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 {
                     StatDrawable statDrawable = statDrawableContainer.GetStatDrawable(buff.StatType.ToString());
                     if (statDrawable != null) statDrawable.UpdateValue((float)buff.Value.Value);
-                    else statDrawableContainer.AddStat(new StatDrawable(buff.StatType.ToString(), (float)buff.Value.Value, false));
+                    else statDrawableContainer.AddStat(new StatDrawable(buff.StatType.ToString(), (float)buff.Value.Value, false), true);
                 }
             }
             catch (Exception)

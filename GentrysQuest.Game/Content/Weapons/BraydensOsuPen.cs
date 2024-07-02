@@ -14,10 +14,10 @@ namespace GentrysQuest.Game.Content.Weapons
         public override int Distance { get; set; } = 200;
         public override string Name { get; set; } = "Brayden's Osu Pen";
 
-        public override string Description { get; protected set; } = "The man himself, Brayden's osu pen! "
-                                                                     + "When held by the true wielder, gain a 20% + 20 per difficulty increase in all your stats. "
-                                                                     + "On the last attack you have a 20% chance to bleed enemies for 6 seconds. "
-                                                                     + "On a critical hit you get a small boost of speed";
+        public override string Description { get; protected set; } = "The man himself, Brayden's osu pen!\n"
+                                                                     + "When [condition]held by the true wielder[/condition], gain a [unit]20%[/unit][details]+ 20 per difficulty[/details] increase in all your stats. "
+                                                                     + "On the last attack you have a [unit]20%[/unit] chance to [type]bleed[/type] enemies for [unit]6 seconds[/unit]. "
+                                                                     + "On a [condition]critical hit[/condition] you get a small boost of speed";
 
         public override StarRating StarRating { get; protected set; } = new(5);
 

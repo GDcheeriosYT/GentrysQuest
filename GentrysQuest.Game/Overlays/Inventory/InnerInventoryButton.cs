@@ -1,13 +1,13 @@
 using System;
+using GentrysQuest.Game.Graphics;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 
 namespace GentrysQuest.Game.Overlays.Inventory
 {
-    public partial class InnerInventoryButton : CompositeDrawable
+    public partial class InnerInventoryButton : GQButton
     {
         private readonly Box backgroundBox;
         public readonly SpriteText Text;
