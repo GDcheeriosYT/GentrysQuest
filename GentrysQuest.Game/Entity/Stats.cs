@@ -13,12 +13,13 @@
         public readonly Stat AttackSpeed = new Stat("AttackSpeed", StatType.AttackSpeed, 1);
         public readonly Stat RegenSpeed = new Stat("RegenSpeed", StatType.RegenSpeed, 0);
         public readonly Stat RegenStrength = new IntStat("RegenStrength", StatType.RegenStrength, 1);
+        private readonly Stat KnockbackStrength = new IntStat("KnockbackStrength", StatType.KnockbackStrength, 1);
         private readonly Stat[] statGrouping;
 
         public Stats()
         {
-            statGrouping = new Stat[]
-            {
+            statGrouping =
+            [
                 Health,
                 Attack,
                 Defense,
@@ -27,8 +28,9 @@
                 Speed,
                 AttackSpeed,
                 RegenSpeed,
-                RegenStrength
-            };
+                RegenStrength,
+                KnockbackStrength
+            ];
         }
 
         public Stat GetStat(string name)
