@@ -23,6 +23,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         public float Distance;
         public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
+        private bool doesDamage;
+        private bool doesKnockback;
 
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
@@ -120,6 +122,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Weapon.Damage.Add(Weapon.Damage.GetPercentFromTotal(pattern.DamagePercent));
                     Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
                     onHitEffect = pattern.OnHitEffect;
+                    doesDamage = pattern.DoesDamage;
+                    doesKnockback = pattern.DoesKnockback;
 
                     if (pattern.Projectiles == null) return;
 
@@ -154,22 +158,23 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
-                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode && hitbox.GetType() != typeof(CollisonHitBox))
+                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode && hitbox.GetType() != typeof(CollisonHitBox) && doesDamage)
                     {
                         DamageDetails details = new DamageDetails();
-                        Entity entity;
+                        DrawableEntity receiver = null;
+                        Entity receiverBase = null;
                         bool isValid = true;
                         bool isCrit = false;
 
                         switch (hitbox.GetParent())
                         {
                             case DrawableEntity drawableEntity:
-                                entity = drawableEntity.GetEntityObject();
+                                receiver = drawableEntity;
+                                receiverBase = receiver.GetEntityObject();
                                 break;
 
                             default:
                                 isValid = false;
-                                entity = new Entity();
                                 break;
                         }
 
@@ -185,23 +190,24 @@ namespace GentrysQuest.Game.Entity.Drawables
                                 Weapon.Holder.Stats.CritDamage.Current.Value
                             );
                             details.IsCrit = true;
-                            entity.CritWithDefense(damage);
+                            receiverBase.CritWithDefense(damage);
                         }
                         else
                         {
-                            entity.DamageWithDefense(damage);
+                            receiverBase.DamageWithDefense(damage);
                         }
 
                         details.Damage = damage;
-                        details.Receiver = entity;
+                        details.Receiver = receiverBase;
                         details.Sender = Weapon.Holder;
+                        receiver.ApplyKnockback(MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position), 1, 200, false);
                         if (!details.Sender.EnemyHitCounter.TryAdd(details.Receiver, 1)) details.Sender.EnemyHitCounter[details.Receiver]++;
 
-                        entity.OnHit(details);
-                        if (onHitEffect != null && onHitEffect.Applies()) entity.AddEffect(onHitEffect.Effect);
+                        receiverBase.OnHit(details);
+                        if (onHitEffect != null && onHitEffect.Applies()) receiverBase.AddEffect(onHitEffect.Effect);
                         Weapon.HitEntity(details);
 
-                        switch (entity)
+                        switch (receiverBase)
                         {
                             case Character character:
                                 GameData.CurrentStats.AddToStat(StatTypes.HitsTaken);
@@ -216,19 +222,19 @@ namespace GentrysQuest.Game.Entity.Drawables
                         switch (Weapon.Holder)
                         {
                             case Character character:
-                                if (entity.IsDead)
+                                if (receiverBase.IsDead)
                                 {
                                     GameData.CurrentStats.AddToStat(StatTypes.Hits);
                                     if (isCrit) GameData.CurrentStats.AddToStat(StatTypes.Crits);
                                     GameData.CurrentStats.AddToStat(StatTypes.Damage, damage);
                                     GameData.CurrentStats.AddToStat(StatTypes.MostDamage, damage);
-                                    int money = entity.GetMoneyReward();
+                                    int money = receiverBase.GetMoneyReward();
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGained, money);
                                     GameData.CurrentStats.AddToStat(StatTypes.MoneyGainedOnce, money);
-                                    Weapon.Holder.AddXp(entity.GetXpReward());
+                                    Weapon.Holder.AddXp(receiverBase.GetXpReward());
                                     GameData.Money.Hand(money);
 
-                                    Weapon.Weapon reward = entity.GetWeaponReward();
+                                    Weapon.Weapon reward = receiverBase.GetWeaponReward();
                                     if (reward != null) GameData.Add(reward);
 
                                     GameData.CurrentStats.AddToStat(StatTypes.Kills);

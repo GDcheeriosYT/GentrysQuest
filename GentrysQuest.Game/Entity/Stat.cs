@@ -26,6 +26,7 @@ namespace GentrysQuest.Game.Entity
             Name = name;
             StatType = statType;
             Minimum.Value = minimumValue;
+            SetDefaultValue(0);
             Current.Value = Total();
             ResetsOnUpdate = resetsOnUpdate;
             calculate();
@@ -41,10 +42,7 @@ namespace GentrysQuest.Game.Entity
 
         public void ResetAdditionalValue() => Additional.Value = 0;
 
-        public void RestoreValue()
-        {
-            Current.Value = Total();
-        }
+        public void RestoreValue() => Current.Value = Total();
 
         public void UpdateCurrentValue(double updateDifference)
         {
@@ -57,7 +55,7 @@ namespace GentrysQuest.Game.Entity
 
         public void SetDefaultValue(double value)
         {
-            Default.Value = value;
+            Default.Value = Minimum.Value + value;
             calculate();
         }
 
@@ -67,15 +65,14 @@ namespace GentrysQuest.Game.Entity
             calculate();
         }
 
+        public virtual double GetDefault() => Math.Round(Default.Value, 2);
+        public virtual double GetAdditional() => Math.Round(Additional.Value, 2);
+        public virtual double GetCurrent() => Math.Round(Current.Value, 2);
+
         public void SetAdditional(double value)
         {
             Additional.Value = value;
             calculate();
-        }
-
-        protected Stat()
-        {
-            // TODO: Make this do something?
         }
 
         public double GetPercentFromDefault(float percent) => MathBase.GetPercent(Default.Value, percent);
@@ -84,12 +81,12 @@ namespace GentrysQuest.Game.Entity
 
         public virtual double Total()
         {
-            return Math.Round(Minimum.Value + Default.Value + Additional.Value, 2);
+            return Math.Round(Default.Value + Additional.Value, 2);
         }
 
         public override string ToString()
         {
-            return $"{Name}: {Minimum.Value + Default.Value} + {Additional.Value} ({Total()})";
+            return $"{Name}: {Default.Value} + {Additional.Value} ({Total()})";
         }
     }
 }

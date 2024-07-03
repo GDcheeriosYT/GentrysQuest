@@ -67,7 +67,7 @@ public class Character : Entity
         );
 
         Stats.Speed.SetDefaultValue(
-            0.5 +
+            0.1 +
             CalculatePointBenefit(0, Stats.Speed.point, 0.2)
         );
 

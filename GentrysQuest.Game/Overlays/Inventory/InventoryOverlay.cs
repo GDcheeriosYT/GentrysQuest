@@ -385,6 +385,8 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
             xp += (item.Experience.CurrentLevel() - 1) * 250;
             xp += (int)Math.Pow(item.StarRating.Value, 1.2) * 500;
+            xp += item.Experience.CurrentLevel() / 4 * 1000;
+            xp += item.Difficulty * 10000;
 
             return xp;
         }

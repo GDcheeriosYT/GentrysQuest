@@ -27,9 +27,11 @@ namespace GentrysQuest.Game.Content.Weapons
             var time = (int)MathBase.SecondToMs(0.4); // seconds
 
             AttackPattern.AddCase(1);
-            AttackPattern.Add(new AttackPatternEvent { Distance = 0, HitboxSize = new Vector2(0.1f, 1), Size = new Vector2(0.6f) });
-            AttackPattern.Add(new AttackPatternEvent(time) { Distance = 0.4f, HitboxSize = new Vector2(0.2f, 1), Size = new Vector2(0.6f) });
-            AttackPattern.Add(new AttackPatternEvent(time) { Distance = 0, HitboxSize = new Vector2(0.1f, 1), Size = new Vector2(0.6f) });
+
+            AttackPattern.Add(new AttackPatternEvent { Distance = 0, HitboxSize = new Vector2(0, 0), Size = new Vector2(0.6f) });
+            AttackPattern.Add(new AttackPatternEvent(time) { Distance = 15, HitboxSize = new Vector2(0f, 0), Size = new Vector2(0.6f), DoesDamage = false });
+            AttackPattern.Add(new AttackPatternEvent(time) { Distance = 65, HitboxSize = new Vector2(0.1f, 1), Size = new Vector2(0.6f) });
+            AttackPattern.Add(new AttackPatternEvent(time) { Distance = 0, HitboxSize = new Vector2(0.1f, 0), Size = new Vector2(0.6f) });
 
             #endregion
 

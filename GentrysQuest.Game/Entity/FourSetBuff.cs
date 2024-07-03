@@ -10,5 +10,7 @@ namespace GentrysQuest.Game.Entity
         /// </summary>
         /// <param name="character"></param>
         public abstract void RemoveFromCharacter(Character character);
+
+        public abstract string Explanation { get; protected set; }
     }
 }

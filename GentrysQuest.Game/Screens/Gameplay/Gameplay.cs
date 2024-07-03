@@ -281,7 +281,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 AddInternal(playerEntity = new DrawablePlayableEntity(GameData.EquipedCharacter));
                 if (GameData.EquipedCharacter.Weapon != null) GameData.EquipedCharacter.SetWeapon(GameData.EquipedCharacter.Weapon);
                 SetDifficulty();
-                playerEntity.OnMove += delegate(float direction, double speed)
+                playerEntity.OnMove += delegate(Vector2 direction, double speed)
                 {
                     manage_direction(direction, speed, map);
                     foreach (DrawableEntity enemyEntity in enemies) manage_direction(direction, speed, enemyEntity);
@@ -340,10 +340,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <param name="direction">Direction</param>
         /// <param name="speed">The speed</param>
         /// <param name="drawable">The drawable to invoke movement on</param>
-        private void manage_direction(float direction, double speed, Drawable drawable)
+        private void manage_direction(Vector2 direction, double speed, Drawable drawable)
         {
             var value = (float)(Clock.ElapsedFrameTime * speed);
-            drawable.MoveTo(drawable.Position + ((MathBase.GetAngleToVector(direction, true) * DrawableEntity.SLOWING_FACTOR) * value));
+            drawable.MoveTo(drawable.Position + -direction * value);
         }
 
         /// <summary>
