@@ -104,10 +104,7 @@ namespace GentrysQuest.Game.Entity
             OnDeath?.Invoke();
         }
 
-        public virtual void Attack()
-        {
-            OnAttack?.Invoke();
-        }
+        public void Attack() => OnAttack?.Invoke();
 
         public int AfterDefense(int amount) => (int)(amount * (100 / (Stats.Defense.Current.Value * DefenseModifier)));
 

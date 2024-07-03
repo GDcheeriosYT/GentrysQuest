@@ -114,6 +114,12 @@ namespace GentrysQuest.Game.Entity
                     level = 1;
                     IsPercent = false;
                     break;
+
+                case StatType.KnockbackStrength:
+                    value = 0.2;
+                    starRating = 0.2;
+                    level = 0.05;
+                    break;
             }
 
             if (!IsPercent) percentDiffer = 1;

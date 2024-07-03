@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity.Weapon;
@@ -25,6 +24,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         private OnHitEffect onHitEffect;
         private bool doesDamage;
         private bool doesKnockback;
+        private bool stuns;
 
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
@@ -36,6 +36,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             RelativeSizeAxes = Axes.Both;
             Colour = Colour4.White;
             Anchor = Anchor.Centre;
+            AlwaysPresent = true;
 
             if (Weapon != null)
             {
@@ -51,29 +52,29 @@ namespace GentrysQuest.Game.Entity.Drawables
                 Weapon.CanAttack = true;
             }
 
-            disable();
+            Disable();
         }
 
-        private void disable()
+        public void Disable()
         {
             HitBox.Disable();
             Hide();
         }
 
-        private void enable()
+        public void Enable()
         {
             HitBox.Enable();
             Show();
         }
 
-        private void disable(int timeMs)
+        public void Disable(int timeMs)
         {
             HitBox.Disable();
             this.FadeOut(timeMs);
             this.ScaleTo(0, timeMs);
         }
 
-        private void enable(int timeMs)
+        public void Enable(int timeMs)
         {
             HitBox.Enable();
             this.FadeIn(timeMs);
@@ -93,11 +94,10 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             DamageQueue.Clear();
             Weapon.CanAttack = false;
-            enable(100);
+            Enable(100);
             Weapon.AttackAmount += 1;
             AttackPatternCaseHolder caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
             Weapon.Holder.Attack(); // Call the holder base method to handle events.
-            List<AttackPatternEvent> patterns;
 
             if (caseHolder == null)
             {
@@ -105,7 +105,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
             }
 
-            patterns = caseHolder.GetEvents();
+            var patterns = caseHolder.GetEvents();
             double delay = 0;
 
             foreach (AttackPatternEvent pattern in patterns)
@@ -124,6 +124,9 @@ namespace GentrysQuest.Game.Entity.Drawables
                     onHitEffect = pattern.OnHitEffect;
                     doesDamage = pattern.DoesDamage;
                     doesKnockback = pattern.DoesKnockback;
+                    stuns = pattern.Stuns;
+
+                    if (!HitBox.Enabled) return;
 
                     if (pattern.Projectiles == null) return;
 
@@ -139,7 +142,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             Scheduler.AddDelayed(() => // Add delay to enable weapon attacking
             {
-                disable(100);
+                Disable(100);
             }, delay + 50);
 
             Scheduler.AddDelayed((() =>
@@ -200,7 +203,13 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Damage = damage;
                         details.Receiver = receiverBase;
                         details.Sender = Weapon.Holder;
-                        receiver.ApplyKnockback(MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position), 1, 200, false);
+
+                        if (doesKnockback)
+                        {
+                            var knockback = (float)Weapon.Holder.Stats.KnockbackStrength.GetCurrent();
+                            receiver.ApplyKnockback(MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position), knockback, (int)knockback * 200, stuns);
+                        }
+
                         if (!details.Sender.EnemyHitCounter.TryAdd(details.Receiver, 1)) details.Sender.EnemyHitCounter[details.Receiver]++;
 
                         receiverBase.OnHit(details);

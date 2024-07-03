@@ -86,6 +86,10 @@ namespace GentrysQuest.Game.Entity.Drawables
                 case StatType.RegenStrength:
                     icon.Icon = FontAwesome.Solid.Vial;
                     break;
+
+                case StatType.KnockbackStrength:
+                    icon.Icon = FontAwesome.Solid.Forward;
+                    break;
             }
         }
     }

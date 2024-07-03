@@ -13,7 +13,7 @@ namespace GentrysQuest.Game.Entity
 # else
         private const bool DEBUG = false;
 # endif
-        private bool enabled = true;
+        public bool Enabled = true;
         public readonly AffiliationType Affiliation;
         private dynamic parent;
 
@@ -43,15 +43,15 @@ namespace GentrysQuest.Game.Entity
             HitBoxScene.Add(this);
         }
 
-        public void Disable() { enabled = false; }
+        public void Disable() { Enabled = false; }
 
-        public void Enable() { enabled = true; }
+        public void Enable() { Enabled = true; }
 
         public dynamic GetParent() => parent;
 
         public bool CheckCollision(HitBox hitBox)
         {
-            if (enabled && !hitBox.Equals(this)) return collisionQuad.Intersects(hitBox.collisionQuad) && Affiliation != hitBox.Affiliation;
+            if (Enabled && !hitBox.Equals(this)) return collisionQuad.Intersects(hitBox.collisionQuad) && Affiliation != hitBox.Affiliation;
 
             return false;
         }

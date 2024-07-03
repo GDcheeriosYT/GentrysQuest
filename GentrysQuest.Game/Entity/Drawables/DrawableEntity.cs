@@ -155,7 +155,11 @@ namespace GentrysQuest.Game.Entity.Drawables
             knockbackForce = force;
             knockbackDuration = duration;
             knockbackTimeRemaining = duration;
-            if (stuns) Entity.AddEffect(new Stun(duration + 200));
+
+            if (!stuns) return;
+
+            Entity.AddEffect(new Stun(duration + 300));
+            Weapon.Disable(50);
         }
 
         public void Move(Vector2 direction, double speed)
