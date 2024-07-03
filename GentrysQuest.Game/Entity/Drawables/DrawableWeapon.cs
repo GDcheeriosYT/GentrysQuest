@@ -23,6 +23,8 @@ namespace GentrysQuest.Game.Entity.Drawables
         public float Distance;
         public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
+        private bool doesDamage;
+        private bool doesKnockback;
 
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
@@ -120,6 +122,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Weapon.Damage.Add(Weapon.Damage.GetPercentFromTotal(pattern.DamagePercent));
                     Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
                     onHitEffect = pattern.OnHitEffect;
+                    doesDamage = pattern.DoesDamage;
+                    doesKnockback = pattern.DoesKnockback;
 
                     if (pattern.Projectiles == null) return;
 
@@ -154,7 +158,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
-                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode && hitbox.GetType() != typeof(CollisonHitBox))
+                    if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode && hitbox.GetType() != typeof(CollisonHitBox) && doesDamage)
                     {
                         DamageDetails details = new DamageDetails();
                         DrawableEntity receiver = null;
@@ -196,7 +200,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Damage = damage;
                         details.Receiver = receiverBase;
                         details.Sender = Weapon.Holder;
-                        receiver.ApplyKnockback(MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position), 1f, 200);
+                        receiver.ApplyKnockback(MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position), 1, 200, false);
                         if (!details.Sender.EnemyHitCounter.TryAdd(details.Receiver, 1)) details.Sender.EnemyHitCounter[details.Receiver]++;
 
                         receiverBase.OnHit(details);

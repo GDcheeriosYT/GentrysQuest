@@ -64,6 +64,16 @@ namespace GentrysQuest.Game.Entity.Weapon
         public bool ResetHitBox = false;
 
         /// <summary>
+        /// does this do damage?
+        /// </summary>
+        public bool DoesDamage = true;
+
+        /// <summary>
+        /// does knockback?
+        /// </summary>
+        public bool DoesKnockback = false;
+
+        /// <summary>
         /// What happens when the entity gets hit
         /// </summary>
         public OnHitEffect OnHitEffect = null;

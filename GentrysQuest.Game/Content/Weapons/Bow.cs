@@ -17,11 +17,13 @@ namespace GentrysQuest.Game.Content.Weapons
             Damage.SetDefaultValue(20);
 
             AttackPattern.AddCase(1);
-            AttackPattern.Add(new AttackPatternEvent { Size = new Vector2(0.5f), HitboxSize = new Vector2(0), Distance = 0.35f });
+            AttackPattern.Add(new AttackPatternEvent { Size = new Vector2(0.5f), Distance = 50 });
+            AttackPattern.Add(new AttackPatternEvent(500) { Size = new Vector2(0.5f), Distance = 40 });
+            AttackPattern.Add(new AttackPatternEvent(10) { Size = new Vector2(0.5f), Distance = 30 });
             AttackPattern.Add(new AttackPatternEvent(750)
             {
                 Size = new Vector2(0.5f),
-                Distance = 0.35f,
+                Distance = 50,
                 HitboxSize = new Vector2(0),
                 Projectiles =
                 [

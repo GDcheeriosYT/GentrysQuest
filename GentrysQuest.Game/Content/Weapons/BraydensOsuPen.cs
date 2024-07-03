@@ -35,35 +35,36 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region AttackPattern
 
-            var distance = 35;
-            var time = (int)MathBase.SecondToMs(0.95); // seconds
-            var movementSpeed = 0.5f;
+            const int distance = 35;
+            var time = (int)MathBase.SecondToMs(1.2); // seconds
+            const float movement_speed = 0.5f;
+            Vector2 hbSize = new Vector2(0.1f, 1);
             OnHitEffect lastComboEffect = new OnHitEffect(20)
             {
-                Effect = new Bleed(6)
+                Effect = new Bleed(new Second(6))
             };
 
             AttackPattern.AddCase(1);
-            AttackPattern.Add(new AttackPatternEvent { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed });
-            AttackPattern.Add(new AttackPatternEvent(time) { Direction = 90, Distance = distance, Transition = Easing.InOutQuart, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed });
+            AttackPattern.Add(new AttackPatternEvent { Direction = -90, Distance = distance, HitboxSize = hbSize, MovementSpeed = movement_speed });
+            AttackPattern.Add(new AttackPatternEvent(time / 4)
+                { Direction = -45, Distance = distance, HitboxSize = hbSize, Transition = Easing.InQuart, MovementSpeed = movement_speed, DoesDamage = false });
+            AttackPattern.Add(new AttackPatternEvent(time / 2) { Direction = 90, Distance = distance, Transition = Easing.OutQuart, HitboxSize = hbSize, MovementSpeed = movement_speed });
 
             AttackPattern.AddCase(2);
-            AttackPattern.Add(new AttackPatternEvent { Direction = 90, Distance = distance, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed });
-            AttackPattern.Add(new AttackPatternEvent(time)
-                { Direction = -90, Distance = distance, Transition = Easing.InOutQuart, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 5, MovementSpeed = movementSpeed });
+            AttackPattern.Add(new AttackPatternEvent { Direction = 90, Distance = distance, HitboxSize = hbSize, MovementSpeed = movement_speed });
+            AttackPattern.Add(new AttackPatternEvent(time / 4)
+                { Direction = 45, Distance = distance, HitboxSize = hbSize, Transition = Easing.InQuart, MovementSpeed = movement_speed, DoesDamage = false });
+            AttackPattern.Add(new AttackPatternEvent(time / 2)
+                { Direction = -90, Distance = distance, Transition = Easing.OutQuart, HitboxSize = hbSize, MovementSpeed = movement_speed });
 
             AttackPattern.AddCase(3);
-            AttackPattern.Add(new AttackPatternEvent
-                { Direction = -90, Distance = distance, HitboxSize = new Vector2(0.1f, 1), MovementSpeed = movementSpeed, OnHitEffect = lastComboEffect });
-            AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
-            {
-                Direction = 180, Distance = distance, Transition = Easing.InSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, MovementSpeed = movementSpeed, OnHitEffect = lastComboEffect
-            });
-            AttackPattern.Add(new AttackPatternEvent((int)(time / 1.6))
-            {
-                Direction = 360, Distance = distance, Transition = Easing.OutSine, HitboxSize = new Vector2(0.1f, 1), DamagePercent = 15, ResetHitBox = true, MovementSpeed = movementSpeed,
-                OnHitEffect = lastComboEffect
-            });
+            AttackPattern.Add(new AttackPatternEvent { Direction = -90, Distance = distance, HitboxSize = hbSize, MovementSpeed = movement_speed });
+            AttackPattern.Add(new AttackPatternEvent(time / 8)
+                { Direction = -45, Distance = distance, HitboxSize = hbSize, Transition = Easing.InQuart, MovementSpeed = movement_speed, DoesDamage = false, OnHitEffect = lastComboEffect });
+            AttackPattern.Add(new AttackPatternEvent(time / 4)
+                { Direction = 90, Distance = distance, HitboxSize = hbSize, MovementSpeed = movement_speed, OnHitEffect = lastComboEffect });
+            AttackPattern.Add(new AttackPatternEvent(time / 2)
+                { Direction = 360, Distance = distance, HitboxSize = hbSize, Transition = Easing.OutQuart, MovementSpeed = movement_speed, OnHitEffect = lastComboEffect, ResetHitBox = true });
 
             #endregion
 
