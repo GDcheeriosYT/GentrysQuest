@@ -35,7 +35,7 @@ namespace GentrysQuest.Game.Content.Weapons
 
             #region AttackPattern
 
-            var distance = 0.35f;
+            var distance = 35;
             var time = (int)MathBase.SecondToMs(0.95); // seconds
             var movementSpeed = 0.5f;
             OnHitEffect lastComboEffect = new OnHitEffect(20)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Utils;
 using JetBrains.Annotations;
+using osuTK;
 
 namespace GentrysQuest.Game.Entity
 {
@@ -16,6 +17,7 @@ namespace GentrysQuest.Game.Entity
         public bool CanAttack = true;
         public bool CanMove = true;
         public bool Invincible = false;
+        public Vector2 positionRef;
 
         // Stats
         public Stats Stats = new();

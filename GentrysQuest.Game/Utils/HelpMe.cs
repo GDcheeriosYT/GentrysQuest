@@ -30,7 +30,8 @@ namespace GentrysQuest.Game.Utils
             if (min == 0) min++;
 
             levelRef += min % 20;
-            levelRef += MathBase.RandomInt(-3, 3);
+            var difference = 1;
+            levelRef += MathBase.RandomInt(-difference, difference);
 
             if (levelRef > max) return max;
             if (levelRef < min) return min;

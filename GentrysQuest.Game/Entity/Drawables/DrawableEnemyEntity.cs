@@ -1,4 +1,3 @@
-using System;
 using GentrysQuest.Game.Utils;
 using osuTK;
 
@@ -8,12 +7,12 @@ namespace GentrysQuest.Game.Entity.Drawables
     {
         private DrawableEntity followEntity;
 
-        public DrawableEnemyEntity(Enemy entity)
-            : base(entity, AffiliationType.Enemy, true)
+        public DrawableEnemyEntity(Entity entity)
+            : base(entity, AffiliationType.Enemy)
         {
-            OnMove += delegate(float direction, double speed)
+            OnMove += delegate(Vector2 direction, double speed)
             {
-                Position += (MathBase.GetAngleToVector(direction) * SLOWING_FACTOR) * (float)(Clock.ElapsedFrameTime * GetSpeed());
+                Position += direction * (float)Clock.ElapsedFrameTime * (float)speed;
             };
         }
 
@@ -28,21 +27,13 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (followEntity == null) return;
 
-            Vector2 positionTo = MathBase.GetDirection(Position, followEntity.Position);
-
-            try
-            {
-                Move(MathBase.GetAngle(Position, positionTo), GetSpeed());
-            }
-            catch (ArgumentException)
-            {
-                // bad coding
-            }
-
             if (GetEntityObject().Weapon != null && MathBase.GetDistance(Position, followEntity.Position) < GetEntityObject().Weapon!.Distance)
             {
                 Attack(followEntity.Position);
             }
+
+            if (Entity.CanMove) Direction += MathBase.GetDirection(Position, followEntity.Position);
+            if (Direction != Vector2.Zero) Move(Direction.Normalized(), GetSpeed());
         }
     }
 }

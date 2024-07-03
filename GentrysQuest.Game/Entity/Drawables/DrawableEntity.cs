@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Audio;
+using GentrysQuest.Game.Content.Effects;
 using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Utils;
 using JetBrains.Annotations;
@@ -46,7 +47,12 @@ namespace GentrysQuest.Game.Entity.Drawables
         public HitBox HitBox { get; set; }
         public CollisonHitBox ColliderBox;
 
-        public int Direction;
+        public int DirectionLooking;
+        public Vector2 Direction = Vector2.Zero;
+        private Vector2 knockbackDirection;
+        private float knockbackForce;
+        private double knockbackDuration;
+        private double knockbackTimeRemaining;
 
         /// <summary>
         /// The entity list to check when attacking
@@ -58,7 +64,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <summary>
         /// The base speed variable for all entities
         /// </summary>
-        protected const double SPEED_MAIN = 0.25;
+        protected const double SPEED_MAIN = 0.35;
 
         /// <summary>
         /// When doing some math you might need this
@@ -68,7 +74,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         private double lastRegenTime;
 
         // Movement events
-        public delegate void Movement(float direction, double speed);
+        public delegate void Movement(Vector2 direction, double speed);
 
         public event Movement OnMove;
 
@@ -118,7 +124,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             entity.OnAddProjectile += parameters =>
             {
                 Projectile projectile = new Projectile(parameters);
-                projectile.Direction += Direction;
+                projectile.Direction += DirectionLooking;
                 QueuedProjectiles.Add(projectile);
             };
         }
@@ -143,12 +149,19 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.Heal((int)Entity.Stats.RegenStrength.Current.Value);
         }
 
-        public virtual void Move(float direction, double speed)
+        public void ApplyKnockback(Vector2 direction, float force, int duration, bool stuns = true)
         {
-            if (!Entity.CanMove) return;
+            knockbackDirection = direction;
+            knockbackForce = force;
+            knockbackDuration = duration;
+            knockbackTimeRemaining = duration;
+            if (stuns) Entity.AddEffect(new Stun(duration + 200));
+        }
 
+        public void Move(Vector2 direction, double speed)
+        {
             float value = (float)(Clock.ElapsedFrameTime * speed);
-            ColliderBox.Position += (MathBase.GetAngleToVector(direction) * 0.0005f) * value;
+            ColliderBox.Position += (direction * 0.06f) * value;
 
             if (!HitBoxScene.Collides(ColliderBox)) OnMove?.Invoke(direction, speed);
         }
@@ -243,7 +256,6 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         /// <summary>
         /// In some cases you'll want to get the entity reference for this drawable class
-        /// </summary>
         /// <returns>The entity reference for this drawable</returns>
         public Entity GetEntityObject() => Entity;
 
@@ -257,6 +269,25 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             // Main update
             base.Update();
+            Entity.positionRef = Position;
+
+            // Movement
+            Direction = Vector2.Zero;
+
+            if (knockbackTimeRemaining > 0)
+            {
+                float knockbackDelta = (float)(knockbackTimeRemaining / knockbackDuration);
+                Entity.SpeedModifier = knockbackForce * knockbackDelta;
+                Direction += knockbackDirection * knockbackForce;
+
+                knockbackTimeRemaining -= Clock.ElapsedFrameTime;
+
+                if (knockbackTimeRemaining < 0)
+                {
+                    knockbackTimeRemaining = 0;
+                    Entity.SpeedModifier = 1;
+                }
+            }
 
             // Reset collider box
             ColliderBox.Position = new Vector2(0);

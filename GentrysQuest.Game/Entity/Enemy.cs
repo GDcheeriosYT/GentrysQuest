@@ -17,7 +17,7 @@ public class Enemy : Entity
 
         Stats.Health.SetDefaultValue(
             Math.Pow(Difficulty, 3) * (2000 * (Stats.Health.point + 1)) +
-            level * 25 * (Stats.Health.point + 1)
+            level * 100 * (Stats.Health.point + 1)
         );
 
         Stats.Attack.SetDefaultValue(
@@ -27,7 +27,7 @@ public class Enemy : Entity
 
         Stats.Defense.SetDefaultValue(
             CalculatePointBenefit(Difficulty * 30, Stats.Defense.point, 18) +
-            CalculatePointBenefit(level * 4, Stats.Defense.point, 2)
+            CalculatePointBenefit(level * 1, Stats.Defense.point, 2)
         );
 
         Stats.CritRate.SetDefaultValue(20);
