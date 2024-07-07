@@ -188,8 +188,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         if (Weapon.Holder.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100))
                         {
                             isCrit = true;
-                            damage += (int)MathBase.GetPercent(
-                                Weapon.Holder.Stats.Attack.Current.Value,
+                            damage += (int)MathBase.GetPercent(damage,
                                 Weapon.Holder.Stats.CritDamage.Current.Value
                             );
                             details.IsCrit = true;

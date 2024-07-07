@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Graphics;
 using osu.Framework.Allocation;
@@ -5,13 +6,16 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
+using Velopack;
+using Velopack.Sources;
 
 namespace GentrysQuest.Game.Screens.LoadingScreen
 {
     public partial class LoadingScreen : Screen
     {
-        private readonly LoadingIndicator indicator;
-        private readonly SpriteText status;
+        private LoadingIndicator indicator;
+        private SpriteText status;
+        private UpdateManager updateManager;
         private byte progress = 0;
 
         public LoadingScreen()
@@ -22,19 +26,6 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
                 {
                     RelativeSizeAxes = Axes.Both,
                     Colour = Colour4.Black
-                },
-                indicator = new LoadingIndicator
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre
-                },
-                status = new SpriteText
-                {
-                    Text = "Doin your mom",
-                    Anchor = Anchor.BottomCentre,
-                    Origin = Anchor.BottomCentre,
-                    Margin = new MarginPadding { Bottom = 50 },
-                    Font = FontUsage.Default.With(size: 72)
                 }
             };
         }
@@ -42,12 +33,49 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
         [BackgroundDependencyLoader]
         private void load()
         {
-            GameData.Reset();
+            updateManager = new UpdateManager(new GithubSource("https://github.com/GDcheeriosYT/GentrysQuest", null, false));
+
+            AddInternal(indicator = new LoadingIndicator
+            {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre
+            });
+            AddInternal(status = new SpriteText
+            {
+                Text = "Checking for updates",
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.BottomCentre,
+                Margin = new MarginPadding { Bottom = 50 },
+                Font = FontUsage.Default.With(size: 72)
+            });
         }
 
-        protected override void LoadComplete()
+        public async Task CheckForUpdates()
+        {
+            status.Text = "Checking for updates...";
+            await Task.Delay(100);
+            var newVersion = await updateManager.CheckForUpdatesAsync();
+
+            if (newVersion == null)
+            {
+                status.Text = "No updates available.";
+                return; // no update available
+            }
+
+            status.Text = $"Downloading update";
+            await updateManager.DownloadUpdatesAsync(newVersion);
+            updateManager.ApplyUpdatesAndRestart(newVersion);
+        }
+
+        protected override async void LoadComplete()
         {
             base.LoadComplete();
+            await CheckForUpdates();
+
+            await Task.Delay(500);
+            status.Text = "Loading game data";
+            GameData.Reset();
+
             Scheduler.AddDelayed(() =>
             {
                 indicator.FadeOut(300, Easing.InOutCirc);
