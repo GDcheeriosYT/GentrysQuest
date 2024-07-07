@@ -62,7 +62,7 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
                 return; // no update available
             }
 
-            status.Text = $"Downloading {newVersion.TargetFullRelease.Version}";
+            status.Text = $"Downloading update";
             await updateManager.DownloadUpdatesAsync(newVersion);
             updateManager.ApplyUpdatesAndRestart(newVersion);
         }
