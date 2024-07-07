@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Graphics;
@@ -49,48 +48,34 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
                 Margin = new MarginPadding { Bottom = 50 },
                 Font = FontUsage.Default.With(size: 72)
             });
-
-            GameData.Reset();
         }
 
         public async Task CheckForUpdates()
         {
-            #region updates
+            status.Text = "Checking for updates...";
+            await Task.Delay(100);
+            var newVersion = await updateManager.CheckForUpdatesAsync();
 
-            try
+            if (newVersion == null)
             {
-                status.Text = "Checking for updates...";
-                await Task.Delay(100);
-                var newVersion = await updateManager.CheckForUpdatesAsync();
-
-                if (newVersion != null)
-                {
-                    status.Text = "Downloading update...";
-                    await updateManager.DownloadUpdatesAsync(newVersion);
-                    status.Text = "Restarting...";
-                    updateManager.ApplyUpdatesAndRestart(newVersion);
-                }
-                else
-                {
-                    status.Text = "No updates available.";
-                }
-            }
-            catch (Exception ex)
-            {
-                status.Text = ex.Message;
+                status.Text = "No updates available.";
+                return; // no update available
             }
 
-            #endregion
-
-            await Task.Delay(500);
-            status.Text = "Loading game data";
-            GameData.Reset();
+            status.Text = $"Downloading {newVersion.TargetFullRelease.Version}";
+            await updateManager.DownloadUpdatesAsync(newVersion);
+            updateManager.ApplyUpdatesAndRestart(newVersion);
         }
 
         protected override async void LoadComplete()
         {
             base.LoadComplete();
             await CheckForUpdates();
+
+            await Task.Delay(500);
+            status.Text = "Loading game data";
+            GameData.Reset();
+
             Scheduler.AddDelayed(() =>
             {
                 indicator.FadeOut(300, Easing.InOutCirc);
