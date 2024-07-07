@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <Version>0.0.1</Version>
+    <Title>Gentry's Quest</Title>
+    <Authors>GDcheerios</Authors>
+    <Description>The best game ever!</Description>
+    <RepositoryUrl>https://github.com/GDcheeriosYT/GentrysQuest</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
@@ -12,5 +17,13 @@
   <ItemGroup>
     <PackageReference Include="ppy.osu.Framework" Version="2024.423.0" />
     <PackageReference Include="ppy.osu.Framework.iOS" Version="2024.306.0" />
+    <PackageReference Include="Velopack" Version="0.0.556" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\GentrysQuest.Desktop\game.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <Link>game.ico</Link>
+    </None>
   </ItemGroup>
 </Project>
