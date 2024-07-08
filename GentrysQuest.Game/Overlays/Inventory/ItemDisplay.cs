@@ -35,12 +35,12 @@ namespace GentrysQuest.Game.Overlays.Inventory
         private readonly Container detailsContainer;
         private readonly Container statsContainer;
         private readonly Container artifactsContainer;
-        private EquipIcon artifactIcon1;
-        private EquipIcon artifactIcon2;
-        private EquipIcon artifactIcon3;
-        private EquipIcon artifactIcon4;
-        private EquipIcon artifactIcon5;
-        private EquipIcon weaponIcon;
+        private EquipPanel artifactIcon1;
+        private EquipPanel artifactIcon2;
+        private EquipPanel artifactIcon3;
+        private EquipPanel artifactIcon4;
+        private EquipPanel artifactIcon5;
+        private EquipPanel weaponPanel;
         private Character characterInfo;
         private Artifact artifactInfo;
         private Weapon weaponInfo;
@@ -257,7 +257,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                             RelativeSizeAxes = Axes.Both,
                             Children = new Drawable[]
                             {
-                                weaponIcon = new EquipIcon(null)
+                                weaponPanel = new EquipPanel(null)
                                 {
                                     Margin = new MarginPadding { Left = 40, Top = 30 },
                                     Anchor = Anchor.TopLeft,
@@ -303,15 +303,15 @@ namespace GentrysQuest.Game.Overlays.Inventory
                                         Y = 0,
                                         Direction = FillDirection.Vertical,
                                         AutoSizeAxes = Axes.Y,
-                                        Anchor = Anchor.TopCentre,
-                                        Origin = Anchor.TopCentre,
+                                        Anchor = Anchor.TopLeft,
+                                        Origin = Anchor.TopLeft,
                                         Children = new Drawable[]
                                         {
-                                            artifactIcon1 = new EquipIcon(null),
-                                            artifactIcon2 = new EquipIcon(null),
-                                            artifactIcon3 = new EquipIcon(null),
-                                            artifactIcon4 = new EquipIcon(null),
-                                            artifactIcon5 = new EquipIcon(null),
+                                            artifactIcon1 = new EquipPanel(null),
+                                            artifactIcon2 = new EquipPanel(null),
+                                            artifactIcon3 = new EquipPanel(null),
+                                            artifactIcon4 = new EquipPanel(null),
+                                            artifactIcon5 = new EquipPanel(null),
                                         }
                                     }
                                 }
@@ -410,7 +410,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     resizeLevelUpComponents(2);
 
                     descriptionText.Y = 130;
-                    weaponIcon.Show();
+                    weaponPanel.Show();
                     artifactsButton.Show();
                     artifactsButton.Scale = new Vector2(1);
 
@@ -419,10 +419,10 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         statDrawableContainer.AddStat(new StatDrawable($"{stat.Name} {stat.GetDefault()} + {stat.GetAdditional()}", (float)stat.Total(), false, stat.Name));
                     }
 
-                    weaponIcon.SetEquip(character.Weapon);
-                    weaponIcon.SetAction(delegate { inventoryReference.ClickWeapon(); });
-                    weaponIcon.SetSwapAction(delegate { inventoryReference.SwapWeapon(); });
-                    weaponIcon.SetRemoveAction(delegate { inventoryReference.RemoveWeapon(); });
+                    weaponPanel.SetEquip(character.Weapon);
+                    weaponPanel.SetAction(delegate { inventoryReference.ClickWeapon(); });
+                    weaponPanel.SetSwapAction(delegate { inventoryReference.SwapWeapon(); });
+                    weaponPanel.SetRemoveAction(delegate { inventoryReference.RemoveWeapon(); });
 
                     artifactIcon1.SetEquip(character.Artifacts.Get(0));
                     artifactIcon1.SetAction(delegate { inventoryReference.ClickArtifact(0); });
@@ -484,7 +484,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     }
 
                     artifactsButton.Hide();
-                    weaponIcon.Hide();
+                    weaponPanel.Hide();
                     artifactsButton.Scale = new Vector2(0);
 
                     artifactInfo.OnLevelUp -= updateArtifactStatContainer;
@@ -500,7 +500,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                     exchangeButton.SetAction(inventoryReference.StartWeaponExchange);
                     exchangeButton.Show();
                     inventoryLevelUpBox.Show();
-                    weaponIcon.Hide();
+                    weaponPanel.Hide();
                     levelUpButton.SetAction(delegate
                     {
                         if (GameData.Money.CanAfford(inventoryLevelUpBox.GetAmount()))
