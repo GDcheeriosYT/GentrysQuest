@@ -50,27 +50,34 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
             });
         }
 
-        public async Task CheckForUpdates()
+        private async Task checkForUpdates()
         {
             status.Text = "Checking for updates...";
             await Task.Delay(100);
-            var newVersion = await updateManager.CheckForUpdatesAsync();
 
-            if (newVersion == null)
+            try
             {
-                status.Text = "No updates available.";
-                return; // no update available
-            }
+                var newVersion = await updateManager.CheckForUpdatesAsync();
 
-            status.Text = $"Downloading update";
-            await updateManager.DownloadUpdatesAsync(newVersion);
-            updateManager.ApplyUpdatesAndRestart(newVersion);
+                if (newVersion == null)
+                {
+                    status.Text = "No updates available.";
+                    return; // no update available
+                }
+
+                status.Text = $"Downloading update";
+                await updateManager.DownloadUpdatesAsync(newVersion);
+                updateManager.ApplyUpdatesAndRestart(newVersion);
+            }
+            catch
+            {
+            }
         }
 
         protected override async void LoadComplete()
         {
             base.LoadComplete();
-            await CheckForUpdates();
+            await checkForUpdates();
 
             await Task.Delay(500);
             status.Text = "Loading game data";
