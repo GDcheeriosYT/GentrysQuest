@@ -11,6 +11,6 @@
         AttackSpeed = 7,
         RegenSpeed = 8,
         RegenStrength = 9,
-        KnockbackStrength = 10
+        Tenacity = 10
     }
 }

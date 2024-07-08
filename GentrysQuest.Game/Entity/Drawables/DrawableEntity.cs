@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Audio;
@@ -72,6 +73,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         public const float SLOWING_FACTOR = 0.01f;
 
         private double lastRegenTime;
+        private double lastHitTime;
 
         // Movement events
         public delegate void Movement(Vector2 direction, double speed);
@@ -106,11 +108,22 @@ namespace GentrysQuest.Game.Entity.Drawables
                 HitBox,
                 ColliderBox
             };
+
+            if (!showInfo)
+            {
+                entityBar.HealthProgressBar.Hide();
+                entityBar.HealthText.Hide();
+                entityBar.EntityLevel.Hide();
+                entityBar.StatusEffects.Anchor = Anchor.CentreLeft;
+                entityBar.StatusEffects.Origin = Anchor.CentreLeft;
+            }
+
             if (Entity.Weapon != null) Weapon = new DrawableWeapon(this, Affiliation);
             Entity.OnSwapWeapon += setDrawableWeapon;
             entity.OnDamage += delegate(int amount) { addIndicator(amount, DamageType.Damage); };
             entity.OnHeal += delegate(int amount) { addIndicator(amount, DamageType.Heal); };
             entity.OnCrit += delegate(int amount) { addIndicator(amount, DamageType.Crit); };
+            entity.OnDamage += delegate { lastHitTime = Clock.CurrentTime; };
             entity.OnDeath += delegate { Sprite.FadeOut(100); };
             entity.OnSpawn += delegate { Sprite.FadeIn(100); };
             entity.OnSpawn += delegate { lastRegenTime = Clock.CurrentTime; };
@@ -149,17 +162,30 @@ namespace GentrysQuest.Game.Entity.Drawables
             Entity.Heal((int)Entity.Stats.RegenStrength.Current.Value);
         }
 
-        public void ApplyKnockback(Vector2 direction, float force, int duration, bool stuns = true)
+        public void ApplyKnockback(Vector2 direction, float force, int duration, KnockbackType type)
         {
             knockbackDirection = direction;
             knockbackForce = force;
             knockbackDuration = duration;
             knockbackTimeRemaining = duration;
 
-            if (!stuns) return;
+            switch (type)
+            {
+                case KnockbackType.None:
+                    break;
 
-            Entity.AddEffect(new Stun(duration + 300));
-            Weapon.Disable(50);
+                case KnockbackType.StopsMovement:
+                    Entity.AddEffect(new Stall(duration));
+                    break;
+
+                case KnockbackType.Stuns:
+                    Entity.AddEffect(new Stun(duration + 300));
+                    Weapon.Disable(50);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
         }
 
         public void Move(Vector2 direction, double speed)
@@ -306,6 +332,12 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             // Reset the teleport
             if (Entity.PositionJump > 0) Entity.PositionJump--;
+
+            if (new ElapsedTime(Clock.CurrentTime, lastHitTime) > new Second(0.5))
+            {
+                Entity.AddTenacity();
+                lastHitTime = Clock.CurrentTime;
+            }
 
             // Regen should always be at the bottom
             if (Entity.IsDead || Entity.IsFullHealth) return;

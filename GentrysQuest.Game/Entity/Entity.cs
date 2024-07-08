@@ -17,6 +17,7 @@ namespace GentrysQuest.Game.Entity
         public bool CanAttack = true;
         public bool CanMove = true;
         public bool Invincible = false;
+        public int CurrentTenacity = 0;
         public Vector2 positionRef;
 
         // Stats
@@ -47,6 +48,7 @@ namespace GentrysQuest.Game.Entity
             OnLevelUp += UpdateStats;
             OnLevelUp += Stats.Restore;
             OnSwapWeapon += UpdateStats;
+            CurrentTenacity = (int)Stats.Tenacity.Total();
             CalculateXpRequirement();
         }
 
@@ -179,6 +181,18 @@ namespace GentrysQuest.Game.Entity
             return null;
         }
 
+        public void AddTenacity()
+        {
+            if (CurrentTenacity < Stats.Tenacity.GetCurrent()) CurrentTenacity++;
+        }
+
+        public void RemoveTenacity()
+        {
+            if (CurrentTenacity > 0) CurrentTenacity--;
+        }
+
+        public bool HasTenacity() => CurrentTenacity > 0;
+
         public void AddEffect(StatusEffect statusEffect)
         {
             bool inList = false;
@@ -239,6 +253,12 @@ namespace GentrysQuest.Game.Entity
         public virtual void UpdateStats() => OnUpdateStats?.Invoke();
 
         #endregion
+
+        protected void AddToStat(Buff attribute)
+        {
+            Stat stat = Stats.GetStat(attribute.StatType.ToString());
+            stat.Add(attribute.IsPercent ? stat.GetPercentFromDefault((float)attribute.Value.Value) : attribute.Value.Value);
+        }
 
         protected static double CalculatePointBenefit(double normalValue, int point, double pointBenefit)
         {

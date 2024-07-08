@@ -23,8 +23,6 @@ namespace GentrysQuest.Game.Entity.Drawables
         public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
         private bool doesDamage;
-        private bool doesKnockback;
-        private bool stuns;
 
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
@@ -123,8 +121,6 @@ namespace GentrysQuest.Game.Entity.Drawables
                     Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
                     onHitEffect = pattern.OnHitEffect;
                     doesDamage = pattern.DoesDamage;
-                    doesKnockback = pattern.DoesKnockback;
-                    stuns = pattern.Stuns;
 
                     if (!HitBox.Enabled) return;
 
@@ -199,15 +195,16 @@ namespace GentrysQuest.Game.Entity.Drawables
                             receiverBase.DamageWithDefense(damage);
                         }
 
+                        receiverBase.RemoveTenacity();
                         details.Damage = damage;
                         details.Receiver = receiverBase;
                         details.Sender = Weapon.Holder;
 
-                        if (doesKnockback)
-                        {
-                            var knockback = (float)Weapon.Holder.Stats.KnockbackStrength.GetCurrent();
-                            receiver.ApplyKnockback(MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position), knockback, (int)knockback * 200, stuns);
-                        }
+                        Vector2 direction = MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position);
+                        float knockbackForce = 1;
+                        if (isCrit) knockbackForce *= 1.5f;
+                        if (receiverBase.HasTenacity()) receiver.ApplyKnockback(direction, 0.54f, 100, KnockbackType.StopsMovement);
+                        else receiver.ApplyKnockback(direction, knockbackForce, (int)knockbackForce * 200, KnockbackType.Stuns);
 
                         if (!details.Sender.EnemyHitCounter.TryAdd(details.Receiver, 1)) details.Sender.EnemyHitCounter[details.Receiver]++;
 

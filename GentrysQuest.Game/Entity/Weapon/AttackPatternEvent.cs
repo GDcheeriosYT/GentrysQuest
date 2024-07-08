@@ -69,16 +69,6 @@ namespace GentrysQuest.Game.Entity.Weapon
         public bool DoesDamage = true;
 
         /// <summary>
-        /// does knockback?
-        /// </summary>
-        public bool DoesKnockback = false;
-
-        /// <summary>
-        /// stuns the receiver?
-        /// </summary>
-        public bool Stuns = true;
-
-        /// <summary>
         /// What happens when the entity gets hit
         /// </summary>
         public OnHitEffect OnHitEffect = null;
