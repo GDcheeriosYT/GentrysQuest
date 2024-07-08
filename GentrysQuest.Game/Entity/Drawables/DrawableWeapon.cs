@@ -201,7 +201,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         details.Sender = Weapon.Holder;
 
                         Vector2 direction = MathBase.GetDirection(Weapon.Holder.positionRef, receiver.Position);
-                        float knockbackForce = 1;
+                        float knockbackForce = (float)(1 + Weapon.Damage.GetDefault() / 100);
                         if (isCrit) knockbackForce *= 1.5f;
                         if (receiverBase.HasTenacity()) receiver.ApplyKnockback(direction, 0.54f, 100, KnockbackType.StopsMovement);
                         else receiver.ApplyKnockback(direction, knockbackForce, (int)knockbackForce * 200, KnockbackType.Stuns);
