@@ -63,14 +63,14 @@ namespace GentrysQuest.Game.Entity
                     value = 10;
                     starRating = 10;
                     level = 5;
-                    percentDiffer = 10;
+                    percentDiffer = 1.5;
                     break;
 
                 case StatType.Defense:
                     value = 2;
                     starRating = 5;
                     level = 5;
-                    percentDiffer = 4;
+                    percentDiffer = 1.7;
                     break;
 
                 case StatType.CritRate:
@@ -102,14 +102,21 @@ namespace GentrysQuest.Game.Entity
                     break;
 
                 case StatType.RegenSpeed:
-                    value = 0.25;
-                    starRating = 0.5;
+                    value = 0.1;
+                    starRating = 0.2;
                     level = 0.05;
                     IsPercent = false;
                     break;
 
                 case StatType.RegenStrength:
                     value = 1;
+                    starRating = 1;
+                    level = 1;
+                    IsPercent = false;
+                    break;
+
+                case StatType.Tenacity:
+                    value = 0;
                     starRating = 1;
                     level = 1;
                     IsPercent = false;
@@ -129,7 +136,7 @@ namespace GentrysQuest.Game.Entity
                     break;
 
                 default:
-                    setValue(((ParentEntity.StarRating.Value * starRating) + (Level * level) + value) / percentDiffer);
+                    setValue(((ParentEntity.StarRating.Value * starRating) + ((Level - 1) * level) + value) / percentDiffer);
                     break;
             }
         }

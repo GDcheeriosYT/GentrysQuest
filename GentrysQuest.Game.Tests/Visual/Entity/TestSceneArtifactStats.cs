@@ -34,6 +34,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             statContainer.AddStat(new StatDrawable("AttackSpeed", (float)getBuff(StatType.AttackSpeed).Value.Value, true));
             statContainer.AddStat(new StatDrawable("RegenSpeed", (float)getBuff(StatType.RegenSpeed).Value.Value, true));
             statContainer.AddStat(new StatDrawable("RegenStrength", (float)getBuff(StatType.RegenStrength).Value.Value, true));
+            statContainer.AddStat(new StatDrawable("Tenacity", (float)getBuff(StatType.Tenacity).Value.Value, true));
         }
 
         private void resetDisplay()
@@ -47,6 +48,7 @@ namespace GentrysQuest.Game.Tests.Visual.Entity
             statContainer.GetStatDrawable("AttackSpeed").UpdateValue((float)getBuff(StatType.AttackSpeed).Value.Value);
             statContainer.GetStatDrawable("RegenSpeed").UpdateValue((float)getBuff(StatType.RegenSpeed).Value.Value);
             statContainer.GetStatDrawable("RegenStrength").UpdateValue((float)getBuff(StatType.RegenStrength).Value.Value);
+            statContainer.GetStatDrawable("Tenacity").UpdateValue((float)getBuff(StatType.Tenacity).Value.Value);
         }
 
         private Buff getBuff(StatType buffType)
