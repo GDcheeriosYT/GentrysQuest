@@ -47,7 +47,7 @@ public class Character : Entity
 
         Stats.Attack.SetDefaultValue(
             CalculatePointBenefit(Difficulty * 8, Stats.Attack.point, 5) +
-            CalculatePointBenefit(level * 2, Stats.Attack.point, 4) +
+            CalculatePointBenefit(level * 1, Stats.Attack.point, 4) +
             CalculatePointBenefit(starRating, Stats.Attack.point, 3)
         );
 
@@ -67,7 +67,7 @@ public class Character : Entity
         );
 
         Stats.Speed.SetDefaultValue(
-            0.5 +
+            0.1 +
             CalculatePointBenefit(0, Stats.Speed.point, 0.2)
         );
 
@@ -84,17 +84,17 @@ public class Character : Entity
             CalculatePointBenefit(Difficulty * 1, Stats.RegenStrength.point, 1)
         );
 
-        if (Weapon != null) addToStat(Weapon.Buff);
+        if (Weapon != null) AddToStat(Weapon.Buff);
 
         foreach (Artifact artifact in Artifacts.Get())
         {
             if (artifact != null)
             {
-                addToStat(artifact.MainAttribute);
+                AddToStat(artifact.MainAttribute);
 
                 foreach (Buff attribute in artifact.Attributes)
                 {
-                    addToStat(attribute);
+                    AddToStat(attribute);
                 }
             }
         }
@@ -115,11 +115,5 @@ public class Character : Entity
         enemy.Ultimate = Ultimate;
         enemy.WeaponChoices = weaponChoices;
         return enemy;
-    }
-
-    private void addToStat(Buff attribute)
-    {
-        Stat stat = Stats.GetStat(attribute.StatType.ToString());
-        stat.Add(attribute.IsPercent ? stat.GetPercentFromDefault((float)attribute.Value.Value) : attribute.Value.Value);
     }
 }

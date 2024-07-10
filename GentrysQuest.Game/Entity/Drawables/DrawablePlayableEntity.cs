@@ -1,6 +1,8 @@
 using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Screens.Gameplay;
+using GentrysQuest.Game.Utils;
 using osu.Framework.Input.Events;
+using osuTK;
 using osuTK.Input;
 
 namespace GentrysQuest.Game.Entity.Drawables;
@@ -76,6 +78,7 @@ public partial class DrawablePlayableEntity : DrawableEntity
                     Entity.Ultimate?.Act();
                     if (Entity.Ultimate != null) Entity.Ultimate.TimeActed = Clock.CurrentTime;
                 }
+
                 break;
         }
 
@@ -109,9 +112,15 @@ public partial class DrawablePlayableEntity : DrawableEntity
     protected override void Update()
     {
         base.Update();
-        if (left) Move(180, GetSpeed());
-        if (right) Move(0, GetSpeed());
-        if (up) Move(270, GetSpeed());
-        if (down) Move(90, GetSpeed());
+
+        if (Entity.CanMove)
+        {
+            if (left) Direction += MathBase.GetAngleToVector(180);
+            if (right) Direction += MathBase.GetAngleToVector(0);
+            if (up) Direction += MathBase.GetAngleToVector(270);
+            if (down) Direction += MathBase.GetAngleToVector(90);
+        }
+
+        if (Direction != Vector2.Zero) Move(Direction.Normalized(), GetSpeed());
     }
 }

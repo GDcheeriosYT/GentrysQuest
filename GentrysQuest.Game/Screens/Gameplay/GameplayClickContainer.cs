@@ -69,6 +69,6 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
     {
         base.Update();
         if (isHeld) player.Attack(mousePos);
-        player.Direction = (int)MathBase.GetAngle(player.Position + new Vector2(50), mousePos);
+        player.DirectionLooking = (int)MathBase.GetAngle(player.Position + new Vector2(50), mousePos);
     }
 }

@@ -53,37 +53,37 @@ namespace GentrysQuest.Game.Entity
             switch (StatType)
             {
                 case StatType.Health:
-                    value = 40;
-                    starRating = 25;
-                    level = 20;
-                    percentDiffer = 8;
+                    value = 100;
+                    starRating = 125;
+                    level = 150;
+                    percentDiffer = 65;
                     break;
 
                 case StatType.Attack:
-                    value = 5;
-                    starRating = 15;
-                    level = 2;
+                    value = 10;
+                    starRating = 10;
+                    level = 5;
                     percentDiffer = 1.5;
                     break;
 
                 case StatType.Defense:
                     value = 2;
-                    starRating = 4;
-                    level = 2;
-                    percentDiffer = 1.2;
+                    starRating = 5;
+                    level = 5;
+                    percentDiffer = 1.7;
                     break;
 
                 case StatType.CritRate:
                     value = 2;
-                    starRating = 1;
-                    level = 0.5;
+                    starRating = 2;
+                    level = 1;
                     IsPercent = false;
                     break;
 
                 case StatType.CritDamage:
                     value = 2;
-                    starRating = 5;
-                    level = 1;
+                    starRating = 2;
+                    level = 2;
                     IsPercent = false;
                     break;
 
@@ -102,13 +102,20 @@ namespace GentrysQuest.Game.Entity
                     break;
 
                 case StatType.RegenSpeed:
-                    value = 0.25;
-                    starRating = 0.15;
-                    level = 0.15;
+                    value = 0.1;
+                    starRating = 0.2;
+                    level = 0.05;
                     IsPercent = false;
                     break;
 
                 case StatType.RegenStrength:
+                    value = 1;
+                    starRating = 1;
+                    level = 1;
+                    IsPercent = false;
+                    break;
+
+                case StatType.Tenacity:
                     value = 0;
                     starRating = 1;
                     level = 1;
@@ -129,7 +136,7 @@ namespace GentrysQuest.Game.Entity
                     break;
 
                 default:
-                    setValue(((ParentEntity.StarRating.Value * starRating) + (Level * level) + value) / percentDiffer);
+                    setValue(((ParentEntity.StarRating.Value * starRating) + ((Level - 1) * level) + value) / percentDiffer);
                     break;
             }
         }

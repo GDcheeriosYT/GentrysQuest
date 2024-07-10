@@ -34,8 +34,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
         private TextFlowContainer scoreFlowContainer;
         private SpriteText scoreText;
         private DrawablePlayableEntity playerEntity;
-        private List<DrawableEntity> enemies = new();
-        private List<Projectile> projectiles = new();
+        private readonly List<DrawableEntity> enemies = new();
+        private readonly List<Projectile> projectiles = new();
         private GameplayHud gameplayHud;
         private DrawableMap map;
         private InventoryOverlay inventoryOverlay;
@@ -45,12 +45,12 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <summary>
         /// Maximum enemies allowed to spawn at once
         /// </summary>
-        private int enemySpawnLimit = 4;
+        private int enemySpawnLimit;
 
         /// <summary>
         /// How many enemies are allowed on the screen
         /// </summary>
-        private int enemyLimit = 4;
+        private int enemyLimit;
 
         /// <summary>
         /// The gameplay difficulty
@@ -281,7 +281,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 AddInternal(playerEntity = new DrawablePlayableEntity(GameData.EquipedCharacter));
                 if (GameData.EquipedCharacter.Weapon != null) GameData.EquipedCharacter.SetWeapon(GameData.EquipedCharacter.Weapon);
                 SetDifficulty();
-                playerEntity.OnMove += delegate(float direction, double speed)
+                playerEntity.OnMove += delegate(Vector2 direction, double speed)
                 {
                     manage_direction(direction, speed, map);
                     foreach (DrawableEntity enemyEntity in enemies) manage_direction(direction, speed, enemyEntity);
@@ -340,11 +340,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <param name="direction">Direction</param>
         /// <param name="speed">The speed</param>
         /// <param name="drawable">The drawable to invoke movement on</param>
-        private void manage_direction(float direction, double speed, Drawable drawable)
+        private void manage_direction(Vector2 direction, double speed, Drawable drawable)
         {
             var value = (float)(Clock.ElapsedFrameTime * speed);
-
-            drawable.MoveTo(drawable.Position + ((MathBase.GetAngleToVector(direction, true) * DrawableEntity.SLOWING_FACTOR) * value));
+            drawable.MoveTo(drawable.Position + -direction * value);
         }
 
         /// <summary>
@@ -352,6 +351,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
+            playerEntity.RemoveClickContainer();
             NotificationContainer.Instance.MoveToY(0);
             Container deathContainer = new Container
             {
@@ -466,6 +466,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 Scheduler.AddDelayed(() =>
                 {
                     RemoveInternal(projectile, false);
+                    projectiles.Remove(projectile);
                     HitBoxScene.Remove(projectile.HitBox);
                 }, projectile.Lifetime);
                 playerEntity.QueuedProjectiles.Remove(projectile);
@@ -481,6 +482,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     Scheduler.AddDelayed(() =>
                     {
                         RemoveInternal(projectile, false);
+                        projectiles.Remove(projectile);
                         HitBoxScene.Remove(projectile.HitBox);
                     }, projectile.Lifetime);
                     enemy.QueuedProjectiles.Remove(projectile);

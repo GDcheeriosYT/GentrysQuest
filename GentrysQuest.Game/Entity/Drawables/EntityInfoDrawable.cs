@@ -34,8 +34,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             RelativeSizeAxes = Axes.X;
             Origin = Anchor.TopCentre;
             Anchor = Anchor.TopCentre;
-            CornerRadius = 0.2f;
-            Margin = new MarginPadding(2);
+            CornerRadius = 0.2f; Margin = new MarginPadding(2);
             Size = new Vector2(0.8f, 100);
             CornerExponent = 2;
             CornerRadius = 15;
@@ -47,7 +46,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Colour4.Gray
+                    Colour = new Colour4(25, 25, 25, 255)
                 },
                 new FillFlowContainer
                 {

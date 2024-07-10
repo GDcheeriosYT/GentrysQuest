@@ -13,21 +13,21 @@ public class Enemy : Entity
 
     public override void UpdateStats()
     {
-        int level = Experience.Level.Current.Value;
+        int level = Experience.CurrentLevel();
 
         Stats.Health.SetDefaultValue(
-            CalculatePointBenefit(Math.Pow(Difficulty, 3) * 2000, Stats.Health.point, 5000) +
-            CalculatePointBenefit(level * 25, Stats.Health.point, 100)
+            Math.Pow(Difficulty, 3) * (2000 * (Stats.Health.point + 1)) +
+            level * 100 * (Stats.Health.point + 1)
         );
 
         Stats.Attack.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 15, Stats.Attack.point, 20) +
-            CalculatePointBenefit(level * 5, Stats.Attack.point, 5)
+            CalculatePointBenefit(Math.Pow(Difficulty, 3) * 15, Stats.Attack.point, 20) +
+            CalculatePointBenefit(level * 1, Stats.Attack.point, 5)
         );
 
         Stats.Defense.SetDefaultValue(
-            CalculatePointBenefit(Difficulty * 42, Stats.Defense.point, 18) +
-            CalculatePointBenefit(level * 4, Stats.Defense.point, 2)
+            CalculatePointBenefit(Difficulty * 30, Stats.Defense.point, 18) +
+            CalculatePointBenefit(level * 1, Stats.Defense.point, 2)
         );
 
         Stats.CritRate.SetDefaultValue(20);

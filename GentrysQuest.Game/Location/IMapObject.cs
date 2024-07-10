@@ -27,6 +27,11 @@ namespace GentrysQuest.Game.Location
         Colour4 Colour { get; }
 
         /// <summary>
+        /// How tought the object is
+        /// </summary>
+        int Toughness { get; }
+
+        /// <summary>
         /// The method that happens when this object is touched
         /// </summary>
         event EventHandler onTouch;

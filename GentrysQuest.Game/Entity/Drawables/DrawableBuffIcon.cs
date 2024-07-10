@@ -86,6 +86,10 @@ namespace GentrysQuest.Game.Entity.Drawables
                 case StatType.RegenStrength:
                     icon.Icon = FontAwesome.Solid.Vial;
                     break;
+
+                case StatType.Tenacity:
+                    icon.Icon = FontAwesome.Solid.LayerGroup;
+                    break;
             }
         }
     }

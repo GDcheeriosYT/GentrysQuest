@@ -65,9 +65,9 @@ namespace GentrysQuest.Game.Utils
             double angleRadians = degrees * Math.PI / 180;
             double x = Math.Cos(angleRadians);
             double y = Math.Sin(angleRadians);
-            if (negative) return new Vector2((float)-x, (float)-y) * 100;
+            if (negative) return new Vector2((float)-x, (float)-y);
 
-            return new Vector2((float)x, (float)y) * 100;
+            return new Vector2((float)x, (float)y);
         }
 
         /// <summary>

@@ -19,13 +19,13 @@ namespace GentrysQuest.Game.Content.Maps
 
             for (int i = 0; i < 200; i++)
             {
-                mapObjects.Add(new MapObject(true, getRandVec(0.01f, 0.05f), getRandVec(0, 1f), Colour4.Black));
+                mapObjects.Add(new MapObject(true, getRandVec(0.01f, 0.05f), getRandVec(0, 1f), Colour4.Black, 100));
             }
 
-            mapObjects.Add(new MapObject(true, new Vector2(1, 0.01f), new Vector2(0, 0), Colour4.Black));
-            mapObjects.Add(new MapObject(true, new Vector2(1, 0.01f), new Vector2(0, 1), Colour4.Black));
-            mapObjects.Add(new MapObject(true, new Vector2(0.01f, 1), new Vector2(0, 0), Colour4.Black));
-            mapObjects.Add(new MapObject(true, new Vector2(0.01f, 1), new Vector2(1, 0), Colour4.Black));
+            mapObjects.Add(new MapObject(true, new Vector2(1, 0.01f), new Vector2(0, 0), Colour4.Black, 10000));
+            mapObjects.Add(new MapObject(true, new Vector2(1, 0.01f), new Vector2(0, 1), Colour4.Black, 10000));
+            mapObjects.Add(new MapObject(true, new Vector2(0.01f, 1), new Vector2(0, 0), Colour4.Black, 10000));
+            mapObjects.Add(new MapObject(true, new Vector2(0.01f, 1), new Vector2(1, 0), Colour4.Black, 10000));
         }
 
         private Vector2 getRandVec(float min, float max)

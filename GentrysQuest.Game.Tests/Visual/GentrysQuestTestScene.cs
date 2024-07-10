@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Database;
+using GentrysQuest.Game.Entity;
 using osu.Framework.Testing;
 
 namespace GentrysQuest.Game.Tests.Visual
@@ -23,6 +24,7 @@ namespace GentrysQuest.Game.Tests.Visual
         public GentrysQuestTestScene()
         {
             GameData.Reset();
+            HitBoxScene.Clear();
         }
     }
 }

@@ -13,5 +13,7 @@ namespace GentrysQuest.Game.Entity
 
             character.Stats.GetStat(buff.StatType.ToString()).Add(amount);
         }
+
+        public string BuffExplanation() => $"Boosts[stat]{buff.StatType}[/stat]by[unit]{buff.Value} {(buff.IsPercent ? '%' : "")}[/unit]";
     }
 }

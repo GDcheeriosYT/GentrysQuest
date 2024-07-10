@@ -9,11 +9,12 @@ namespace GentrysQuest.Game.Entity.Drawables;
 public partial class DrawableEntityBar : CompositeDrawable
 {
     // objects
-    private readonly ProgressBar healthProgressBar;
-    private FillFlowContainer statusEffects;
-    private SpriteText entityName;
-    private SpriteText entityLevel;
-    private SpriteText healthText;
+    public readonly ProgressBar HealthProgressBar;
+    public readonly ProgressBar TenacityBar;
+    public FillFlowContainer StatusEffects;
+    public SpriteText EntityName;
+    public SpriteText EntityLevel;
+    public SpriteText HealthText;
 
     public DrawableEntityBar(Entity entity)
     {
@@ -25,7 +26,7 @@ public partial class DrawableEntityBar : CompositeDrawable
         Size = new Vector2(1.25f, 0.125f);
         InternalChildren = new Drawable[]
         {
-            entityName = new SpriteText
+            EntityName = new SpriteText
             {
                 Text = entity.Name,
                 Anchor = Anchor.TopCentre,
@@ -41,7 +42,7 @@ public partial class DrawableEntityBar : CompositeDrawable
                     {
                         Anchor = Anchor.CentreLeft,
                         Origin = Anchor.CentreLeft,
-                        Child = entityLevel = new SpriteText
+                        Child = EntityLevel = new SpriteText
                         {
                             Text = entity.Experience.Level.Current.Value.ToString(),
                             Anchor = Anchor.CentreRight,
@@ -49,14 +50,24 @@ public partial class DrawableEntityBar : CompositeDrawable
                             Font = FontUsage.Default.With(size: 32)
                         }
                     },
-                    healthProgressBar = new ProgressBar(0, entity.Stats.Health.Total())
+                    HealthProgressBar = new ProgressBar(0, entity.Stats.Health.Total())
                     {
                         RelativeSizeAxes = Axes.X,
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.CentreRight,
                         Size = new Vector2(0.98f, 20)
                     },
-                    healthText = new SpriteText
+                    TenacityBar = new ProgressBar(0, entity.Stats.Tenacity.Total())
+                    {
+                        BackgroundColour = Colour4.Transparent,
+                        ForegroundColour = Colour4.Yellow,
+                        Anchor = Anchor.CentreRight,
+                        Origin = Anchor.CentreRight,
+                        RelativeSizeAxes = Axes.X,
+                        Y = -10,
+                        Size = new Vector2(0.98f, 2)
+                    },
+                    HealthText = new SpriteText
                     {
                         Text = "0",
                         Anchor = Anchor.Centre,
@@ -65,27 +76,31 @@ public partial class DrawableEntityBar : CompositeDrawable
                     },
                 }
             },
-            statusEffects = new FillFlowContainer
+            StatusEffects = new FillFlowContainer
             {
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreRight,
                 Direction = FillDirection.Horizontal,
             }
         };
-        healthProgressBar.ForegroundColour = Colour4.Lime;
-        healthProgressBar.BackgroundColour = Colour4.Red;
+        HealthProgressBar.ForegroundColour = Colour4.Lime;
+        HealthProgressBar.BackgroundColour = Colour4.Red;
 
         entity.OnHealthEvent += delegate
         {
-            healthProgressBar.Current = entity.Stats.Health.Current.Value;
-            healthText.Text = entity.Stats.Health.Current.Value.ToString();
+            HealthProgressBar.Current = entity.Stats.Health.Current.Value;
+            HealthText.Text = entity.Stats.Health.Current.Value.ToString();
+            TenacityBar.Current = entity.CurrentTenacity;
+            TenacityBar.Max = entity.Stats.Tenacity.Total();
         };
         entity.OnUpdateStats += delegate
         {
-            entityLevel.Text = entity.Experience.Level.Current.Value.ToString();
-            healthProgressBar.Current = entity.Stats.Health.Current.Value;
-            healthProgressBar.Max = entity.Stats.Health.Total();
-            healthText.Text = entity.Stats.Health.Current.Value.ToString();
+            EntityLevel.Text = entity.Experience.Level.Current.Value.ToString();
+            HealthProgressBar.Current = entity.Stats.Health.GetCurrent();
+            HealthProgressBar.Max = entity.Stats.Health.Total();
+            HealthText.Text = entity.Stats.Health.Current.Value.ToString();
+            TenacityBar.Current = entity.CurrentTenacity;
+            TenacityBar.Max = entity.Stats.Tenacity.Total();
         };
         entity.OnDeath += delegate { this.FadeOut(); };
         entity.OnSpawn += delegate { this.FadeIn(); };
@@ -94,11 +109,11 @@ public partial class DrawableEntityBar : CompositeDrawable
 
     private void updateEffects(Entity entity)
     {
-        statusEffects.Clear();
+        StatusEffects.Clear();
 
         foreach (StatusEffect effect in entity.Effects)
         {
-            statusEffects.Add(new DrawableStatusEffect(effect));
+            StatusEffects.Add(new DrawableStatusEffect(effect));
         }
     }
 }
