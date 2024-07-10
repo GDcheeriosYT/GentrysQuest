@@ -1,5 +1,3 @@
-using GentrysQuest.Game.Database;
-using osu.Framework.Graphics;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 
@@ -29,8 +27,6 @@ namespace GentrysQuest.Game.Overlays.Inventory
 
             if (amount + actionAmount >= 0) amount += actionAmount;
             else amount = 0;
-            SetTextColor(Colour4.Red);
-            if (GameData.Money.CanAfford(amount)) SetTextColor(Colour4.Black);
             SetText($"${amount.ToString()}");
             return base.OnMouseDown(e);
         }

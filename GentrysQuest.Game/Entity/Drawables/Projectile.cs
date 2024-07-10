@@ -128,7 +128,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (!started) return;
 
-            Position += (MathBase.GetAngleToVector(Direction) * 0.0005f) * (float)(Speed * Clock.ElapsedFrameTime);
+            Position += (MathBase.GetAngleToVector(Direction) * 0.05f) * (float)(Speed * Clock.ElapsedFrameTime);
 
             foreach (var hitBox in HitBoxScene.GetIntersections(HitBox).Where(hitBox => !damageQueue.Check(hitBox)))
             {
@@ -160,7 +160,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 hits++;
                 int damage = Damage;
                 if (TakesDefense) entity.DamageWithDefense(damage);
-                entity.Damage(damage);
+                else entity.Damage(damage);
 
                 details.Damage = damage;
                 details.Receiver = entity;

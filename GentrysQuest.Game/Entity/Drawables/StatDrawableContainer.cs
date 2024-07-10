@@ -1,3 +1,4 @@
+using System.Linq;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -40,21 +41,14 @@ namespace GentrysQuest.Game.Entity.Drawables
             };
         }
 
-        public void AddStat(StatDrawable statDrawable) => statDrawables.Add(statDrawable);
-
-        public StatDrawable GetStatDrawable(string name)
+        public void AddStat(StatDrawable statDrawable, bool isNew = false)
         {
-            foreach (StatDrawable statDrawable in statDrawables.Children)
-            {
-                if (statDrawable.Name == name) return statDrawable;
-            }
-
-            return null;
+            statDrawables.Add(statDrawable);
+            if (isNew) statDrawable.NewDisplay();
         }
 
-        public void Clear()
-        {
-            statDrawables.Clear();
-        }
+        public StatDrawable GetStatDrawable(string identifier) => statDrawables.Children.FirstOrDefault(statDrawable => statDrawable.Identifier == identifier);
+
+        public void Clear() => statDrawables.Clear();
     }
 }

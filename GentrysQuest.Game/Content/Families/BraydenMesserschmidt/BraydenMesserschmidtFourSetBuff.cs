@@ -17,5 +17,6 @@ namespace GentrysQuest.Game.Content.Families.BraydenMesserschmidt
 
         public override void ApplyToCharacter(Character character) => character.OnHitEntity += buff;
         public override void RemoveFromCharacter(Character character) => character.OnHitEntity -= buff;
+        public override string Explanation { get; protected set; } = "[condition]Crits[/condition][type]bleed[/type]enemies.";
     }
 }

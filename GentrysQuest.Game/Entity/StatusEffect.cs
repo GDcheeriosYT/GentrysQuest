@@ -9,7 +9,7 @@ public abstract class StatusEffect
 {
     protected StatusEffect(int duration = 1, int stack = 1)
     {
-        Duration = new Second(duration);
+        Duration = duration;
         Stack = stack;
     }
 

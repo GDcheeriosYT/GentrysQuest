@@ -15,6 +15,6 @@
     <EmbeddedResource Include="game.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Squirrel.Windows" Version="2.0.1" />
+    <PackageReference Include="Velopack" Version="0.0.556" />
   </ItemGroup>
 </Project>
