@@ -5,7 +5,6 @@ namespace GentrysQuest.Game.Overlays.Notifications;
 
 public partial class NotificationContainer : CompositeDrawable
 {
-    private const bool DEBUG = true;
     private FillFlowContainer notifications;
     private static NotificationContainer instance;
     public static NotificationContainer Instance => instance ??= new NotificationContainer();
