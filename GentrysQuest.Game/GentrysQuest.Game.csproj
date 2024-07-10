@@ -11,10 +11,6 @@
     <ProjectReference Include="..\GentrysQuest.Resources\GentrysQuest.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Player\" />
-    <Folder Include="User\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ppy.osu.Framework" Version="2024.423.0" />
     <PackageReference Include="ppy.osu.Framework.iOS" Version="2024.306.0" />
     <PackageReference Include="Velopack" Version="0.0.556" />
@@ -25,5 +21,8 @@
       <PackagePath></PackagePath>
       <Link>game.ico</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Online\" />
   </ItemGroup>
 </Project>

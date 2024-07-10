@@ -3,6 +3,7 @@ using GentrysQuest.Game.Content;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Overlays.Notifications;
+using GentrysQuest.Game.Users;
 
 namespace GentrysQuest.Game.Database
 {
@@ -29,6 +30,11 @@ namespace GentrysQuest.Game.Database
         public static Statistics Statistics { get; private set; }
 
         public static StatTracker CurrentStats { get; private set; }
+
+        /// <summary>
+        /// The current user that's being used in the game
+        /// </summary>
+        public static User CurrentUser { get; private set; }
 
         // The lists of entities
         public static List<Character> Characters { get; private set; }
