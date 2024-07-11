@@ -22,7 +22,4 @@
       <Link>game.ico</Link>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Online\" />
-  </ItemGroup>
 </Project>
