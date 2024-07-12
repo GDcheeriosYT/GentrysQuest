@@ -1,62 +1,58 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using osu.Framework.IO.Network;
+using Newtonsoft.Json;
 using osu.Framework.Logging;
 
 namespace GentrysQuest.Game.Online.API
 {
     public abstract class APIRequest
     {
+        protected static readonly HttpClient Client = new();
+
         public abstract string Target { get; }
         public string Uri => $@"{APIAccess.Endpoint}/api/{Target}";
-        public abstract Task Execute();
         public void Fail(Exception exception) => Logger.Log(exception.ToString(), LoggingTarget.Network);
-        public event APISuccessHandler Success;
-        protected virtual WebRequest CreateWebRequest() => new(Uri);
-
-        protected virtual void PostProcess()
-        {
-        }
+        protected virtual HttpMethod Method => HttpMethod.Get;
     }
 
     // Generic derived class
     public abstract class APIRequest<T> : APIRequest where T : class
     {
-        protected override WebRequest CreateWebRequest() => new JsonWebRequest<T>(Uri);
+        public T Response { get; private set; }
 
-        [CanBeNull]
-        public T Response { get; set; }
-
-        public new event APISuccessHandler<T> Success;
-
-        protected override void PostProcess()
+        public async Task PerformAsync()
         {
-            base.PostProcess();
+            var endpoint = $@"{APIAccess.Endpoint.APIEndpointUrl}/api/{Target}";
+            Logger.Log($"Trying request @ {endpoint}", LoggingTarget.Network);
 
-            if (WebRequest != null)
+            try
             {
-                Response = ((OsuJsonWebRequest<T>)WebRequest).ResponseObject;
-                Logger.Log($"{GetType().ReadableName()} finished with response size of {WebRequest.ResponseStream.Length:#,0} bytes", LoggingTarget.Network);
+                HttpRequestMessage requestMessage = new HttpRequestMessage(Method, endpoint);
+                if (Method == HttpMethod.Post) requestMessage.Content = CreateContent();
+
+                using (var response = await Client.GetAsync(endpoint))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var data = await response.Content.ReadAsStringAsync();
+                    if (typeof(T) == typeof(string)) Response = data as T;
+                    else Response = JsonConvert.DeserializeObject<T>(data);
+                }
+
+                Logger.Log($"successful with {Response}", LoggingTarget.Network);
+            }
+            catch (HttpRequestException e)
+            {
+                Logger.Log($"Request failed: {e.Message}", level: LogLevel.Error);
+                Fail(e);
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"Unexpected error: {e.Message}", level: LogLevel.Error);
+                Fail(e);
             }
         }
 
-        protected APIRequest()
-        {
-            base.Success += () => Success?.Invoke(Response);
-        }
-
-        public override async Task Execute()
-        {
-            await Task.CompletedTask;
-        }
+        protected HttpContent CreateContent() => null;
     }
-
-    public delegate void APIFailureHandler(Exception e);
-
-    public delegate void APISuccessHandler();
-
-    public delegate void APIProgressHandler(long current, long total);
-
-    public delegate void APISuccessHandler<in T>(T content);
 }

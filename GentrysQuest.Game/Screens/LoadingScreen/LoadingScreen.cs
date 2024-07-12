@@ -73,6 +73,8 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
             catch
             {
             }
+
+            await Task.Delay(500);
         }
 
         private async Task loadGameData()
@@ -82,10 +84,10 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
             await Task.Delay(500);
         }
 
-        private async Task getAPIAccess()
+        private async Task setupAPIAccess()
         {
             status.Text = "Connecting to server";
-            var apiAccess = new APIAccess();
+            _ = new APIAccess();
             await Task.Delay(500);
         }
 
@@ -93,8 +95,7 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
         {
             base.LoadComplete();
             await checkForUpdates();
-
-            await Task.Delay(500);
+            await setupAPIAccess();
             await loadGameData();
 
             Scheduler.AddDelayed(() =>

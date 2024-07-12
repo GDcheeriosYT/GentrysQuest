@@ -1,4 +1,3 @@
-using System;
 using GentrysQuest.Game.Online.API.Requests;
 
 namespace GentrysQuest.Game.Online.API
@@ -16,19 +15,9 @@ namespace GentrysQuest.Game.Online.API
             Endpoint = new ProductionEndpointConfiguration();
 #endif
 
-            token = new GetTokenRequest().Response;
-        }
-
-        public void Perform(APIRequest request)
-        {
-            try
-            {
-                request.Execute();
-            }
-            catch (Exception e)
-            {
-                request.Fail(e);
-            }
+            var tokenRequest = new GetTokenRequest();
+            _ = tokenRequest.PerformAsync();
+            token = tokenRequest.Response;
         }
     }
 }
