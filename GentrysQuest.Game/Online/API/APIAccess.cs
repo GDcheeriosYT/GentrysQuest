@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using GentrysQuest.Game.Online.API.Requests;
 
 namespace GentrysQuest.Game.Online.API
@@ -14,10 +15,16 @@ namespace GentrysQuest.Game.Online.API
 #else
             Endpoint = new ProductionEndpointConfiguration();
 #endif
+        }
 
-            var tokenRequest = new GetTokenRequest();
-            _ = tokenRequest.PerformAsync();
-            token = tokenRequest.Response;
+        public static async Task GrabToken()
+        {
+            if (token == null)
+            {
+                var tokenRequest = new GetTokenRequest();
+                await tokenRequest.PerformAsync();
+                token = tokenRequest.Response;
+            }
         }
     }
 }

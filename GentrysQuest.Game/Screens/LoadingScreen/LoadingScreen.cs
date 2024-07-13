@@ -87,8 +87,8 @@ namespace GentrysQuest.Game.Screens.LoadingScreen
         private async Task setupAPIAccess()
         {
             status.Text = "Connecting to server";
-            _ = new APIAccess();
-            await Task.Delay(500);
+            _ = new APIAccess(); // need to set up API access
+            await APIAccess.GrabToken();
         }
 
         protected override async void LoadComplete()
