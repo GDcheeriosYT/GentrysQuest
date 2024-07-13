@@ -26,5 +26,10 @@ namespace GentrysQuest.Game.Online.API
                 token = tokenRequest.Response;
             }
         }
+
+        public static async Task DeleteToken()
+        {
+            if (token != null) await new DeleteTokenRequest(token).PerformAsync();
+        }
     }
 }
