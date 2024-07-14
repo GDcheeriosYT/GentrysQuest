@@ -68,7 +68,7 @@ namespace GentrysQuest.Game.Screens.MainMenu
             playButton.SetAction(delegate
             {
                 Character character = new BraydenMesserschmidt();
-                Weapon weapon = new Knife();
+                Weapon weapon = new BraydensOsuPen();
                 character.Weapon = weapon;
                 GameData.Add(character);
                 GameData.EquipCharacter(character);
@@ -77,6 +77,7 @@ namespace GentrysQuest.Game.Screens.MainMenu
             quitButton.SetAction(delegate
             {
                 _ = APIAccess.DeleteToken();
+                Game.Exit();
             });
         }
 

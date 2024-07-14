@@ -10,6 +10,7 @@ using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Location.Drawables;
+using GentrysQuest.Game.Online.API.Requests;
 using GentrysQuest.Game.Overlays.Inventory;
 using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Utils;
@@ -351,6 +352,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
+            _ = new SubmitScoreRequest(1, 1, (long)GameData.CurrentStats.ScoreStatistic.Value).PerformAsync();
             playerEntity.RemoveClickContainer();
             NotificationContainer.Instance.MoveToY(0);
             Container deathContainer = new Container

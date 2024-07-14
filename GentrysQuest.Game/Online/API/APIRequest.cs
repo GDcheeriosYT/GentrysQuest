@@ -33,6 +33,7 @@ namespace GentrysQuest.Game.Online.API
 
                 using (var response = await Client.GetAsync(endpoint))
                 {
+                    Logger.Log(Method.Method, LoggingTarget.Network);
                     response.EnsureSuccessStatusCode();
                     var data = await response.Content.ReadAsStringAsync();
                     if (typeof(T) == typeof(string)) Response = data as T;
@@ -53,6 +54,6 @@ namespace GentrysQuest.Game.Online.API
             }
         }
 
-        protected HttpContent CreateContent() => null;
+        protected virtual HttpContent CreateContent() => null;
     }
 }
