@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
@@ -82,21 +83,22 @@ namespace GentrysQuest.Game.Entity
 
         private void handleBuff(Buff newBuff)
         {
-            bool duplicate = false;
-
-            foreach (Buff buff in Attributes)
+            if (newBuff.StatType == MainAttribute.StatType && newBuff.IsPercent == MainAttribute.IsPercent) handleBuff(new Buff(this));
+            else
             {
-                if (newBuff.StatType == buff.StatType && newBuff.IsPercent == buff.IsPercent)
+                bool duplicate = false;
+
+                foreach (var buff in Attributes.Where(buff => newBuff.StatType == buff.StatType && newBuff.IsPercent == buff.IsPercent))
                 {
                     buff.Improve();
                     duplicate = true;
                 }
-            }
 
-            if (!duplicate)
-            {
-                newBuff.ParentEntity = this;
-                Attributes.Add(newBuff);
+                if (!duplicate)
+                {
+                    newBuff.ParentEntity = this;
+                    Attributes.Add(newBuff);
+                }
             }
         }
     }
