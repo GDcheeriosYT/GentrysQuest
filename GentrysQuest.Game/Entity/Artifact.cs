@@ -25,7 +25,7 @@ namespace GentrysQuest.Game.Entity
             Initialize(ValidStarRatings[Random.Shared.Next(ValidStarRatings.Count)]);
             OnLevelUp += delegate
             {
-                if (Experience.Level.Current.Value % 4 == 0) addBuff();
+                if (Experience.Level.Current.Value % 4 == 0) AddBuff();
                 MainAttribute.Improve();
                 Holder?.UpdateStats();
             };
@@ -72,14 +72,14 @@ namespace GentrysQuest.Game.Entity
 
             while (counter > 2)
             {
-                addBuff();
+                AddBuff();
                 counter--;
             }
         }
 
-        private void addBuff(Buff buff) => handleBuff(buff);
+        public void AddBuff(Buff buff) => handleBuff(buff);
 
-        private void addBuff() => handleBuff(new Buff(this));
+        public void AddBuff() => handleBuff(new Buff(this));
 
         private void handleBuff(Buff newBuff)
         {

@@ -11,6 +11,7 @@ namespace GentrysQuest.Game.Entity.Drawables
     {
         private const int DURATION = 500;
         public string Identifier;
+        private bool isPercent;
         public new string Name { get; private set; }
         private readonly Box backgroundBox;
         private readonly SpriteText nameText;
@@ -20,8 +21,9 @@ namespace GentrysQuest.Game.Entity.Drawables
         private readonly Box newIndicationBox;
         private readonly SpriteText newIndicationText;
 
-        public StatDrawable(string name, float value, bool isMain, string identifier = null)
+        public StatDrawable(string name, float value, bool isMain, string identifier = null, bool isPercent = false)
         {
+            this.isPercent = isPercent;
             Identifier = identifier ?? name;
             Name = name;
             RelativeSizeAxes = Axes.X;
@@ -69,7 +71,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                     {
                         changedToValue = new SpriteText
                         {
-                            Text = "" + value,
+                            Text = "" + value + percentText,
                             Anchor = Anchor.CentreRight,
                             Margin = new MarginPadding { Left = 20, Right = 20 },
                             Origin = Anchor.CentreRight
@@ -84,7 +86,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                         },
                         valueText = new SpriteText
                         {
-                            Text = "" + value,
+                            Text = "" + value + percentText,
                             Anchor = Anchor.CentreRight,
                             Margin = new MarginPadding { Right = 20 },
                             Origin = Anchor.CentreRight
@@ -118,16 +120,18 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public void UpdateValue(float newValue)
         {
-            if (valueText.Text == $"{newValue}") return;
+            if (valueText.Text == $"{newValue}{percentText}") return;
 
-            valueText.Text = changedToValue.Text;
+            valueText.Text = changedToValue.Text + percentText;
             backgroundBox.FlashColour(new Colour4(255, 255, 255, 100), DURATION);
-            changedToValue.Text = "" + newValue;
+            changedToValue.Text = "" + newValue + percentText;
             changedToValue.ScaleTo(1, DURATION * 0.2);
             arrowIndicator.ScaleTo(1, DURATION * 0.2);
             changedToValue.FadeColour(Colour4.Gold, DURATION * 0.2);
             valueText.FlashColour(Colour4.Gold, DURATION * 0.5);
             nameText.FlashColour(Colour4.Gold, DURATION * 0.5);
         }
+
+        private string percentText => $"{(isPercent ? '%' : ' ')}";
     }
 }
