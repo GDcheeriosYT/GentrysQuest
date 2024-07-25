@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace GentrysQuest.Game.Users
 {
     public class User
@@ -5,11 +7,13 @@ namespace GentrysQuest.Game.Users
         /// <summary>
         /// The username
         /// </summary>
-        public string Name { get; private set; }
+        [JsonProperty("username")]
+        public string Name { get; set; }
 
         /// <summary>
         /// The user id
         /// </summary>
-        public string ID { get; private set; }
+        [JsonProperty("id")]
+        public int ID { get; set; }
     }
 }

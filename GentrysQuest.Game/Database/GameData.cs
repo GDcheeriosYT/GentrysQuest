@@ -4,6 +4,7 @@ using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Overlays.Notifications;
 using GentrysQuest.Game.Users;
+using osu.Framework.Bindables;
 
 namespace GentrysQuest.Game.Database
 {
@@ -34,7 +35,7 @@ namespace GentrysQuest.Game.Database
         /// <summary>
         /// The current user that's being used in the game
         /// </summary>
-        public static User CurrentUser { get; private set; }
+        public static Bindable<User> CurrentUser { get; private set; } = new();
 
         // The lists of entities
         public static List<Character> Characters { get; private set; }

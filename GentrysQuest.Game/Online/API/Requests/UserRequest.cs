@@ -6,6 +6,6 @@ namespace GentrysQuest.Game.Online.API.Requests
     {
         private string idUsername = idUsername;
 
-        public override string Target { get; } = $@"/accounts/grab{idUsername}";
+        public override string Target { get; } = $@"/accounts/grab/{idUsername}";
     }
 }

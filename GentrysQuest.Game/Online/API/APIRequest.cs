@@ -31,11 +31,11 @@ namespace GentrysQuest.Game.Online.API
                 HttpRequestMessage requestMessage = new HttpRequestMessage(Method, endpoint);
                 if (Method == HttpMethod.Post) requestMessage.Content = CreateContent();
 
-                using (var response = await Client.GetAsync(endpoint))
+                using (var response = await Client.SendAsync(requestMessage))
                 {
-                    Logger.Log(Method.Method, LoggingTarget.Network);
                     response.EnsureSuccessStatusCode();
                     var data = await response.Content.ReadAsStringAsync();
+                    Logger.Log(data, LoggingTarget.Network);
                     if (typeof(T) == typeof(string)) Response = data as T;
                     else Response = JsonConvert.DeserializeObject<T>(data);
                 }
@@ -44,12 +44,12 @@ namespace GentrysQuest.Game.Online.API
             }
             catch (HttpRequestException e)
             {
-                Logger.Log($"Request failed: {e.Message}", level: LogLevel.Error);
+                Logger.Log($"Request failed: {e.Message}", LoggingTarget.Network);
                 Fail(e);
             }
             catch (Exception e)
             {
-                Logger.Log($"Unexpected error: {e.Message}", level: LogLevel.Error);
+                Logger.Log($"Unexpected error: {e.Message}", LoggingTarget.Network);
                 Fail(e);
             }
         }
