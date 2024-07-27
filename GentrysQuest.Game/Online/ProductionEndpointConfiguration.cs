@@ -6,7 +6,7 @@ namespace GentrysQuest.Game.Online
         {
             ServerUrl = APIEndpointUrl = "https://gdcheerios.com";
             GQEndpointUrl = $@"{APIEndpointUrl}/api/gq";
-            LeaderboardID = 2;
+            LeaderboardID = 3;
         }
     }
 }
