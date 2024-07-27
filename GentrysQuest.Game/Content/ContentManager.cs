@@ -50,6 +50,7 @@ public class ContentManager
 
         Weapons.Add(new Knife());
         Weapons.Add(new BraydensOsuPen());
+        Weapons.Add(new BrodysBroadsword());
 
         #endregion
     }
