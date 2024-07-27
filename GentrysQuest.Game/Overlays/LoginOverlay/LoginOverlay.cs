@@ -5,7 +5,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Logging;
 using osuTK;
 
 namespace GentrysQuest.Game.Overlays.LoginOverlay
@@ -83,6 +82,22 @@ namespace GentrysQuest.Game.Overlays.LoginOverlay
                 }
             });
 
+            if (GameData.CurrentUser.Value != null)
+            {
+                loginButton.SetText("Sign Out");
+                usernameContainer.ScaleTo(new Vector2(1, 0), 100);
+                passwordContainer.ScaleTo(new Vector2(1, 0), 100);
+                usernameText.ScaleTo(new Vector2(1, 1), 100);
+                usernameText.Text = GameData.CurrentUser.Value.Name;
+            }
+            else
+            {
+                loginButton.SetText("login");
+                usernameContainer.ScaleTo(new Vector2(1, 1), 100);
+                passwordContainer.ScaleTo(new Vector2(1, 1), 100);
+                usernameText.ScaleTo(new Vector2(1, 0), 100);
+            }
+
             loginButton.SetAction(sendLoginRequest);
         }
 
@@ -90,7 +105,6 @@ namespace GentrysQuest.Game.Overlays.LoginOverlay
         {
             if (GameData.CurrentUser.Value == null)
             {
-                Logger.Log($"{usernameInput.Text} {passwordInput.Text}");
                 var loginRequest = new LoginRequest(usernameInput.Text, passwordInput.Text);
                 await loginRequest.PerformAsync();
 

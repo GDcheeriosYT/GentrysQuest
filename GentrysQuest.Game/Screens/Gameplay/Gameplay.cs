@@ -13,6 +13,7 @@ using GentrysQuest.Game.Location.Drawables;
 using GentrysQuest.Game.Online.API.Requests;
 using GentrysQuest.Game.Overlays.Inventory;
 using GentrysQuest.Game.Overlays.Notifications;
+using GentrysQuest.Game.Screens.Gameplay.Results;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -352,7 +353,13 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// </summary>
         public void End()
         {
-            _ = new SubmitScoreRequest(1, 1, (long)GameData.CurrentStats.ScoreStatistic.Value).PerformAsync();
+            if (GameData.CurrentUser.Value != null)
+            {
+                var scoreTask = new SubmitScoreRequest(1, GameData.CurrentUser.Value.ID, (long)GameData.CurrentStats.ScoreStatistic.Value).PerformAsync();
+            }
+
+            Pause();
+
             playerEntity.RemoveClickContainer();
             NotificationContainer.Instance.MoveToY(0);
             Container deathContainer = new Container
@@ -362,11 +369,6 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 RelativeSizeAxes = Axes.Both,
                 Children = new Drawable[]
                 {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Colour = Colour4.Black
-                    },
                     new SpriteText
                     {
                         Text = "You died",
@@ -378,67 +380,10 @@ namespace GentrysQuest.Game.Screens.Gameplay
                 }
             };
             AddInternal(deathContainer);
-            Pause();
-            removeAllEnemies();
             gameplayHud.Delay(3000).Then().FadeOut();
             Scheduler.AddDelayed(() => map.Unload(), 3000);
-            deathContainer.FadeIn(3000).Then()
-                          .Delay(1000).FadeOut(2000);
-            scoreFlowContainer.FadeOut().Then()
-                              .ScaleTo(5, 6100).Then()
-                              .FadeIn(250).Then()
-                              .Delay(2000).Then()
-                              .MoveToY(-400, 250, Easing.InOutCirc)
-                              .ScaleTo(3, 250, Easing.InOutCirc);
-            scoreFlowContainer.Anchor = Anchor.Centre;
-            scoreFlowContainer.Origin = Anchor.Centre;
-            InventoryButton retryButton = new InventoryButton("Retry")
-            {
-                Anchor = Anchor.BottomCentre,
-                Origin = Anchor.BottomCentre,
-                Size = new Vector2(250, 100),
-                Margin = new MarginPadding { Bottom = 5 }
-            };
-            EndStatContainer endStatContainer = new EndStatContainer
-            {
-                Size = new Vector2(1, 0.65f),
-                RelativePositionAxes = Axes.Y,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre
-            };
-            retryButton.SetAction(delegate
-            {
-                RemoveInternal(retryButton, true);
-                RemoveInternal(deathContainer, true);
-                RemoveInternal(endStatContainer, true);
-                UnPause();
-                scoreFlowContainer.Anchor = Anchor.TopRight;
-                scoreFlowContainer.Origin = Anchor.TopRight;
-                scoreFlowContainer.Scale = new Vector2(1);
-                scoreFlowContainer.Position = new Vector2(0);
-                GameData.Artifacts.Clear();
-                GameData.Weapons.Clear();
-                GameData.Money.Amount.Value = 0;
-                GameData.EquipedCharacter.Weapon = new BraydensOsuPen();
-                GameData.EquipedCharacter.Artifacts.Clear();
-                GameData.EquipedCharacter.Experience.Level.Current.Value = 1;
-                GameData.EquipedCharacter.Experience.Xp.Current.Value = 0;
-                GameData.EquipedCharacter.UpdateStats();
-                GameData.EquipedCharacter.Stats.Restore();
-                map.FadeIn();
-                gameplayHud.FadeIn();
-                SetUp();
-            });
-            AddInternal(endStatContainer);
-            Scheduler.AddDelayed(() =>
-            {
-                endStatContainer.PopulateStats(GameData.CurrentStats);
-                GameData.WrapUpStats();
-            }, 9000);
-            Scheduler.AddDelayed(() =>
-            {
-                AddInternal(retryButton);
-            }, 9000);
+            deathContainer.FadeIn(3000);
+            Scheduler.AddDelayed(delegate { this.Push(new ResultScreen(1)); }, 3000);
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -453,6 +398,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
             }
 
             return base.OnKeyDown(e);
+        }
+
+        public override void OnEntering(ScreenTransitionEvent e)
+        {
+            this.FadeInFromZero(500, Easing.OutQuint);
         }
 
         protected override void Update()

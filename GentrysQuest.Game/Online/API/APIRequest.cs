@@ -36,6 +36,7 @@ namespace GentrysQuest.Game.Online.API
                     response.EnsureSuccessStatusCode();
                     var data = await response.Content.ReadAsStringAsync();
                     Logger.Log(data, LoggingTarget.Network);
+                    Logger.Log(data.GetType().ToString(), LoggingTarget.Network);
                     if (typeof(T) == typeof(string)) Response = data as T;
                     else Response = JsonConvert.DeserializeObject<T>(data);
                 }
