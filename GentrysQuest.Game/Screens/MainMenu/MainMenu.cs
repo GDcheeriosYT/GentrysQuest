@@ -5,12 +5,14 @@ using GentrysQuest.Game.Database;
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Graphics.TextStyles;
-using GentrysQuest.Game.Overlays.UserMenu;
+using GentrysQuest.Game.Online.API;
+using GentrysQuest.Game.Overlays.LoginOverlay;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Colour;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Screens;
 using osuTK;
@@ -22,9 +24,10 @@ namespace GentrysQuest.Game.Screens.MainMenu
     {
         private Box background;
         private TitleText title;
-        private UserMenu userMenu;
         private DrawableTrack menuTheme;
-        private MainMenuButton mainMenuButton;
+        private MainMenuButton playButton;
+        private MainMenuButton quitButton;
+        private LoginOverlay loginOverlay;
 
         [BackgroundDependencyLoader]
         private void load(ITrackStore trackStore)
@@ -41,14 +44,58 @@ namespace GentrysQuest.Game.Screens.MainMenu
                 {
                     Alpha = 0
                 },
-                mainMenuButton = new MainMenuButton("Play")
+                new FillFlowContainer
                 {
+                    AutoSizeAxes = Axes.Y,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(300, 150)
+                    Y = 100,
+                    Spacing = new Vector2(0, 50),
+                    Direction = FillDirection.Vertical,
+                    Children = new Drawable[]
+                    {
+                        playButton = new MainMenuButton("Play")
+                        {
+                            Size = new Vector2(300, 150),
+                            Origin = Anchor.Centre
+                        },
+                        quitButton = new MainMenuButton("Quit")
+                        {
+                            Size = new Vector2(300, 150),
+                            Origin = Anchor.Centre
+                        }
+                    }
+                },
+                new Container
+                {
+                    Size = new Vector2(400),
+                    Y = 35,
+                    X = -100,
+                    Origin = Anchor.CentreRight,
+                    Anchor = Anchor.CentreRight,
+                    Masking = true,
+                    CornerExponent = 2,
+                    CornerRadius = 15,
+                    Children = new Drawable[]
+                    {
+                        new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = new Color4(20, 20, 20, 200)
+                        },
+                        new Container
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            RelativeSizeAxes = Axes.Both,
+                            Size = new Vector2(0.95f),
+                            Child =
+                                loginOverlay = new LoginOverlay()
+                        }
+                    }
                 }
             };
-            mainMenuButton.SetAction(delegate
+            playButton.SetAction(delegate
             {
                 Character character = new BraydenMesserschmidt();
                 Weapon weapon = new BraydensOsuPen();
@@ -57,18 +104,25 @@ namespace GentrysQuest.Game.Screens.MainMenu
                 GameData.EquipCharacter(character);
                 this.Push(new Gameplay.Gameplay());
             });
+            quitButton.SetAction(delegate
+            {
+                _ = APIAccess.DeleteToken();
+                Game.Exit();
+            });
         }
 
         public void press_play()
         {
             title.FadeOut(200);
-            userMenu.ToggleOn();
         }
 
         public override void OnEntering(ScreenTransitionEvent e)
         {
             base.OnEntering(e);
-            background.FadeColour(ColourInfo.GradientVertical(Color4.DarkGray, Color4.White), 120, Easing.In);
+            background.FadeColour(ColourInfo.GradientVertical(
+                new Colour4(72, 72, 72, 255),
+                new Colour4(58, 58, 58, 255)
+            ), 500);
             title.Delay(120).Then().FadeIn(120);
         }
 

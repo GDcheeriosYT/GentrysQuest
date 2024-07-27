@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GentrysQuest.Game.Utils;
 
 namespace GentrysQuest.Game.Entity
@@ -24,7 +25,7 @@ namespace GentrysQuest.Game.Entity
             Initialize(ValidStarRatings[Random.Shared.Next(ValidStarRatings.Count)]);
             OnLevelUp += delegate
             {
-                if (Experience.Level.Current.Value % 4 == 0) addBuff();
+                if (Experience.Level.Current.Value % 4 == 0) AddBuff();
                 MainAttribute.Improve();
                 Holder?.UpdateStats();
             };
@@ -71,32 +72,33 @@ namespace GentrysQuest.Game.Entity
 
             while (counter > 2)
             {
-                addBuff();
+                AddBuff();
                 counter--;
             }
         }
 
-        private void addBuff(Buff buff) => handleBuff(buff);
+        public void AddBuff(Buff buff) => handleBuff(buff);
 
-        private void addBuff() => handleBuff(new Buff(this));
+        public void AddBuff() => handleBuff(new Buff(this));
 
         private void handleBuff(Buff newBuff)
         {
-            bool duplicate = false;
-
-            foreach (Buff buff in Attributes)
+            if (newBuff.StatType == MainAttribute.StatType && newBuff.IsPercent == MainAttribute.IsPercent) handleBuff(new Buff(this));
+            else
             {
-                if (newBuff.StatType == buff.StatType && newBuff.IsPercent == buff.IsPercent)
+                bool duplicate = false;
+
+                foreach (var buff in Attributes.Where(buff => newBuff.StatType == buff.StatType && newBuff.IsPercent == buff.IsPercent))
                 {
                     buff.Improve();
                     duplicate = true;
                 }
-            }
 
-            if (!duplicate)
-            {
-                newBuff.ParentEntity = this;
-                Attributes.Add(newBuff);
+                if (!duplicate)
+                {
+                    newBuff.ParentEntity = this;
+                    Attributes.Add(newBuff);
+                }
             }
         }
     }

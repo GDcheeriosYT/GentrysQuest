@@ -476,11 +476,11 @@ namespace GentrysQuest.Game.Overlays.Inventory
                         updateExperienceBar(entity);
                     });
                     resizeLevelUpComponents(2);
-                    statDrawableContainer.AddStat(new StatDrawable(mainAttribute.StatType.ToString(), (float)mainAttribute.Value.Value, true));
+                    statDrawableContainer.AddStat(new StatDrawable(mainAttribute.StatType.ToString(), (float)mainAttribute.Value.Value, true, identifier: getIdentifier(mainAttribute), isPercent: mainAttribute.IsPercent));
 
                     foreach (Buff attribute in artifact.Attributes)
                     {
-                        statDrawableContainer.AddStat(new StatDrawable(attribute.StatType.ToString(), (float)attribute.Value.Value, false));
+                        statDrawableContainer.AddStat(new StatDrawable(attribute.StatType.ToString(), (float)attribute.Value.Value, false, identifier: getIdentifier(attribute), isPercent: attribute.IsPercent));
                     }
 
                     artifactsButton.Hide();
@@ -560,13 +560,13 @@ namespace GentrysQuest.Game.Overlays.Inventory
         {
             try
             {
-                statDrawableContainer.GetStatDrawable(artifactInfo.MainAttribute.StatType.ToString()).UpdateValue((float)artifactInfo.MainAttribute.Value.Value);
+                statDrawableContainer.GetStatDrawable(getIdentifier(artifactInfo.MainAttribute)).UpdateValue((float)artifactInfo.MainAttribute.Value.Value);
 
                 foreach (Buff buff in artifactInfo.Attributes)
                 {
-                    StatDrawable statDrawable = statDrawableContainer.GetStatDrawable(buff.StatType.ToString());
+                    StatDrawable statDrawable = statDrawableContainer.GetStatDrawable(getIdentifier(buff));
                     if (statDrawable != null) statDrawable.UpdateValue((float)buff.Value.Value);
-                    else statDrawableContainer.AddStat(new StatDrawable(buff.StatType.ToString(), (float)buff.Value.Value, false), true);
+                    else statDrawableContainer.AddStat(new StatDrawable(buff.StatType.ToString(), (float)buff.Value.Value, false, getIdentifier(buff), isPercent: buff.IsPercent), true);
                 }
             }
             catch (Exception)
@@ -587,5 +587,7 @@ namespace GentrysQuest.Game.Overlays.Inventory
                 Logger.Log("Yep, You already know (Weapon)");
             }
         }
+
+        private string getIdentifier(Buff buff) => $"{buff.StatType}{(buff.IsPercent ? '%' : ' ')}";
     }
 }
