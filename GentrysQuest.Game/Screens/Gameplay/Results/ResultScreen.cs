@@ -20,11 +20,9 @@ namespace GentrysQuest.Game.Screens.Gameplay.Results
         private LoadingIndicator loadingIndicator;
         private StatDrawableContainer statisticsContainer;
         private InventoryButton retryButton;
-        private readonly int leaderboardId;
 
-        public ResultScreen(int leaderboardId = 0)
+        public ResultScreen()
         {
-            this.leaderboardId = leaderboardId;
             AddInternal(new Box
             {
                 RelativeSizeAxes = Axes.Both,
@@ -62,9 +60,9 @@ namespace GentrysQuest.Game.Screens.Gameplay.Results
             }
         }
 
-        private static async Task<List<LeaderboardPlacement>> fetchLeaderboard(int id)
+        private static async Task<List<LeaderboardPlacement>> fetchLeaderboard()
         {
-            var leaderboardResult = new GetLeaderboardRequest(id);
+            var leaderboardResult = new GetLeaderboardRequest();
             await leaderboardResult.PerformAsync();
             return leaderboardResult.Response;
         }
@@ -72,12 +70,8 @@ namespace GentrysQuest.Game.Screens.Gameplay.Results
         protected override async void LoadComplete()
         {
             base.LoadComplete();
-
-            if (leaderboardId > 0)
-            {
-                var placements = await fetchLeaderboard(leaderboardId);
-                Populate(placements);
-            }
+            var placements = await fetchLeaderboard();
+            Populate(placements);
         }
 
         public void Populate(List<LeaderboardPlacement> placements)

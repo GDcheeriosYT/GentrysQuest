@@ -355,7 +355,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         {
             if (GameData.CurrentUser.Value != null)
             {
-                var scoreTask = new SubmitScoreRequest(2, GameData.CurrentUser.Value.ID, (long)GameData.CurrentStats.ScoreStatistic.Value).PerformAsync();
+                var scoreTask = new SubmitScoreRequest(GameData.CurrentUser.Value.ID, (long)GameData.CurrentStats.ScoreStatistic.Value).PerformAsync();
             }
 
             Pause();
@@ -383,7 +383,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
             gameplayHud.Delay(3000).Then().FadeOut();
             Scheduler.AddDelayed(() => map.Unload(), 3000);
             deathContainer.FadeIn(3000);
-            Scheduler.AddDelayed(delegate { this.Push(new ResultScreen(2)); }, 3000);
+            Scheduler.AddDelayed(delegate { this.Push(new ResultScreen()); }, 3000);
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
