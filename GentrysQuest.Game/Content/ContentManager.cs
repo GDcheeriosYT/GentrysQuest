@@ -38,8 +38,9 @@ public class ContentManager
 
         #region Enemies
 
-        Enemies.Add(new TestEnemy());
-        Enemies.Add(new AngryPedestrian());
+        // Enemies.Add(new TestEnemy());
+        // Enemies.Add(new AngryPedestrian());
+        Enemies.Add(new AngryChineseMan());
 
         #endregion
 
