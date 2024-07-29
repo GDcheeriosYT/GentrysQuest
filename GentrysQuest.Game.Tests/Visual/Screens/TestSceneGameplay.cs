@@ -20,12 +20,12 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
 
         public TestSceneGameplay()
         {
+
             theGuy = new TestCharacter(1);
             testWeapon = new Sword();
             GameData.EquipCharacter(theGuy);
             GameData.Money.InfiniteMoney = true;
             GameData.Add(theGuy);
-            GameData.Add(new TestCharacter(1));
             theGuy.SetWeapon(testWeapon);
             Add(screens = new ScreenStack());
             screens.Push(gameplay = new Gameplay());
@@ -34,6 +34,7 @@ namespace GentrysQuest.Game.Tests.Visual.Screens
         [Test]
         public void Gameplay()
         {
+            AddStep("Ready", () => { });
             AddStep("AddEnemy", () =>
             {
                 gameplay.AddEnemy(theGuy.Experience.Level.Current.Value);
