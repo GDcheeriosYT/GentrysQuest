@@ -45,6 +45,7 @@ public class HitHandler
         applyHitCount();
         applyKnockback();
         invokeHitEvent();
+        applyRewards();
     }
 
     private bool getCritChance() => sender.Stats.CritRate.Current.Value > MathBase.RandomInt(0, 100);
