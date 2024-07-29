@@ -180,7 +180,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 case KnockbackType.Stuns:
                     Entity.AddEffect(new Stun(duration + 300));
-                    Weapon.Disable(50);
+                    Weapon.RestWeapon();
                     break;
 
                 default:
@@ -255,8 +255,8 @@ namespace GentrysQuest.Game.Entity.Drawables
                 Entity.CanDodge = false;
                 Entity.IsDodging = true;
                 Entity.SpeedModifier = 3;
-                Scheduler.AddDelayed(() => { Entity.SpeedModifier = 1; }, 100);
-                Scheduler.AddDelayed(() => { Entity.IsDodging = false; }, 100);
+                Scheduler.AddDelayed(() => { Entity.SpeedModifier = 1; }, 500);
+                Scheduler.AddDelayed(() => { Entity.IsDodging = false; }, 500);
                 Scheduler.AddDelayed(() => { Entity.CanDodge = true; }, 1000);
             }
         }

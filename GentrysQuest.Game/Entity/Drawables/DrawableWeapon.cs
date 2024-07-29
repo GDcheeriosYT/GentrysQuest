@@ -23,6 +23,18 @@ namespace GentrysQuest.Game.Entity.Drawables
         public Vector2 PositionHolder;
         private OnHitEffect onHitEffect;
         private bool doesDamage;
+        private AttackPatternEvent lastPattern;
+
+        /// <summary>
+        /// This is to ensure that when resting the weapon
+        /// right after an attack it won't look clunky.
+        /// </summary>
+        private bool transitionCooldown;
+
+        /// <summary>
+        /// The delay to make animations smooth
+        /// </summary>
+        private const int FADE_DELAY = 50;
 
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
@@ -49,34 +61,6 @@ namespace GentrysQuest.Game.Entity.Drawables
                 };
                 Weapon.CanAttack = true;
             }
-
-            Disable();
-        }
-
-        public void Disable()
-        {
-            HitBox.Disable();
-            Hide();
-        }
-
-        public void Enable()
-        {
-            HitBox.Enable();
-            Show();
-        }
-
-        public void Disable(int timeMs)
-        {
-            HitBox.Disable();
-            this.FadeOut(timeMs);
-            this.ScaleTo(0, timeMs);
-        }
-
-        public void Enable(int timeMs)
-        {
-            HitBox.Enable();
-            this.FadeIn(timeMs);
-            this.ScaleTo(1, timeMs);
         }
 
         [BackgroundDependencyLoader]
@@ -92,7 +76,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         {
             DamageQueue.Clear();
             Weapon.CanAttack = false;
-            Enable(100);
+            HitBox.Enable();
             Weapon.AttackAmount += 1;
             AttackPatternCaseHolder caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
             Weapon.Holder.Attack(); // Call the holder base method to handle events.
@@ -108,53 +92,81 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             foreach (AttackPatternEvent pattern in patterns)
             {
-                double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
+                double speed = getPatternSpeed(pattern);
                 Scheduler.AddDelayed(() =>
                 {
-                    this.RotateTo(pattern.Direction + direction, duration: speed, pattern.Transition);
-                    this.TransformTo(nameof(PositionHolder), pattern.Position, speed, pattern.Transition);
-                    this.ResizeTo(pattern.Size, duration: speed, pattern.Transition);
-                    HitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
-                    this.TransformTo(nameof(Distance), pattern.Distance, speed, pattern.Transition);
-                    if (pattern.ResetHitBox) DamageQueue.Clear();
-                    Weapon.Damage.Add(Weapon.Damage.GetPercentFromTotal(pattern.DamagePercent));
-                    Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
-                    onHitEffect = pattern.OnHitEffect;
-                    doesDamage = pattern.DoesDamage;
-
-                    if (!HitBox.Enabled) return;
-
-                    if (pattern.Projectiles == null) return;
-
-                    foreach (var projectile in pattern.Projectiles.Select(parameters => new Projectile(parameters)))
-                    {
-                        projectile.Position *= Distance;
-                        projectile.Direction += direction - 90;
-                        Holder.QueuedProjectiles.Add(projectile);
-                    }
+                    handlePattern(pattern, direction, speed);
+                    lastPattern = pattern;
                 }, delay);
                 delay += speed;
             }
 
-            Scheduler.AddDelayed(() => // Add delay to enable weapon attacking
-            {
-                Disable(100);
-            }, delay + 50);
+            Scheduler.AddDelayed(() => RestWeapon(true), FADE_DELAY + delay);
+        }
 
-            Scheduler.AddDelayed((() =>
+        public void ChargeAttack()
+        {
+
+        }
+
+        private double getPatternSpeed(AttackPatternEvent pattern) => pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
+
+        public void RestWeapon(bool delay = false)
+        {
+            Weapon.CanAttack = true;
+            HitBox.Disable();
+
+            if (lastPattern != null)
             {
-                Weapon.CanAttack = true;
-            }), delay + 110);
+                handlePattern(lastPattern, Holder.DirectionLooking + 90, delay ? getPatternSpeed(lastPattern) : 0, true);
+
+                if (delay)
+                {
+                    transitionCooldown = true;
+                    Scheduler.AddDelayed(() =>
+                    {
+                        transitionCooldown = false;
+                    }, getPatternSpeed(lastPattern));
+                }
+            }
+        }
+
+        private void handlePattern(AttackPatternEvent pattern, float direction, double speed, bool resting = false)
+        {
+            this.RotateTo(pattern.Direction + direction, duration: speed, pattern.Transition);
+            this.TransformTo(nameof(PositionHolder), pattern.Position, speed, pattern.Transition);
+            this.ResizeTo(pattern.Size, duration: speed, pattern.Transition);
+            HitBox.ScaleTo(pattern.HitboxSize, duration: speed, pattern.Transition);
+            this.TransformTo(nameof(Distance), pattern.Distance, speed, pattern.Transition);
+
+            if (!resting)
+            {
+                if (pattern.ResetHitBox) DamageQueue.Clear();
+                Weapon.Damage.Add(Weapon.Damage.GetPercentFromTotal(pattern.DamagePercent));
+                Weapon.Holder.SpeedModifier = pattern.MovementSpeed;
+                onHitEffect = pattern.OnHitEffect;
+                doesDamage = pattern.DoesDamage;
+            }
+
+            if (!HitBox.Enabled) return;
+
+            if (pattern.Projectiles == null) return;
+
+            foreach (var projectile in pattern.Projectiles.Select(parameters => new Projectile(parameters)))
+            {
+                projectile.Position *= Distance;
+                projectile.Direction += direction - 90;
+                Holder.QueuedProjectiles.Add(projectile);
+            }
         }
 
         protected override void Update()
         {
             base.Update();
+            Position = MathBase.RotateVector(PositionHolder, Rotation - 180) + MathBase.GetAngleToVector(Rotation - 90) * Distance;
 
             if (!Weapon.CanAttack)
             {
-                Position = MathBase.RotateVector(PositionHolder, Rotation - 180) + MathBase.GetAngleToVector(Rotation - 90) * Distance;
-
                 foreach (var hitbox in HitBoxScene.GetIntersections(HitBox))
                 {
                     if (!DamageQueue.Check(hitbox) && Weapon.IsGeneralDamageMode && hitbox.GetType() != typeof(CollisonHitBox) && doesDamage)
@@ -257,6 +269,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 Weapon.UpdateStats();
                 Weapon.Holder.SpeedModifier = 1;
+                if (!transitionCooldown) RestWeapon();
             }
         }
     }
