@@ -103,11 +103,6 @@ namespace GentrysQuest.Game.Entity.Drawables
             Scheduler.AddDelayed(() => RestWeapon(true), FADE_DELAY + delay);
         }
 
-        public void ChargeAttack()
-        {
-
-        }
-
         private double getPatternSpeed(AttackPatternEvent pattern) => pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
 
         public void RestWeapon(bool delay = false)

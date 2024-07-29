@@ -4,7 +4,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
-using osu.Framework.Logging;
 using osuTK;
 using osuTK.Input;
 
@@ -80,7 +79,7 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
 
         if (isHeld && new ElapsedTime(Clock.CurrentTime, holdStart) > HOLD_TIME)
         {
-            Logger.Log("Holding");
+            // Todo: implement hold logic
         }
 
         player.DirectionLooking = (int)MathBase.GetAngle(player.Position + new Vector2(50), mousePos);
