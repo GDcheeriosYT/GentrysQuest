@@ -29,6 +29,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (GetEntityObject().Weapon != null && MathBase.GetDistance(Position, followEntity.Position) < GetEntityObject().Weapon!.Distance) Attack(followEntity.Position);
 
+            DirectionLooking = (int)MathBase.GetAngle(Position, followEntity.Position);
             if (Entity.CanMove) Direction += MathBase.GetDirection(Position, followEntity.Position);
             if (Direction != Vector2.Zero) Move(Direction.Normalized(), GetSpeed());
         }
