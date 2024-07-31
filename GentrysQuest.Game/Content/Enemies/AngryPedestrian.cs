@@ -10,7 +10,7 @@ namespace GentrysQuest.Game.Content.Enemies
 
         public AngryPedestrian()
         {
-            TextureMapping.Add("Idle", "enemies_angry_pedestrian_idle.jpg");
+            TextureMapping.Add("Idle", "enemies_angry_pedestrian_idle.jpeg");
 
             WeaponChoices.AddChoice(new Knife(), 100);
         }
