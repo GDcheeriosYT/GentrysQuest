@@ -55,6 +55,8 @@ public class ContentManager
         Weapons.Add(new Knife());
         Weapons.Add(new Sword());
         Weapons.Add(new Bow());
+        Weapons.Add(new Spear());
+        Weapons.Add(new Hammer());
         Weapons.Add(new BraydensOsuPen());
         Weapons.Add(new BrodysBroadsword());
 

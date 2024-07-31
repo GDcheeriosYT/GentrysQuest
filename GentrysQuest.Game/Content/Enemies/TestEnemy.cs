@@ -12,6 +12,8 @@ namespace GentrysQuest.Game.Content.Enemies
             WeaponChoices.AddChoice(new Bow(), 33);
             WeaponChoices.AddChoice(new Knife(), 33);
             WeaponChoices.AddChoice(new Sword(), 33);
+            WeaponChoices.AddChoice(new Spear(), 33);
+            WeaponChoices.AddChoice(new Hammer(), 33);
         }
     }
 }
