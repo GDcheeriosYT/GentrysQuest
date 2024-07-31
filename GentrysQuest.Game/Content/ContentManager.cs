@@ -38,8 +38,8 @@ public class ContentManager
 
         #region Enemies
 
-        // Enemies.Add(new TestEnemy());
-        // Enemies.Add(new AngryPedestrian());
+        Enemies.Add(new TestEnemy());
+        Enemies.Add(new AngryPedestrian());
         Enemies.Add(new AngryChineseMan());
 
         #endregion
@@ -53,6 +53,8 @@ public class ContentManager
         #region Weapons
 
         Weapons.Add(new Knife());
+        Weapons.Add(new Sword());
+        Weapons.Add(new Bow());
         Weapons.Add(new BraydensOsuPen());
         Weapons.Add(new BrodysBroadsword());
 
