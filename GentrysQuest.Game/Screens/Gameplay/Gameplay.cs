@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Content.Effects;
-using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Content.Maps;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Database;
@@ -123,7 +122,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
         /// <param name="enemy">For if you want to use custom enemies</param>
         public void AddEnemy(int level, Enemy enemy = null)
         {
-            enemy ??= new TestEnemy(1);
+            enemy ??= (Enemy)Activator.CreateInstance(map.MapReference.Enemies[MathBase.RandomChoice(map.MapReference.Enemies.Count)].GetType());
             enemy.Experience.Level.Current.Value = level;
             enemy.UpdateStats();
             DrawableEnemyEntity newEnemy = new DrawableEnemyEntity(enemy);

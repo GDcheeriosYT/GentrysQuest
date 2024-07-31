@@ -62,6 +62,7 @@ public class HitHandler
     {
         if (Details.IsCrit) receiverBase.CritWithDefense(Details.Damage);
         else receiverBase.DamageWithDefense(Details.Damage);
+        receiverBase.RemoveTenacity();
     }
 
     private void applyHitCount()
