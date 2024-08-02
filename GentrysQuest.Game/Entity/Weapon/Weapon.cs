@@ -45,6 +45,17 @@ namespace GentrysQuest.Game.Entity.Weapon
         public AttackPattern AttackPattern = new();
 
         /// <summary>
+        /// Defines how the weapon's
+        /// charged attackPattern works
+        /// </summary>
+        public AttackPattern ChargeAttackPattern = new(true);
+
+        /// <summary>
+        /// How long it takes to finish the charge
+        /// </summary>
+        public virtual int ChargeTime { get; protected set; } = 0;
+
+        /// <summary>
         /// Who is holding the weapon
         /// </summary>
         public Entity Holder;

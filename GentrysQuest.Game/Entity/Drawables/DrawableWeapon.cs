@@ -24,6 +24,11 @@ namespace GentrysQuest.Game.Entity.Drawables
         private OnHitEffect onHitEffect;
         private bool doesDamage;
 
+        /// <summary>
+        /// How long it takes to start the charge
+        /// </summary>
+        private const int CHARGE_HOLD_TIME = 200;
+
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
             Holder = entity;
@@ -88,13 +93,16 @@ namespace GentrysQuest.Game.Entity.Drawables
 
         public Weapon.Weapon GetWeaponObject() { return Weapon; }
 
-        public void Attack(float direction)
+        public void Attack(float direction, double chargeTime = 0)
         {
             DamageQueue.Clear();
             Weapon.CanAttack = false;
             Enable(100);
             Weapon.AttackAmount += 1;
-            AttackPatternCaseHolder caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
+            AttackPatternCaseHolder caseHolder;
+
+            if (chargeTime > CHARGE_HOLD_TIME) caseHolder = Weapon.ChargeAttackPattern.GetCase((int)(100 * (chargeTime / Weapon.ChargeTime)));
+            else caseHolder = Weapon.AttackPattern.GetCase(Weapon.AttackAmount);
             Weapon.Holder.Attack(); // Call the holder base method to handle events.
 
             if (caseHolder == null)
@@ -108,7 +116,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             foreach (AttackPatternEvent pattern in patterns)
             {
-                double speed = pattern.TimeMs / Weapon.Holder.Stats.AttackSpeed.Current.Value;
+                double speed = pattern.ControlNumber / Weapon.Holder.Stats.AttackSpeed.Current.Value;
                 Scheduler.AddDelayed(() =>
                 {
                     this.RotateTo(pattern.Direction + direction, duration: speed, pattern.Transition);

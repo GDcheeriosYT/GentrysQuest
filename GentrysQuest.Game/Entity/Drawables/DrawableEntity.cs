@@ -200,13 +200,13 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// Attacks towards a direction
         /// </summary>
         /// <param name="position">Location of the attack</param>
-        public void Attack(Vector2 position)
+        public void Attack(Vector2 position, double chargeTime = 0)
         {
             if (!Entity.CanAttack) return;
 
             Vector2 center = new Vector2(50);
             double angle = MathBase.GetAngle(Position + center, position);
-            if (Weapon.GetWeaponObject().CanAttack) Weapon.Attack((float)angle + 90);
+            if (Weapon.GetWeaponObject().CanAttack) Weapon.Attack((float)angle + 90, chargeTime);
         }
 
         /// <summary>

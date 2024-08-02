@@ -12,6 +12,7 @@ namespace GentrysQuest.Game.Screens.Gameplay;
 public partial class GameplayClickContainer(DrawablePlayableEntity player) : Container
 {
     private bool isHeld;
+    private double holdStart;
     private Vector2 mousePos;
 
     [BackgroundDependencyLoader]
@@ -30,6 +31,7 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
         {
             case MouseButton.Left:
                 isHeld = true;
+                holdStart = Clock.CurrentTime;
                 break;
 
             case MouseButton.Right:
@@ -51,6 +53,7 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
         {
             case MouseButton.Left:
                 isHeld = false;
+                holdStart = 0;
                 var weapon = player.GetEntityObject().Weapon;
                 if (weapon != null) weapon.AttackAmount = 0;
                 break;
@@ -68,7 +71,7 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
     protected override void Update()
     {
         base.Update();
-        if (isHeld) player.Attack(mousePos);
+        if (isHeld) player.Attack(mousePos, new ElapsedTime(Clock.CurrentTime, holdStart));
         player.DirectionLooking = (int)MathBase.GetAngle(player.Position + new Vector2(50), mousePos);
     }
 }

@@ -1,5 +1,6 @@
 using GentrysQuest.Game.Entity;
 using GentrysQuest.Game.Entity.Weapon;
+using GentrysQuest.Game.Utils;
 using osuTK;
 
 namespace GentrysQuest.Game.Content.Weapons
@@ -15,28 +16,32 @@ namespace GentrysQuest.Game.Content.Weapons
         public Bow()
         {
             Damage.SetDefaultValue(20);
+            ChargeTime = new Second(1.5);
 
             AttackPattern.AddCase(1);
-            AttackPattern.Add(new AttackPatternEvent { Size = new Vector2(0.5f), Distance = 50, MovementSpeed = 0.5f });
-            AttackPattern.Add(new AttackPatternEvent(500) { Size = new Vector2(0.5f), Distance = 40, MovementSpeed = 0.1f });
-            AttackPattern.Add(new AttackPatternEvent(10) { Size = new Vector2(0.5f), Distance = 30, MovementSpeed = 0 });
-            AttackPattern.Add(new AttackPatternEvent(750)
+            AttackPattern.Add(new AttackPatternEvent(100));
+            AttackPattern.Add(new AttackPatternEvent(500)
             {
                 Size = new Vector2(0.5f),
                 Distance = 50,
                 HitboxSize = new Vector2(0),
-                MovementSpeed = 0f,
                 Projectiles =
                 [
                     new ProjectileParameters
                     {
                         Speed = 15,
+                        Lifetime = 500,
                         PassthroughAmount = 1,
-                        Damage = (int)Damage.Current.Value,
+                        Damage = (int)Damage.Current.Value / 10,
                         TakesHolderDamage = true,
                         TakesDefense = true
                     }
                 ]
+            });
+
+            ChargeAttackPattern.Add(new AttackPatternEvent(20)
+            {
+                Distance = 50
             });
         }
     }

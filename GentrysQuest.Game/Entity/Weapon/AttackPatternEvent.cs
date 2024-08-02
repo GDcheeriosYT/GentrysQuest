@@ -4,13 +4,13 @@ using osuTK;
 
 namespace GentrysQuest.Game.Entity.Weapon
 {
-    public class AttackPatternEvent(int timeMs)
+    public class AttackPatternEvent(int controlNumber)
     {
         /// <summary>
         /// How long until the pattern condition is met.
-        /// Ex: The size will size down to 20px in 600ms.
+        /// Ex: The size will size down to 20px in x ms/x%.
         /// </summary>
-        public int TimeMs = timeMs;
+        public int ControlNumber = controlNumber;
 
         /// <summary>
         /// The direction based on where you're looking.
@@ -85,7 +85,7 @@ namespace GentrysQuest.Game.Entity.Weapon
 
         public override string ToString()
         {
-            return $"{timeMs}\n"
+            return $"{controlNumber}\n"
                    + $"{Direction}\n"
                    + $"{Position}\n"
                    + $"{Size}\n"
