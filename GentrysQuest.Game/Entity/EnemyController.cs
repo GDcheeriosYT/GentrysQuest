@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Utils;
 using osu.Framework.Graphics;
@@ -9,11 +10,11 @@ namespace GentrysQuest.Game.Entity
     public partial class EnemyController : CompositeDrawable
     {
         private DrawableEntity parent;
-        private CollisonHitBox[] directionChecks;
-        private const int DIRECTIONS = 12;
-        private const float DISTANCE = 1f;
+        private MovementHitBox[] directionChecks;
+        private const int DIRECTIONS = 8;
+        private const float DISTANCE = 0.5f;
 
-        public EnemyController(DrawableEntity enemy)
+        public EnemyController(DrawableEnemyEntity enemy)
         {
             RelativeSizeAxes = Axes.Both;
             Anchor = Anchor.Centre;
@@ -21,20 +22,33 @@ namespace GentrysQuest.Game.Entity
 
             parent = enemy;
 
-            directionChecks = new CollisonHitBox[DIRECTIONS];
+            directionChecks = new MovementHitBox[DIRECTIONS];
 
             for (int i = 0; i < DIRECTIONS; i++)
             {
                 var rotation = i * (360 / DIRECTIONS);
-                directionChecks[i] = new CollisonHitBox(enemy)
+                directionChecks[i] = new MovementHitBox(enemy)
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Size = new Vector2(1f, 0.1f),
+                    Size = new Vector2(0.1f, 0.1f),
                     Rotation = rotation,
                     Position = MathBase.GetAngleToVector(rotation) * DISTANCE
                 };
                 AddInternal(directionChecks[i]);
             }
+        }
+
+        public Dictionary<int, bool> GetIntersectedAngles()
+        {
+            Dictionary<int, bool> points = new Dictionary<int, bool>();
+
+            for (int i = 0; i < DIRECTIONS; i++)
+            {
+                if (HitBoxScene.Collides(directionChecks[i])) points.Add(i * (360 / DIRECTIONS), true);
+                else points.Add(i * (360 / DIRECTIONS), false);
+            }
+
+            return points;
         }
     }
 }

@@ -10,6 +10,7 @@ namespace GentrysQuest.Game.Entity
         {
             foreach (var box in intersections.Where(box =>
                          box.GetType() == typeof(CollisonHitBox)
+                         || box.GetType() == typeof(MovementHitBox)
                          || box.GetParent().GetType() == typeof(Projectile)
                          || box.GetParent().GetType() == typeof(DrawableWeapon)
                          || queue.Check(box)).ToList())
