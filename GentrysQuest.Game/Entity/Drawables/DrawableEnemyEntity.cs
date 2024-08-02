@@ -24,10 +24,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             // AddInternal(directionHandler = new EnemyController(this));
         }
 
-        public void FollowEntity(DrawableEntity drawableEntity)
-        {
-            followEntity = drawableEntity;
-        }
+        public void FollowEntity(DrawableEntity drawableEntity) => followEntity = drawableEntity;
 
         protected override void Update()
         {
