@@ -21,7 +21,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         [BackgroundDependencyLoader]
         private void load()
         {
-            AddInternal(directionHandler = new EnemyController(this));
+            // AddInternal(directionHandler = new EnemyController(this));
         }
 
         public void FollowEntity(DrawableEntity drawableEntity)
