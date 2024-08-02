@@ -1,4 +1,5 @@
 using GentrysQuest.Game.Utils;
+using osu.Framework.Allocation;
 using osuTK;
 
 namespace GentrysQuest.Game.Entity.Drawables
@@ -6,6 +7,7 @@ namespace GentrysQuest.Game.Entity.Drawables
     public partial class DrawableEnemyEntity : DrawableEntity
     {
         private DrawableEntity followEntity;
+        private EnemyController directionHandler;
 
         public DrawableEnemyEntity(Entity entity)
             : base(entity, AffiliationType.Enemy)
@@ -14,6 +16,12 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 Position += direction * (float)Clock.ElapsedFrameTime * (float)speed;
             };
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
+        {
+            AddInternal(directionHandler = new EnemyController(this));
         }
 
         public void FollowEntity(DrawableEntity drawableEntity)
