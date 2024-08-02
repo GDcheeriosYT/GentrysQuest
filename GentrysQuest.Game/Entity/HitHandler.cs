@@ -36,7 +36,7 @@ public class HitHandler
         Details = new DamageDetails();
         Details.Sender = this.sender = sender;
         this.receiver = receiver;
-        Details.Receiver = receiverBase = receiver.GetEntityObject();
+        Details.Receiver = receiverBase = receiver.GetBase();
         stats = GameData.CurrentStats;
 
         // logic

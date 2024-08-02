@@ -19,8 +19,8 @@ namespace GentrysQuest.Game.Content.Characters
             Stats.CritRate.point = 1;
             Stats.CritDamage.point = 1;
 
-            Secondary = new CircleThrow(this);
-            Utility = new Teleport(this);
+            Secondary = new CircleThrow();
+            Utility = new Teleport();
 
             OnUpdateStats += checkWeapon;
 

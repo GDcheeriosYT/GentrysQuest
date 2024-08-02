@@ -290,7 +290,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// <summary>
         /// In some cases you'll want to get the entity reference for this drawable class
         /// <returns>The entity reference for this drawable</returns>
-        public Entity GetEntityObject() => Entity;
+        public Entity GetBase() => Entity;
 
         /// <summary>
         /// Manages the speed of the entity

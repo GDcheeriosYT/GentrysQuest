@@ -130,8 +130,8 @@ namespace GentrysQuest.Game.Screens.Gameplay
             AddInternal(newEnemy);
             enemies.Add(newEnemy);
             enemy.SetWeapon();
-            newEnemy.GetEntityObject().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
-            newEnemy.GetEntityObject().OnDeath += delegate
+            newEnemy.GetBase().OnDeath += delegate { Scheduler.AddDelayed(() => RemoveEnemy(newEnemy), 100); };
+            newEnemy.GetBase().OnDeath += delegate
             {
                 bool notValidArtifact = true;
                 int spendAmount = (int)(Math.Pow(gameplayDifficulty + 1, 2) * 1000);
@@ -168,7 +168,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
             while (enemies.Count < enemyLimit)
             {
-                AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetEntityObject().Experience.Level.Current.Value));
+                AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetBase().Experience.Level.Current.Value));
                 currentAmount++;
                 if (currentAmount > enemySpawnLimit) break;
             }
@@ -179,17 +179,17 @@ namespace GentrysQuest.Game.Screens.Gameplay
         public void SetDifficulty()
         {
             gameplayDifficulty = map.MapReference.Difficulty;
-            if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetEntityObject().Difficulty;
+            if (map.MapReference.DifficultyScales) gameplayDifficulty += playerEntity.GetBase().Difficulty;
             enemyLimit = (gameplayDifficulty + 1) * 2;
         }
 
         public void Pause()
         {
-            playerEntity.GetEntityObject().AddEffect(new Paused());
+            playerEntity.GetBase().AddEffect(new Paused());
 
             foreach (DrawableEntity enemy in enemies)
             {
-                enemy.GetEntityObject().AddEffect(new Paused());
+                enemy.GetBase().AddEffect(new Paused());
             }
 
             isPaused = true;
@@ -197,11 +197,11 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
         public void UnPause()
         {
-            playerEntity.GetEntityObject().RemoveEffect("Paused");
+            playerEntity.GetBase().RemoveEffect("Paused");
 
             foreach (DrawableEntity enemy in enemies)
             {
-                enemy.GetEntityObject().RemoveEffect("Paused");
+                enemy.GetBase().RemoveEffect("Paused");
             }
 
             isPaused = false;
@@ -220,7 +220,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
 
                 if (MathBase.RandomInt(1, 10000 / 1 + gameplayDifficulty) < 5)
                 {
-                    if (!atEnemyLimit()) AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetEntityObject().Experience.Level.Current.Value));
+                    if (!atEnemyLimit()) AddEnemy(HelpMe.GetScaledLevel(gameplayDifficulty, playerEntity.GetBase().Experience.Level.Current.Value));
                 }
 
                 if (elapsedTime > MAX_TIME_TO_SPAWN)
@@ -288,15 +288,15 @@ namespace GentrysQuest.Game.Screens.Gameplay
                     foreach (DrawableEntity enemyEntity in enemies) manage_direction(direction, speed, enemyEntity);
                     foreach (Projectile projectile in projectiles) manage_direction(direction, speed, projectile);
                 };
-                playerEntity.GetEntityObject().OnDeath += End;
-                playerEntity.GetEntityObject().OnLevelUp += SetDifficulty;
-                playerEntity.GetEntityObject().OnLevelUp += delegate
+                playerEntity.GetBase().OnDeath += End;
+                playerEntity.GetBase().OnLevelUp += SetDifficulty;
+                playerEntity.GetBase().OnLevelUp += delegate
                 {
-                    if (playerEntity.GetEntityObject().Experience.CurrentLevel() % 5 == 0)
+                    if (playerEntity.GetBase().Experience.CurrentLevel() % 5 == 0)
                     {
                         removeAllEnemies();
                         Character character = GameData.Content.Characters[MathBase.RandomChoice(GameData.Content.Characters.Count)];
-                        character.Experience.Level.Current.Value = playerEntity.GetEntityObject().Experience.CurrentLevel();
+                        character.Experience.Level.Current.Value = playerEntity.GetBase().Experience.CurrentLevel();
                         character.Stats.Health.point += 5;
                         WeaponChoices weaponChoices = new WeaponChoices();
 
@@ -313,7 +313,7 @@ namespace GentrysQuest.Game.Screens.Gameplay
                                 break;
                         }
 
-                        AddEnemy(playerEntity.GetEntityObject().Experience.CurrentLevel(), character.CreateEnemy(weaponChoices));
+                        AddEnemy(playerEntity.GetBase().Experience.CurrentLevel(), character.CreateEnemy(weaponChoices));
                     }
                 };
             }
