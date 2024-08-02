@@ -67,6 +67,10 @@ namespace GentrysQuest.Game.Entity.Drawables
         /// </summary>
         protected const double SPEED_MAIN = 0.35;
 
+        private const int DODGE_TIME = 250;
+        private const int DODGE_INTERVAL = 1000;
+        private const int BASE_DODGE_SPEED = 3;
+
         /// <summary>
         /// When doing some math you might need this
         /// </summary>
@@ -254,10 +258,9 @@ namespace GentrysQuest.Game.Entity.Drawables
             {
                 Entity.CanDodge = false;
                 Entity.IsDodging = true;
-                Entity.SpeedModifier = 3;
-                Scheduler.AddDelayed(() => { Entity.SpeedModifier = 1; }, 500);
-                Scheduler.AddDelayed(() => { Entity.IsDodging = false; }, 500);
-                Scheduler.AddDelayed(() => { Entity.CanDodge = true; }, 1000);
+                Scheduler.AddDelayed(() => { Entity.IsDodging = false; }, DODGE_TIME);
+                Scheduler.AddDelayed(() => { Entity.CanDodge = true; }, DODGE_INTERVAL);
+                ApplyKnockback(Direction, (int)(BASE_DODGE_SPEED + GetSpeed()), DODGE_TIME, KnockbackType.StopsMovement);
             }
         }
 
