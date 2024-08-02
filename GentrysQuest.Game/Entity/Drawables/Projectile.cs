@@ -119,7 +119,7 @@ namespace GentrysQuest.Game.Entity.Drawables
             Affiliation = shooter.Affiliation;
             AddInternal(HitBox = new HitBox(this));
             started = true;
-            if (TakesHolderDamage) Damage += (int)shooter.GetEntityObject().Stats.Attack.Current.Value;
+            if (TakesHolderDamage) Damage += (int)shooter.GetBase().Stats.Attack.Current.Value;
         }
 
         protected override void Update()
@@ -139,7 +139,7 @@ namespace GentrysQuest.Game.Entity.Drawables
                 switch (hitBox.GetParent())
                 {
                     case DrawableEntity drawableEntity:
-                        entity = drawableEntity.GetEntityObject();
+                        entity = drawableEntity.GetBase();
                         break;
 
                     case DrawableMapObject mapObject:
@@ -164,7 +164,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
                 details.Damage = damage;
                 details.Receiver = entity;
-                details.Sender = shooter.GetEntityObject();
+                details.Sender = shooter.GetBase();
 
                 entity.OnHit(details);
 

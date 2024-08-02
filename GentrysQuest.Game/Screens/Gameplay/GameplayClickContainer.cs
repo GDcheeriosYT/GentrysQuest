@@ -36,10 +36,10 @@ public partial class GameplayClickContainer(DrawablePlayableEntity player) : Con
                 break;
 
             case MouseButton.Right:
-                if (player.GetEntityObject().Secondary?.PercentToDone == 100 || player.GetEntityObject().Secondary?.UsesAvailable > 0)
+                if (player.GetBase().Secondary?.PercentToDone == 100 || player.GetBase().Secondary?.UsesAvailable > 0)
                 {
-                    player.GetEntityObject().Secondary?.Act();
-                    player.GetEntityObject().Secondary.TimeActed = Clock.CurrentTime;
+                    player.GetBase().Secondary?.Act();
+                    player.GetBase().Secondary.TimeActed = Clock.CurrentTime;
                 }
 
                 break;

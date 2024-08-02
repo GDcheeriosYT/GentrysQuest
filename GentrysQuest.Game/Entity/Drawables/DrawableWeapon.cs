@@ -38,7 +38,7 @@ namespace GentrysQuest.Game.Entity.Drawables
         public DrawableWeapon(DrawableEntity entity, AffiliationType affiliation)
         {
             Holder = entity;
-            Weapon = entity.GetEntityObject().Weapon;
+            Weapon = entity.GetBase().Weapon;
             Affiliation = affiliation;
             HitBox = new HitBox(this);
             Size = new Vector2(1f);
@@ -161,7 +161,7 @@ namespace GentrysQuest.Game.Entity.Drawables
 
             if (!Weapon.CanAttack)
             {
-                if (doesDamage && Weapon.IsGeneralDamageMode) _ = new DamageFrameHandler(HitBoxScene.GetIntersections(HitBox), DamageQueue, Holder.GetEntityObject());
+                if (doesDamage && Weapon.IsGeneralDamageMode) _ = new DamageFrameHandler(HitBoxScene.GetIntersections(HitBox), DamageQueue, Holder.GetBase());
             }
             else
             {

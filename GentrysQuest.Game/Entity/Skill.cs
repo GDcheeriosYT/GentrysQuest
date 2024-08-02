@@ -1,9 +1,10 @@
 using System;
+using GentrysQuest.Game.Entity.Drawables;
 using GentrysQuest.Game.Graphics;
 
 namespace GentrysQuest.Game.Entity
 {
-    public abstract class Skill(Entity skillHaver)
+    public abstract class Skill
     {
         public Action OnAct;
 
@@ -37,7 +38,7 @@ namespace GentrysQuest.Game.Entity
         /// Who has this skill?
         /// I know haver isn't a word...
         /// </summary>
-        public Entity SkillHaver { get; } = skillHaver;
+        public DrawableEntity User { get; set; }
 
         /// <summary>
         /// How many uses of the skill you have
