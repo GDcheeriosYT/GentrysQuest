@@ -1,12 +1,7 @@
 using GentrysQuest.Game.Audio;
-using GentrysQuest.Game.Content.Characters;
-using GentrysQuest.Game.Content.Weapons;
-using GentrysQuest.Game.Database;
-using GentrysQuest.Game.Entity;
-using GentrysQuest.Game.Entity.Weapon;
 using GentrysQuest.Game.Graphics.TextStyles;
 using GentrysQuest.Game.Online.API;
-using GentrysQuest.Game.Overlays.LoginOverlay;
+using GentrysQuest.Game.Screens.UserSelect;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
@@ -27,7 +22,6 @@ namespace GentrysQuest.Game.Screens.MainMenu
         private DrawableTrack menuTheme;
         private MainMenuButton playButton;
         private MainMenuButton quitButton;
-        private LoginOverlay loginOverlay;
 
         [BackgroundDependencyLoader]
         private void load(ITrackStore trackStore)
@@ -65,45 +59,9 @@ namespace GentrysQuest.Game.Screens.MainMenu
                             Origin = Anchor.Centre
                         }
                     }
-                },
-                new Container
-                {
-                    Size = new Vector2(400),
-                    Y = 35,
-                    X = -100,
-                    Origin = Anchor.CentreRight,
-                    Anchor = Anchor.CentreRight,
-                    Masking = true,
-                    CornerExponent = 2,
-                    CornerRadius = 15,
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = new Color4(20, 20, 20, 200)
-                        },
-                        new Container
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            RelativeSizeAxes = Axes.Both,
-                            Size = new Vector2(0.95f),
-                            Child =
-                                loginOverlay = new LoginOverlay()
-                        }
-                    }
                 }
             };
-            playButton.SetAction(delegate
-            {
-                Character character = new BraydenMesserschmidt();
-                Weapon weapon = new BraydensOsuPen();
-                character.Weapon = weapon;
-                GameData.Add(character);
-                GameData.EquipCharacter(character);
-                this.Push(new Gameplay.Gameplay());
-            });
+            playButton.SetAction(delegate { this.Push(new UserSelectScreen()); });
             quitButton.SetAction(delegate
             {
                 _ = APIAccess.DeleteToken();
