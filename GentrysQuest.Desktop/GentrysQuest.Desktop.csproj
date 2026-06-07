@@ -5,8 +5,8 @@
     <AssemblyName>GentrysQuest</AssemblyName>
     <ApplicationIcon>game.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>2026.410.0</Version>
-    <FileVersion>2026.410.0</FileVersion>
+    <Version>2026.601.0</Version>
+    <FileVersion>2026.601.0</FileVersion>
   </PropertyGroup>
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\GentrysQuest.Game\GentrysQuest.Game.csproj" />
@@ -15,6 +15,6 @@
     <EmbeddedResource Include="game.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Velopack" Version="0.0.1298" />
+    <PackageReference Include="Velopack" Version="1.1.1" />
   </ItemGroup>
 </Project>

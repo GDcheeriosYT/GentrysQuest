@@ -8,12 +8,6 @@ public class Enemy : Entity
     public WeaponChoices WeaponChoices = new();
     public ArtifactChoices ArtifactChoices = new();
 
-    public Enemy()
-        : base()
-    {
-        UpdateStats();
-    }
-
     public override void UpdateStats()
     {
         int level = Experience.CurrentLevel();
@@ -23,29 +17,19 @@ public class Enemy : Entity
             level * 100 * (Stats.Health.Point + 1)
         );
 
-        int damage = (level + 1) * Stats.Attack.Point;
+        int damage = 35 + level + 2 + 5 * Stats.Attack.Point;
         damage += (int)(10 * Difficulty * level);
         Stats.Attack.SetDefaultValue(damage);
 
         Stats.Defense.SetDefaultValue(100);
 
-        Stats.CritRate.SetDefaultValue(20);
+        // Stats.CritRate.SetDefaultValue(20);
 
-        Stats.CritDamage.SetDefaultValue(Difficulty * 20);
+        // Stats.CritDamage.SetDefaultValue(Difficulty * 20);
 
-        Stats.Speed.SetDefaultValue(0.75f);
+        Stats.Speed.SetDefaultValue(0.8f + CalculatePointBenefit(0, Stats.Speed.Point, 0.2));
 
-        Stats.AttackSpeed.SetDefaultValue(1);
-
-        RemoveStatModifierSourcesByPrefix("equipment:");
-
-        if (Weapon != null)
-        {
-            if (Weapon.Buff.IsPercent)
-                SetStatModifierSource("equipment:weapon", StatModifier.PercentOfDefault(Weapon.Buff.StatType, Weapon.Buff.Value.Value));
-            else
-                SetStatModifierSource("equipment:weapon", StatModifier.Flat(Weapon.Buff.StatType, Weapon.Buff.Value.Value));
-        }
+        Stats.AttackSpeed.SetDefaultValue(0.35f + CalculatePointBenefit(0, Stats.AttackSpeed.Point, 0.3));
 
         RebuildStatAdditionalValues();
 
@@ -63,7 +47,14 @@ public class Enemy : Entity
         UpdateStats();
     }
 
-    public void SetWeapon() => SetWeapon(WeaponChoices.GetChoice());
+    public void SetWeapon()
+    {
+        SetWeapon(WeaponChoices.GetChoice());
+        // TODO: Certain weapons make starting really hard, so we set the default damage to 0
+        Weapon?.Damage.SetDefaultValue(0);
+        Weapon?.Damage.SetAdditional(0);
+    }
+
     public List<Artifact> GetArtifactReward() => ArtifactChoices.GetChoice();
 
     public Enemy Copy()

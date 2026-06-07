@@ -27,11 +27,11 @@ namespace GentrysQuest.Game.Entity
         private readonly Dictionary<string, Func<Stat, double, double>> totalModifiers = new();
         protected double LastTotal = 0;
 
-        public Stat(string name, StatType statType)
+        public Stat(string name, StatType statType, double minimumValue = 0)
         {
             Name = name;
             StatType = statType;
-            Current.Value = Total();
+            Minimum.Value = minimumValue;
 
             IsPercent = statType switch
             {

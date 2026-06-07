@@ -4,16 +4,15 @@
     /// Stat management class /// </summary>
     public class Stats
     {
-        public Stat Health = new HealthStat();
+        public Stat Health = new HealthStat(100);
         public Stat Attack = new IntStat("Attack", StatType.Attack);
-        public Stat Defense = new IntStat("Defense", StatType.Defense);
+        public Stat Defense = new IntStat("Defense", StatType.Defense, 100);
         public Stat CritRate = new IntStat("CritRate", StatType.CritRate);
         public Stat CritDamage = new IntStat("CritDamage", StatType.CritDamage);
         public Stat Speed = new("Speed", StatType.Speed);
         public Stat AttackSpeed = new("AttackSpeed", StatType.AttackSpeed);
         public Stat RegenSpeed = new("RegenSpeed", StatType.RegenSpeed);
-        public Stat RegenStrength = new IntStat("RegenStrength", StatType.RegenStrength);
-        public Stat Tenacity = new IntStat("Tenacity", StatType.Tenacity);
+        public Stat RegenStrength = new IntStat("RegenStrength", StatType.RegenStrength, 1);
         private readonly Stat[] statGrouping;
 
         public Stats()
@@ -28,8 +27,7 @@
                 Speed,
                 AttackSpeed,
                 RegenSpeed,
-                RegenStrength,
-                Tenacity
+                RegenStrength
             ];
         }
 
