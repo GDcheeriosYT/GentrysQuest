@@ -1,7 +1,6 @@
 using GentrysQuest.Game.Entity;
-using GentrysQuest.Game.Entity.AI;
 
-namespace GentrysQuest.Game.Content.Characters
+namespace GentrysQuest.Game.Content.Enemies
 {
     public class EvilGentry : Enemy
     {

@@ -22,6 +22,7 @@ namespace GentrysQuest.Game.Entity
 
         public Bindable<double> Default { get; set; } = new();
         public Bindable<double> Current { get; set; } = new();
+        public Bindable<double> Minimum { get; set; } = new();
         public Bindable<double> Additional { get; set; } = new();
 
         private readonly Dictionary<string, Func<Stat, double, double>> totalModifiers = new();

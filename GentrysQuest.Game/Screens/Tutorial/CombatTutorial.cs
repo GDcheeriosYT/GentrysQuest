@@ -1,6 +1,7 @@
 using GentrysQuest.Game.Audio;
 using GentrysQuest.Game.Content.Characters;
 using GentrysQuest.Game.Content.Effects;
+using GentrysQuest.Game.Content.Enemies;
 using GentrysQuest.Game.Content.Music;
 using GentrysQuest.Game.Content.Weapons;
 using GentrysQuest.Game.Entity;

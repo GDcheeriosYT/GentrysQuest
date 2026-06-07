@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GentrysQuest.Game.Entity.Drawables;
-using GentrysQuest.Game.Entity.Weapon;
 
 namespace GentrysQuest.Game.Entity
 {

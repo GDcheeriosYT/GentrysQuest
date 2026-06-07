@@ -4,8 +4,8 @@ namespace GentrysQuest.Game.Entity
     {
         private double previousMaxHealth;
 
-        public HealthStat()
-            : base("Health", StatType.Health) =>
+        public HealthStat(double minimumValue = 0)
+            : base("Health", StatType.Health, minimumValue) =>
             previousMaxHealth = Total();
 
         public override void Recalculate()
