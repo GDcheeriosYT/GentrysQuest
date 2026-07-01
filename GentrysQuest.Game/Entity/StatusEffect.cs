@@ -9,7 +9,6 @@ public abstract class StatusEffect
 {
     protected static int Identifier = 0;
     public int ID;
-    public virtual int? ContentID { get; set; } = null;
 
     protected StatusEffect(int duration = 1, int stack = 1)
     {

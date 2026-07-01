@@ -11,11 +11,6 @@ namespace GentrysQuest.Game.Entity
         /// </summary>
         public int ID { get; set; }
 
-        /// <summary>
-        /// This is the ID of the entity in the content.
-        /// </summary>
-        public virtual int? ContentID { get; set; } = null;
-
         public virtual string Name { get; set; } = "Entity";
         public virtual StarRating StarRating { get; protected set; } = new(1);
         public virtual string Description { get; protected set; } = "This is a description";

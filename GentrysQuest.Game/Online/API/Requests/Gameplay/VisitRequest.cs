@@ -9,12 +9,12 @@ namespace GentrysQuest.Game.Online.API.Requests.Gameplay
     public class VisitRequest : APIRequest<Visitation>
     {
         private readonly int userId;
-        private readonly int locationId;
+        private readonly string locationName;
 
-        public VisitRequest(int userId, int locationId)
+        public VisitRequest(int userId, string locationName)
         {
             this.userId = userId;
-            this.locationId = locationId;
+            this.locationName = locationName;
         }
 
         protected override HttpMethod Method => HttpMethod.Post;
@@ -25,7 +25,7 @@ namespace GentrysQuest.Game.Online.API.Requests.Gameplay
             var payload = new
             {
                 user_id = userId,
-                location = locationId
+                location = locationName
             };
 
             return new StringContent(

@@ -8,8 +8,6 @@ namespace GentrysQuest.Game.Content.Maps
 {
     public class TestMap : Map
     {
-        public override int? ContentID { get; protected set; } = 1;
-
         public TestMap()
         {
             Name = "Test Map";

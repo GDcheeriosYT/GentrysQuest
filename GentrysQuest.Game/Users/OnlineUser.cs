@@ -251,11 +251,11 @@ namespace GentrysQuest.Game.Users
                 user = ID,
                 stat = statistic.Name,
                 amount = statistic.Value,
-                enemy = statistic.Enemy?.ContentID,
-                character = statistic.Character?.ContentID,
-                weapon = statistic.Weapon?.ContentID,
-                location = statistic.Map?.ContentID,
-                status_effect = statistic.StatusEffect?.ContentID,
+                enemy = statistic.Enemy?.Name,
+                character = statistic.Character?.Name,
+                weapon = statistic.Weapon?.Name,
+                location = statistic.Map?.Name,
+                status_effect = statistic.StatusEffect?.Name,
                 visitation = statistic.Visitation,
                 leaderboard = statistic.Leaderboard
             };

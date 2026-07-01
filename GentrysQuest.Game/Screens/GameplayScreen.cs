@@ -136,7 +136,7 @@ namespace GentrysQuest.Game.Screens
 
             if (user is OnlineUser onlineUser)
             {
-                _ = beginVisitationAsync(onlineUser.ID, map.ContentID ?? 0);
+                _ = beginVisitationAsync(onlineUser.ID);
             }
 
             user.EquippedCharacter.OnHitEntity += details =>
@@ -286,9 +286,9 @@ namespace GentrysQuest.Game.Screens
         {
         }
 
-        private async Task beginVisitationAsync(int userId, int locationId)
+        private async Task beginVisitationAsync(int userId)
         {
-            var request = new VisitRequest(userId, locationId);
+            var request = new VisitRequest(userId, mapScene.GetMap().Name);
 
             try
             {

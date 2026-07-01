@@ -5,8 +5,6 @@ namespace GentrysQuest.Game.Content.Characters
 {
     public class GMoney : Character
     {
-        public override int? ContentID { get; set; } = 1;
-
         public GMoney()
         {
             Name = "GMoney";
